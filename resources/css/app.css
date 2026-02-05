@@ -21,22 +21,61 @@
   --color-buksu-gold: #fbbf24;
   --color-background-light: #f8fafc;
   --color-background-dark: #0f172a;
+  --color-surface-dark: #1e293b;
+  --color-surface-light: #ffffff;
 }
 
 @layer base {
   body {
     font-family: 'Poppins';
   }
-  .material-symbols-outlined {
-    font-variation-settings:
-      'FILL' 0,
-      'wght' 400,
-      'GRAD' 0,
-      'opsz' 24;
-  }
 }
+
+/* Landing page */
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
 .hero-gradient {
   background:
     radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
     radial-gradient(circle at 100% 100%, rgba(30, 58, 138, 0.1) 0%, transparent 50%);
+}
+
+/* Login */
+.glass-panel {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Signup Step 1 & 2 */
+.step-active {
+  @apply border-primary text-primary;
+}
+
+.step-complete {
+  @apply border-primary bg-primary text-white;
+}
+
+.step-pending {
+  @apply border-slate-700 text-slate-500;
+}
+
+input:focus,
+select:focus {
+  @apply border-primary ring-2 ring-primary/40 outline-none;
+}
+
+/* Signup Step 3 */
+.verification-input {
+  @apply h-16 w-12 rounded-xl border-white/10 bg-background-dark text-center text-2xl font-bold text-white transition-all;
+}
+
+.glow-envelope {
+  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.4));
 }

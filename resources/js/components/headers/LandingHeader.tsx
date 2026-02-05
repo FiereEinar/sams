@@ -25,9 +25,11 @@ export default function LandingHeader() {
           </a>
         </nav>
         <div className="flex items-center gap-3">
-          <button className="hidden h-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-5 text-sm font-bold transition-all hover:bg-slate-200 sm:flex dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10">
-            Login
-          </button>
+          <a href="/login">
+            <button className="hidden h-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-5 text-sm font-bold transition-all hover:bg-slate-200 sm:flex dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10">
+              Login
+            </button>
+          </a>
           <button className="flex h-10 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:bg-primary-hover active:scale-95">
             Get Started
           </button>

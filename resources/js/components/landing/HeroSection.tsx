@@ -1,3 +1,5 @@
+import TrustedBy from '../TrustedBy';
+
 export default function HeroSection() {
   return (
     <section className="hero-gradient relative overflow-hidden px-6 py-16 lg:px-20 lg:py-28">
@@ -31,13 +33,8 @@ export default function HeroSection() {
               Watch Demo
             </button>
           </div>
-          <div className="flex items-center gap-4 text-sm text-slate-500">
-            <div className="flex -space-x-3">
-              <div className="h-8 w-8 rounded-full border-2 border-white bg-slate-300 dark:border-background-dark" data-alt="Student 1"></div>
-              <div className="h-8 w-8 rounded-full border-2 border-white bg-primary/40 dark:border-background-dark" data-alt="Student 2"></div>
-              <div className="h-8 w-8 rounded-full border-2 border-white bg-buksu-blue/40 dark:border-background-dark" data-alt="Student 3"></div>
-            </div>
-            <span>Trusted by 50+ campus organizations</span>
+          <div className="-mt-10">
+            <TrustedBy />
           </div>
         </div>
         <div className="group relative">
