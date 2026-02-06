@@ -89,8 +89,27 @@ select:focus {
   filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.4));
 }
 
+/* TENANT */
+
 /* Sidebar */
 .active-nav {
   background-color: color-mix(in oklab, #3b82f6 10%, transparent);
   color: #3b82f6 !important;
+}
+
+/* Events page */
+.status-badge {
+  @apply rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase;
+}
+
+/* Attendance page */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
 }
