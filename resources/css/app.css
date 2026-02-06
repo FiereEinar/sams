@@ -31,6 +31,15 @@
   }
 }
 
+/* custom colors in google autofill / remove colors */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: white;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 /* Landing page */
 .material-symbols-outlined {
   font-variation-settings:
@@ -78,4 +87,10 @@ select:focus {
 
 .glow-envelope {
   filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.4));
+}
+
+/* Sidebar */
+.active-nav {
+  background-color: color-mix(in oklab, #3b82f6 10%, transparent);
+  color: #3b82f6 !important;
 }

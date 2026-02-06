@@ -14,12 +14,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // central app user
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Nick Mours',
+            'email' => 'nickxylanmelloria@gmail.com',
+            'password' => '123123',
         ]);
+
 
         $tenant = Tenant::query()->create([
             'id' => 'sbo',
@@ -28,5 +29,15 @@ class DatabaseSeeder extends Seeder
         $tenant->domains()->create([
             'domain' => 'sbo.localhost',
         ]);
+
+        // tenant
+        tenancy()->initialize($tenant);
+        User::factory()->create([
+            'name' => 'Lester Ybanez',
+            'email' => 'lester@gmail.com',
+            'password' => '123123',
+            'tenant_id' => $tenant->id,
+        ]);
+        tenancy()->end();
     }
 }
