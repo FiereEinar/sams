@@ -1,4 +1,12 @@
-export default function EventsTable() {
+import { Event } from '@/types/event';
+import { Link } from '@inertiajs/react';
+import { format } from 'date-fns';
+
+type EventsTableProps = {
+  events: Event[];
+};
+
+export default function EventsTable({ events }: EventsTableProps) {
   return (
     <>
       <TableFilter />
@@ -15,10 +23,11 @@ export default function EventsTable() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+              {events && events.map((event) => <TableRow key={event.id} event={event} />)}
               <tr className="transition-colors hover:bg-slate-50 dark:hover:bg-white/2">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
                       <span className="material-symbols-outlined">sports_soccer</span>
                     </div>
                     <div>
@@ -54,7 +63,7 @@ export default function EventsTable() {
               <tr className="transition-colors hover:bg-slate-50 dark:hover:bg-white/2">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500">
                       <span className="material-symbols-outlined">school</span>
                     </div>
                     <div>
@@ -90,7 +99,7 @@ export default function EventsTable() {
               <tr className="transition-colors hover:bg-slate-50 dark:hover:bg-white/2">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-500">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-500">
                       <span className="material-symbols-outlined">psychology</span>
                     </div>
                     <div>
@@ -126,7 +135,7 @@ export default function EventsTable() {
               <tr className="opacity-75 transition-colors hover:bg-slate-50 dark:hover:bg-white/2">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-slate-500/10 text-slate-500">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-slate-500/10 text-slate-500">
                       <span className="material-symbols-outlined">campaign</span>
                     </div>
                     <div>
@@ -181,6 +190,54 @@ export default function EventsTable() {
         </div>
       </div>
     </>
+  );
+}
+
+function TableRow({ event }: { event: Event }) {
+  console.log(event.start_at);
+  console.log(new Date(event.start_at));
+  console.log(format(new Date(event.start_at), 'hh:mm a'));
+  return (
+    <tr className="transition-colors hover:bg-slate-50 dark:hover:bg-white/2">
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+            <span className="material-symbols-outlined">sports_soccer</span>
+          </div>
+          <div>
+            <span className="block text-sm font-bold">{event.title}</span>
+            <span className="text-[10px] text-slate-400">ID: {event.code}</span>
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4">
+        <div className="text-sm">
+          <div className="font-medium">{format(new Date(event.start_at), 'MMM dd, yyyy')}</div>
+          <div className="text-xs text-slate-500">
+            {format(new Date(event.start_at), 'hh:mm a')} - {format(new Date(event.end_at), 'hh:mm a')}
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4 text-sm font-medium">{event.venue}</td>
+      <td className="px-6 py-4">
+        <span className="status-badge border border-emerald-500/20 bg-emerald-500/10 text-emerald-500">Live</span>
+      </td>
+      <td className="px-6 py-4 text-right">
+        <div className="flex items-center justify-end gap-2">
+          <button className="rounded-lg p-2 text-slate-400 transition-all hover:bg-primary/10 hover:text-primary" title="View Attendance">
+            <span className="material-symbols-outlined text-lg">group</span>
+          </button>
+          <button className="rounded-lg p-2 text-slate-400 transition-all hover:bg-primary/10 hover:text-primary" title="Edit Event">
+            <span className="material-symbols-outlined text-lg">edit_square</span>
+          </button>
+          <Link href={`/events/${event.id}`}>
+            <button className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-primary-hover">
+              Manage
+            </button>
+          </Link>
+        </div>
+      </td>
+    </tr>
   );
 }
 

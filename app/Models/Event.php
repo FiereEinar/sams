@@ -10,6 +10,7 @@ class Event extends Model
         'title',
         'code',
         'venue',
+        'description',
         'start_at',
         'end_at',
         'created_by',

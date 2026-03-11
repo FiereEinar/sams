@@ -46,6 +46,12 @@ class AuthController extends Controller
 
     public function logout() {
         auth()->guard('web')->logout();
-        return redirect('/login');
+        // If tenant domain → redirect to tenant login
+        if (tenant()) {
+            return redirect()->route('tenant-login');
+        }
+
+        // Otherwise → central login
+        return redirect()->route('login');
     }
 }

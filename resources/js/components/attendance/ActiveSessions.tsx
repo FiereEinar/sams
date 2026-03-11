@@ -8,7 +8,7 @@ export default function ActiveSessions() {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div className="group rounded-2xl border border-slate-200 bg-surface-light p-5 transition-all hover:ring-2 hover:ring-primary/30 dark:border-white/5 dark:bg-surface-dark">
           <div className="mb-4 flex items-start justify-between">
-            <div className="rounded-xl bg-primary/10 p-3 text-primary">
+            <div className="flex size-14 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <span className="material-symbols-outlined">sensors</span>
             </div>
             <span className="rounded-lg bg-green-500/10 px-2 py-1 text-[10px] font-bold tracking-wider text-green-500 uppercase">Live</span>
@@ -31,7 +31,7 @@ export default function ActiveSessions() {
         </div>
         <div className="group rounded-2xl border border-slate-200 bg-surface-light p-5 transition-all hover:ring-2 hover:ring-primary/30 dark:border-white/5 dark:bg-surface-dark">
           <div className="mb-4 flex items-start justify-between">
-            <div className="rounded-xl bg-cyan-500/10 p-3 text-cyan-500">
+            <div className="flex size-14 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-500">
               <span className="material-symbols-outlined">event_seat</span>
             </div>
             <span className="rounded-lg bg-green-500/10 px-2 py-1 text-[10px] font-bold tracking-wider text-green-500 uppercase">Live</span>

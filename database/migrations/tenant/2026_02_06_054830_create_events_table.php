@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('code')->unique(); // EVT-2024-001
             $table->string('venue');
+            $table->text('description');
 
             $table->dateTime('start_at');
             $table->dateTime('end_at');
