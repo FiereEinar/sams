@@ -24,6 +24,8 @@
   --color-background-dark: #0f172a;
   --color-surface-dark: #1e293b;
   --color-surface-light: #ffffff;
+  --color-destructive: #ef4343;
+  --color-destructive-foreground: #ffffff;
 
   --color-deep-navy: #0a0f18;
   --color-charcoal-grey: #1a1f26;
