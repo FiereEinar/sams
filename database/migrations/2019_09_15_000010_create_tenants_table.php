@@ -10,15 +10,16 @@ class CreateTenantsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->string('id')->primary();
 
-            // your custom columns may go here
+            $table->enum('plan', ['basic', 'premium'])->default('basic');
+            $table->string('organization_name')->default('');
+            $table->string('organization_type')->default('');
+            $table->enum('status', ['active', 'inactive'])->default('active');
 
             $table->timestamps();
             $table->json('data')->nullable();
@@ -27,8 +28,6 @@ class CreateTenantsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

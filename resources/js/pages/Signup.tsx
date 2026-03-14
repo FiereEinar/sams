@@ -29,8 +29,10 @@ const adminSchema = z
   });
 
 export const signupSchema = z.object({
+  plan: z.enum(['basic', 'premium']),
   organization: organizationSchema,
   admin: adminSchema,
+  verification_code: z.string().optional(),
 });
 
 export type SignupFormValues = z.infer<typeof signupSchema>;
@@ -39,6 +41,7 @@ export default function Signup() {
   const [activeTab, setActiveTab] = useState(1);
 
   const form = useForm<SignupFormValues>({
+    plan: 'premium',
     organization: {
       name: '',
       type: 'college-club',
@@ -50,12 +53,13 @@ export default function Signup() {
       password: '',
       confirmPassword: '',
     },
+    verification_code: '',
   });
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background-dark p-6 text-white">
       <div className="grid w-full max-w-6xl items-start gap-8 lg:grid-cols-12">
-        <LeftAside />
+        <LeftAside form={form} />
         <div className="overflow-hidden rounded-4xl border border-white/5 bg-surface-dark shadow-2xl lg:col-span-8">
           {activeTab === 1 ? <Step1Header /> : activeTab === 2 ? <Step2Header /> : <Step3Header />}
 
@@ -81,8 +85,9 @@ export default function Signup() {
   );
 }
 
-function LeftAside() {
-  const [selectedPlan, setSelectedPlan] = useState<'basic' | 'premium'>('premium');
+function LeftAside({ form }: { form: ReturnType<typeof useForm<SignupFormValues>> }) {
+  const selectedPlan = form.data.plan;
+  const setSelectedPlan = (plan: 'basic' | 'premium') => form.setData('plan', plan);
   const planCardStyles = {
     notSelected:
       'group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-white/5 bg-surface-dark p-5 transition-all hover:border-primary/40',

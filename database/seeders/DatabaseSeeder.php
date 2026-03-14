@@ -21,13 +21,16 @@ class DatabaseSeeder extends Seeder
             'password' => '123123',
         ]);
 
-
-        $tenant = Tenant::query()->create([
+        $tenant = Tenant::create([
             'id' => 'sbo',
+            'plan' => 'premium',
+            'organization_name' => 'SBO',
+            'organization_type' => 'School',
+            'status' => 'active',
         ]);
 
         $tenant->domains()->create([
-            'domain' => 'sbo.localhost',
+            'domain' => 'sbo.'.env('APP_DOMAIN'),
         ]);
 
         // tenant

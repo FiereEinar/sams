@@ -46,6 +46,7 @@ export default function Step1Card({ activeTab, setActiveTab, form }: Step1CardPr
             <div className="relative">
               <span className="material-symbols-outlined absolute top-1/2 left-4 -translate-y-1/2 text-slate-500">groups</span>
               <input
+                autoComplete="organization"
                 className="w-full rounded-xl border-white/10 bg-background-dark py-3.5 pl-12 text-sm text-white transition-all placeholder:text-slate-600"
                 placeholder="BukSU Computer Studies Society"
                 type="text"

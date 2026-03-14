@@ -1,7 +1,9 @@
 import { useToast } from '@/hooks/use-toast';
 import { SignupFormValues, signupSchema } from '@/pages/Signup';
 import { useForm } from '@inertiajs/react';
+import axios from 'axios';
 import _ from 'lodash';
+import { useState } from 'react';
 
 export function Step2Header() {
   return (
@@ -33,10 +35,11 @@ type Step2CardProps = {
 };
 
 export default function Step2Card({ activeTab, setActiveTab, form }: Step2CardProps) {
-  const { data, setData, post, processing, errors } = form;
+  const { data, setData } = form;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitting form with data:', data);
     const validationResult = signupSchema.safeParse(data);
@@ -54,7 +57,20 @@ export default function Step2Card({ activeTab, setActiveTab, form }: Step2CardPr
       return;
     }
 
-    setActiveTab(activeTab + 1);
+    try {
+      setIsSubmitting(true);
+      await axios.post('/signup/send-code', { email: data.admin.email });
+      setActiveTab(activeTab + 1);
+    } catch (error: any) {
+      console.error('Failed to send code:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.response?.data?.message || 'Failed to send verification code. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -129,6 +145,7 @@ export default function Step2Card({ activeTab, setActiveTab, form }: Step2CardPr
         </div>
         <div className="flex items-center justify-between pt-4">
           <button
+            disabled={isSubmitting}
             onClick={() => setActiveTab(activeTab - 1)}
             className="flex items-center gap-2 px-6 py-3 font-bold text-slate-400 transition-colors hover:text-white"
             type="button"
@@ -137,6 +154,7 @@ export default function Step2Card({ activeTab, setActiveTab, form }: Step2CardPr
             <span>Previous Step</span>
           </button>
           <button
+            disabled={isSubmitting}
             onClick={onSubmit}
             className="flex items-center gap-2 rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-hover"
             type="button"

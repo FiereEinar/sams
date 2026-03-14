@@ -1,5 +1,8 @@
 import { SignupFormValues, signupSchema } from '@/pages/Signup';
 import { useForm } from '@inertiajs/react';
+import { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
+import { useToast } from '@/hooks/use-toast';
 
 export function Step3Header() {
   return (
@@ -35,16 +38,78 @@ type Step3CardProps = {
 };
 
 export default function Step3Card({ activeTab, setActiveTab, form }: Step3CardProps) {
-  const onSubmit = (e: React.FormEvent) => {
+  const [code, setCode] = useState(['', '', '', '', '', '']);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+  const { toast } = useToast();
+
+  const handleInputChange = (index: number, value: string) => {
+    if (!/^[0-9]*$/.test(value)) return;
+
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
+
+    if (value && index < 5) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !code[index] && index > 0) {
+      inputsRef.current[index - 1]?.focus();
+    }
+  };
+
+  useEffect(() => {
+    form.setData('verification_code', code.join(''));
+  }, [code]);
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitting form with data:', form.data);
-    const validationResult = signupSchema.safeParse(form.data);
-    if (!validationResult.success) {
-      console.error('Validation errors:', validationResult.error.issues);
+
+    if (code.join('').length !== 6) {
+      toast({
+        variant: 'destructive',
+        title: 'Invalid Code',
+        description: 'Please enter the 6-digit verification code.',
+      });
       return;
     }
 
-    setActiveTab(activeTab + 1);
+    const validationResult = signupSchema.safeParse(form.data);
+    if (!validationResult.success) {
+      console.error('Validation errors:', validationResult.error.issues);
+      toast({
+        variant: 'destructive',
+        title: 'Validation Error',
+        description: 'Please go back and ensure all fields are correctly filled.',
+      });
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const endpoint = form.data.plan === 'premium' ? '/signup/premium' : '/signup/basic';
+      const response = await axios.post(endpoint, form.data);
+
+      if (response.data.redirect) {
+        window.location.href = response.data.redirect;
+      } else if (response.data.checkout_url) {
+        window.location.href = response.data.checkout_url;
+      } else {
+        toast({ title: 'Success', description: response.data.message });
+      }
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.response?.data?.message || 'Verification failed. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -59,21 +124,29 @@ export default function Step3Card({ activeTab, setActiveTab, form }: Step3CardPr
         <h3 className="text-3xl font-extrabold tracking-tight">Check your inbox</h3>
         <p className="text-sm text-slate-400">
           We've sent a 6-digit code to
-          <span className="font-semibold text-white">j.delacruz@buksu.edu.ph</span>
+          <span className="font-semibold text-white"> {form.data.admin.email}</span>
         </p>
       </div>
       <form onSubmit={onSubmit} className="w-full max-w-sm space-y-8">
         <div className="flex justify-center gap-3">
-          <input autoFocus className="verification-input" maxLength={1} type="text" />
-          <input className="verification-input" maxLength={1} type="text" />
-          <input className="verification-input" maxLength={1} type="text" />
-          <div className="w-2"></div>
-          <input className="verification-input" maxLength={1} type="text" />
-          <input className="verification-input" maxLength={1} type="text" />
-          <input className="verification-input" maxLength={1} type="text" />
+          {code.map((digit, index) => (
+            <input
+              key={index}
+              ref={(el) => {
+                inputsRef.current[index] = el;
+              }}
+              value={digit}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(index, e)}
+              className={`verification-input ${index === 3 ? 'ml-2' : ''}`}
+              maxLength={1}
+              type="text"
+            />
+          ))}
         </div>
         <div className="flex flex-col gap-4">
           <button
+            disabled={isSubmitting}
             className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-4 font-bold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-hover"
             type="submit"
           >
@@ -81,11 +154,19 @@ export default function Step3Card({ activeTab, setActiveTab, form }: Step3CardPr
             <span className="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">task_alt</span>
           </button>
           <div className="flex items-center justify-between px-2">
-            <button className="flex items-center gap-1 text-sm font-bold text-slate-400 transition-colors hover:text-primary" type="button">
+            <button
+              disabled={isSubmitting}
+              className="flex items-center gap-1 text-sm font-bold text-slate-400 transition-colors hover:text-primary"
+              type="button"
+            >
               <span className="material-symbols-outlined text-base">refresh</span>
               Resend Code
             </button>
-            <button className="flex items-center gap-1 text-sm font-bold text-slate-400 transition-colors hover:text-white" type="button">
+            <button
+              disabled={isSubmitting}
+              className="flex items-center gap-1 text-sm font-bold text-slate-400 transition-colors hover:text-white"
+              type="button"
+            >
               <span className="material-symbols-outlined text-base">edit</span>
               Change Email
             </button>
