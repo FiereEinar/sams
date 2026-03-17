@@ -21,5 +21,14 @@ foreach (config('tenancy.central_domains') as $domain) {
         Route::post('/signup/premium', \App\Http\Controllers\Signup\PremiumSignupController::class)->name('signup.premium');
 
         Route::get('/signup/success', \App\Http\Controllers\Signup\SignupSuccessController::class)->name('signup.success');
+
+        Route::middleware(['auth'])->group(function () {
+            Route::get('/admin/requests', [\App\Http\Controllers\Admin\TenantRequestController::class, 'index'])->name('admin.requests');
+            Route::post('/admin/requests/{tenant}/approve', [\App\Http\Controllers\Admin\TenantRequestController::class, 'approve'])->name('admin.requests.approve');
+            Route::post('/admin/requests/{tenant}/reject', [\App\Http\Controllers\Admin\TenantRequestController::class, 'reject'])->name('admin.requests.reject');
+
+            Route::get('/admin/tenants', [\App\Http\Controllers\Admin\TenantController::class, 'index'])->name('admin.tenants');
+            Route::post('/admin/tenants/{tenant}/toggle-status', [\App\Http\Controllers\Admin\TenantController::class, 'toggleStatus'])->name('admin.tenants.toggle-status');
+        });
     });
 }

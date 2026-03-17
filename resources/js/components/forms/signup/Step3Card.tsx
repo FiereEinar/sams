@@ -94,10 +94,15 @@ export default function Step3Card({ activeTab, setActiveTab, form }: Step3CardPr
       const endpoint = form.data.plan === 'premium' ? '/signup/premium' : '/signup/basic';
       const response = await axios.post(endpoint, form.data);
 
-      if (response.data.redirect) {
-        window.location.href = response.data.redirect;
-      } else if (response.data.checkout_url) {
+      if (response.data.checkout_url) {
         window.location.href = response.data.checkout_url;
+      } else if (form.data.plan === 'basic') {
+        toast({
+          title: 'Registration Submitted!',
+          description: 'Your application is pending admin approval. You will receive an email once approved.',
+        });
+      } else if (response.data.redirect) {
+        window.location.href = response.data.redirect;
       } else {
         toast({ title: 'Success', description: response.data.message });
       }

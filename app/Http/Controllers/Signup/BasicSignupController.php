@@ -40,12 +40,10 @@ class BasicSignupController extends Controller
         try {
             $tenant = Tenant::create([
                 'id' => $tenantId,
-                'data' => [
-                    'plan' => 'basic',
-                    'status' => 'pending',
-                    'organization_name' => $request->input('organization.name'),
-                    'organization_type' => $request->input('organization.type'),
-                ],
+                'plan' => 'basic',
+                'organization_name' => $request->input('organization.name'),
+                'organization_type' => $request->input('organization.type'),
+                'status' => 'inactive',
             ]);
 
             $tenant->domains()->create(['domain' => $tenantId.'.'.env('APP_DOMAIN')]);
