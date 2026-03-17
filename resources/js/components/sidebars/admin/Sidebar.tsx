@@ -11,7 +11,7 @@ export default function Sidebar() {
     { title: 'Tenants', href: '/admin/tenants', icon: 'domain' },
   ];
   return (
-    <aside className="flex h-screen w-72 shrink-0 flex-col border-r border-white/5 bg-surface-dark/50">
+    <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r border-slate-200 bg-background-light dark:border-white/10 dark:bg-background-dark">
       <SidebarHeader icon="admin_panel_settings" title="Admin" subtitle="Central Panel" />
 
       <nav className="flex flex-1 flex-col gap-1 px-4">
