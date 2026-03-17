@@ -23,6 +23,9 @@ foreach (config('tenancy.central_domains') as $domain) {
         Route::get('/signup/success', \App\Http\Controllers\Signup\SignupSuccessController::class)->name('signup.success');
 
         Route::middleware(['auth'])->group(function () {
+            Route::get('/admin', fn () => redirect('/admin/dashboard'));
+            Route::get('/admin/dashboard', \App\Http\Controllers\Admin\DashboardController::class)->name('admin.dashboard');
+
             Route::get('/admin/requests', [\App\Http\Controllers\Admin\TenantRequestController::class, 'index'])->name('admin.requests');
             Route::post('/admin/requests/{tenant}/approve', [\App\Http\Controllers\Admin\TenantRequestController::class, 'approve'])->name('admin.requests.approve');
             Route::post('/admin/requests/{tenant}/reject', [\App\Http\Controllers\Admin\TenantRequestController::class, 'reject'])->name('admin.requests.reject');

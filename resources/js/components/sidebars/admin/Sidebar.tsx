@@ -1,0 +1,34 @@
+import { Link, usePage } from '@inertiajs/react';
+import SidebarHeader from '../SidebarHeader';
+import { SidebarLink } from '../tenant/Sidebar';
+
+export default function Sidebar() {
+  const { url } = usePage();
+
+  const navItems = [
+    { title: 'Dashboard', href: '/admin/dashboard', icon: 'dashboard' },
+    { title: 'Requests', href: '/admin/requests', icon: 'pending_actions' },
+    { title: 'Tenants', href: '/admin/tenants', icon: 'domain' },
+  ];
+  return (
+    <aside className="flex h-screen w-72 shrink-0 flex-col border-r border-white/5 bg-surface-dark/50">
+      <SidebarHeader icon="admin_panel_settings" title="Admin" subtitle="Central Panel" />
+
+      <nav className="flex flex-1 flex-col gap-1 px-4">
+        {navItems.map((link) => (
+          <SidebarLink key={link.title} {...link} isActive={url.startsWith(link.href)} />
+        ))}
+      </nav>
+
+      <div className="px-4 pb-6">
+        <Link
+          href="/logout"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
+        >
+          <span className="material-symbols-outlined">logout</span>
+          <span className="text-sm font-medium">Log Out</span>
+        </Link>
+      </div>
+    </aside>
+  );
+}

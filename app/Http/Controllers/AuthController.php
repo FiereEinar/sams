@@ -34,7 +34,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if (! $user->tenant_id) {
-            return redirect()->route('admin.requests');
+            return redirect()->route('admin.dashboard');
         }
 
         $tenant = Tenant::find($user->tenant_id);
