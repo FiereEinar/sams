@@ -18,6 +18,7 @@ class BasicSignupController extends Controller
             'organization.name' => 'required|string',
             'organization.type' => 'required|string',
             'organization.subdomain' => 'required|string|regex:/^[a-z0-9]+(-[a-z0-9]+)*$/',
+            'organization.address' => 'required|string',
             'admin.fullname' => 'required|string',
             'admin.email' => 'required|email',
             'admin.password' => 'required|string|min:8',
@@ -43,6 +44,9 @@ class BasicSignupController extends Controller
                 'plan' => 'basic',
                 'organization_name' => $request->input('organization.name'),
                 'organization_type' => $request->input('organization.type'),
+                'name' => $request->input('admin.fullname'),
+                'email' => $request->input('admin.email'),
+                'address' => $request->input('organization.address'),
                 'status' => 'inactive',
             ]);
 

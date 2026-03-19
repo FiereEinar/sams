@@ -108,9 +108,7 @@ export default function Dashboard({ stats, recentTenants }: DashboardProps) {
             </div>
             <div>
               <p className="text-xs text-slate-500">Active Rate</p>
-              <p className="text-lg font-black">
-                {stats.total_tenants > 0 ? Math.round((stats.active_tenants / stats.total_tenants) * 100) : 0}%
-              </p>
+              <p className="text-lg font-black">{stats.total_tenants > 0 ? Math.round((stats.active_tenants / stats.total_tenants) * 100) : 0}%</p>
             </div>
           </div>
         </div>
@@ -139,19 +137,21 @@ export default function Dashboard({ stats, recentTenants }: DashboardProps) {
                     </div>
                     <div>
                       <p className="text-sm font-bold">{tenant.organization_name}</p>
-                      <p className="text-xs text-slate-500">{tenant.domain}</p>
+                      <a href={`${window.location.protocol}//${tenant.domain}:${import.meta.env.VITE_APP_PORT}/login`} target="_blank">
+                        <p className="text-xs text-slate-500 transition-all hover:text-primary">{tenant.domain}</p>
+                      </a>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <span
-                      className={`rounded-lg px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${
+                      className={`rounded-lg px-2 py-0.5 text-xs font-bold tracking-wider uppercase ${
                         tenant.plan === 'premium' ? 'bg-violet-500/10 text-violet-400' : 'bg-slate-700/50 text-slate-400'
                       }`}
                     >
                       {tenant.plan}
                     </span>
                     <span
-                      className={`rounded-lg px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${
+                      className={`rounded-lg px-2 py-0.5 text-xs font-bold tracking-wider uppercase ${
                         tenant.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
                       }`}
                     >

@@ -19,7 +19,7 @@ class CreateTenantsTable extends Migration
             $table->enum('plan', ['basic', 'premium'])->default('basic');
             $table->string('organization_name')->default('');
             $table->string('organization_type')->default('');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('status', ['active', 'inactive'])->default('inactive');
 
             $table->timestamps();
             $table->json('data')->nullable();

@@ -41,6 +41,9 @@ class SignupSuccessController extends Controller
                 'plan' => 'premium',
                 'organization_name' => $formData['organization']['name'],
                 'organization_type' => $formData['organization']['type'],
+                'name' => $formData['admin']['fullname'],
+                'email' => $formData['admin']['email'],
+                'address' => $formData['organization']['address'],
                 'status' => 'active',
             ]);
 

@@ -15,6 +15,7 @@ class PremiumSignupController extends Controller
             'organization.name' => 'required|string',
             'organization.type' => 'required|string',
             'organization.subdomain' => 'required|string|regex:/^[a-z0-9]+(-[a-z0-9]+)*$/',
+            'organization.address' => 'required|string',
             'admin.fullname' => 'required|string',
             'admin.email' => 'required|email',
             'admin.password' => 'required|string|min:8',

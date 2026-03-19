@@ -21,6 +21,9 @@ class TenantController extends Controller
                     'organization_type' => $tenant->organization_type,
                     'plan' => $tenant->plan,
                     'status' => $tenant->status,
+                    'address' => $tenant->address,
+                    'name' => $tenant->name,
+                    'email' => $tenant->email,
                     'domain' => $tenant->domains->first()?->domain,
                     'created_at' => $tenant->created_at->format('M d, Y'),
                 ];

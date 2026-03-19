@@ -9,6 +9,7 @@ import z from 'zod';
 const organizationSchema = z.object({
   name: z.string().min(2).max(100),
   type: z.enum(['college-club', 'departmental', 'society', 'interest', 'council']),
+  address: z.string().min(2).max(100),
   subdomain: z
     .string()
     .min(3)
@@ -45,6 +46,7 @@ export default function Signup() {
     organization: {
       name: '',
       type: 'college-club',
+      address: '',
       subdomain: '',
     },
     admin: {

@@ -11,6 +11,8 @@ interface TenantRequest {
 }
 
 export default function Requests({ requests }: { requests: TenantRequest[] }) {
+  console.log(requests);
+
   const handleApprove = (id: string) => {
     if (!confirm('Are you sure you want to approve this organization?')) return;
     router.post(`/admin/requests/${id}/approve`);
@@ -56,7 +58,13 @@ export default function Requests({ requests }: { requests: TenantRequest[] }) {
                       </span>
                       <span className="flex items-center gap-1">
                         <span className="material-symbols-outlined text-sm">link</span>
-                        {req.domain}
+                        <a
+                          href={`${window.location.protocol}//${req.domain}:${import.meta.env.VITE_APP_PORT}/login`}
+                          target="_blank"
+                          className="transition-all hover:text-primary"
+                        >
+                          {req.domain}
+                        </a>
                       </span>
                       {req.admin_email && (
                         <span className="flex items-center gap-1">

@@ -8,6 +8,9 @@ interface TenantItem {
   plan: string;
   status: string;
   domain: string | null;
+  address: string | null;
+  name: string | null;
+  email: string | null;
   created_at: string;
 }
 
@@ -52,19 +55,15 @@ export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
                     <div className="flex items-center gap-3">
                       <h3 className="text-lg font-bold">{tenant.organization_name}</h3>
                       <span
-                        className={`rounded-lg px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider ${
-                          tenant.plan === 'premium'
-                            ? 'bg-primary/10 text-primary'
-                            : 'bg-slate-700/50 text-slate-400'
+                        className={`rounded-lg px-2.5 py-0.5 text-xs font-bold tracking-wider uppercase ${
+                          tenant.plan === 'premium' ? 'bg-primary/10 text-primary' : 'bg-slate-700/50 text-slate-400'
                         }`}
                       >
                         {tenant.plan}
                       </span>
                       <span
-                        className={`rounded-lg px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider ${
-                          tenant.status === 'active'
-                            ? 'bg-emerald-500/10 text-emerald-400'
-                            : 'bg-red-500/10 text-red-400'
+                        className={`rounded-lg px-2.5 py-0.5 text-xs font-bold tracking-wider uppercase ${
+                          tenant.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
                         }`}
                       >
                         {tenant.status}
@@ -77,8 +76,29 @@ export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
                       </span>
                       <span className="flex items-center gap-1">
                         <span className="material-symbols-outlined text-sm">link</span>
-                        {tenant.domain}
+                        <a
+                          href={`${window.location.protocol}//${tenant.domain}:${import.meta.env.VITE_APP_PORT}/login`}
+                          target="_blank"
+                          className="transition-all hover:text-primary"
+                        >
+                          {tenant.domain}
+                        </a>
                       </span>
+
+                      {tenant.name && (
+                        <span className="flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">person</span>
+                          {tenant.name}
+                        </span>
+                      )}
+
+                      {tenant.address && (
+                        <span className="flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">location_on</span>
+                          {tenant.address}
+                        </span>
+                      )}
+
                       <span className="flex items-center gap-1">
                         <span className="material-symbols-outlined text-sm">schedule</span>
                         {tenant.created_at}
@@ -95,9 +115,7 @@ export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
                         : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
                     }`}
                   >
-                    <span className="material-symbols-outlined text-lg">
-                      {tenant.status === 'active' ? 'block' : 'check_circle'}
-                    </span>
+                    <span className="material-symbols-outlined text-lg">{tenant.status === 'active' ? 'block' : 'check_circle'}</span>
                     {tenant.status === 'active' ? 'Deactivate' : 'Activate'}
                   </button>
                 </div>

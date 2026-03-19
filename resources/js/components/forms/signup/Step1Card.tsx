@@ -76,28 +76,48 @@ export default function Step1Card({ activeTab, setActiveTab, form }: Step1CardPr
             </div>
           </div>
         </div>
-        <div className="space-y-2">
-          <label className="ml-1 text-xs font-bold tracking-widest text-slate-400 uppercase">Organization Subdomain</label>
-          <div className="flex items-center gap-0">
-            <div className="relative flex-1">
-              <span className="material-symbols-outlined absolute top-1/2 left-4 -translate-y-1/2 text-slate-500">link</span>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="ml-1 text-xs font-bold tracking-widest text-slate-400 uppercase">Organization Address</label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute top-1/2 left-4 -translate-y-1/2 text-slate-500">location_on</span>
               <input
-                value={data.organization.subdomain}
-                onChange={(e) => setData('organization', { ...data.organization, subdomain: e.target.value })}
-                className="w-full rounded-l-xl border-white/10 bg-background-dark py-3.5 pl-12 text-sm text-white transition-all placeholder:text-slate-600"
-                placeholder="my-org"
+                autoComplete="organization_address"
+                className="w-full rounded-xl border-white/10 bg-background-dark py-3.5 pl-12 text-sm text-white transition-all placeholder:text-slate-600"
+                placeholder="Malaybalay City, Bukidnon"
                 type="text"
+                value={data.organization.address}
+                onChange={(e) => setData('organization', { ...data.organization, address: e.target.value })}
               />
             </div>
-            <div className="rounded-r-xl border-y border-r border-white/10 bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-400">
-              .buksu-sams.com
+          </div>
+
+          <div className="space-y-2">
+            <label className="ml-1 text-xs font-bold tracking-widest text-slate-400 uppercase">Organization Subdomain</label>
+            <div className="flex items-center gap-0">
+              <div className="relative flex-1">
+                <span className="material-symbols-outlined absolute top-1/2 left-4 -translate-y-1/2 text-slate-500">link</span>
+                <input
+                  value={data.organization.subdomain}
+                  onChange={(e) => setData('organization', { ...data.organization, subdomain: e.target.value })}
+                  className="w-full rounded-l-xl border-white/10 bg-background-dark py-3.5 pl-12 text-sm text-white transition-all placeholder:text-slate-600"
+                  placeholder="my-org"
+                  type="text"
+                />
+              </div>
+              <div className="rounded-r-xl border-y border-r border-white/10 bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-400">
+                .buksu-sams.com
+              </div>
             </div>
           </div>
-          <div className="mt-2 flex items-center gap-2 px-1">
-            <span className="text-[11px] text-slate-500">Your portal will be available at:</span>
-            <span className="text-[11px] font-bold text-primary">{data.organization.subdomain || 'my-org'}.buksu-sams.com</span>
-          </div>
         </div>
+
+        <div className="mt-2 flex w-full items-center gap-2 px-1">
+          <span className="text-[11px] text-slate-500">Your portal will be available at:</span>
+          <span className="text-[11px] font-bold text-primary">{data.organization.subdomain || 'my-org'}.buksu-sams.com</span>
+        </div>
+
         <div className="flex items-start gap-4 rounded-xl border border-primary/20 bg-primary/10 p-4">
           <span className="material-symbols-outlined mt-0.5 text-primary">help_outline</span>
           <p className="text-xs leading-relaxed text-slate-300">

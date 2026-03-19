@@ -13,7 +13,7 @@ export default function SignupSuccess({ status, subdomain }: { status: string; s
             <h1 className="mb-4 text-3xl font-extrabold tracking-tight">Payment Successful!</h1>
             <p className="mb-8 text-slate-400">Welcome aboard! Your premium organization workspace is now active and ready to use.</p>
             <a
-              href={`${window.location.protocol}//${subdomain}/login`}
+              href={`${window.location.protocol}//${subdomain}:${import.meta.env.VITE_APP_PORT}/login`}
               target="_blank"
               className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-4 font-bold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-hover"
             >

@@ -37,6 +37,7 @@ class TenantRequestController extends Controller
                     'organization_type' => $tenant->organization_type,
                     'domain' => $tenant->domains->first()?->domain,
                     'admin_email' => $adminEmail,
+                    'email' => $tenant->email,
                     'created_at' => $tenant->created_at->format('M d, Y'),
                 ];
             });
