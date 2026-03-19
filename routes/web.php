@@ -32,6 +32,8 @@ foreach (config('tenancy.central_domains') as $domain) {
 
             Route::get('/admin/tenants', [\App\Http\Controllers\Admin\TenantController::class, 'index'])->name('admin.tenants');
             Route::post('/admin/tenants/{tenant}/toggle-status', [\App\Http\Controllers\Admin\TenantController::class, 'toggleStatus'])->name('admin.tenants.toggle-status');
+
+            Route::get('/admin/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('admin.payments');
         });
     });
 }

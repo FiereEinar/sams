@@ -55,16 +55,13 @@ class TenantRequestController extends Controller
         $port = env('APP_PORT');
         $loginUrl = "http://{$domain}:{$port}/login";
 
-        // Get admin email from tenant DB
-        $tenant->run(function () use ($loginUrl, $tenant) {
-            $user = User::first();
-            if ($user) {
-                Mail::to($user->email)->send(new ApprovalMail(
-                    organizationName: $tenant->organization_name,
-                    loginUrl: $loginUrl,
-                ));
-            }
-        });
+        // Send approval/welcome email using tenant's stored email
+        if ($tenant->email) {
+            Mail::to($tenant->email)->send(new ApprovalMail(
+                organizationName: $tenant->organization_name,
+                loginUrl: $loginUrl,
+            ));
+        }
 
         return redirect()->back()->with('success', "Tenant '{$tenant->organization_name}' has been approved.");
     }

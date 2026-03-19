@@ -9,6 +9,7 @@ export default function Sidebar() {
     { title: 'Dashboard', href: '/admin/dashboard', icon: 'dashboard' },
     { title: 'Requests', href: '/admin/requests', icon: 'pending_actions' },
     { title: 'Tenants', href: '/admin/tenants', icon: 'domain' },
+    { title: 'Payments', href: '/admin/payments', icon: 'payments' },
   ];
   return (
     <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r border-slate-200 bg-background-light dark:border-white/10 dark:bg-background-dark">
