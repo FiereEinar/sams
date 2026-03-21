@@ -72,7 +72,7 @@ export default function ImportPreview({ data, onConfirm, onCancel, isImporting }
       <div className="overflow-hidden rounded-xl border border-slate-800 bg-surface-dark shadow-2xl">
         <div className="overflow-x-auto">
           {/* Scrollable table body with 5-row height */}
-          <div className="max-h-[280px] overflow-y-auto custom-scrollbar">
+          <div className="custom-scrollbar max-h-[480px] overflow-y-auto">
             <table className="w-full border-collapse text-left">
               <thead className="sticky top-0 z-10 bg-primary text-xs font-bold tracking-wider text-white uppercase">
                 <tr>
@@ -111,7 +111,11 @@ export default function ImportPreview({ data, onConfirm, onCancel, isImporting }
             {data.rows.length} total rows • {data.summary.valid} ready to import
           </p>
           <div className="flex gap-4">
-            <button onClick={onCancel} disabled={isImporting} className="text-sm font-bold text-slate-400 transition-colors hover:text-white disabled:opacity-50">
+            <button
+              onClick={onCancel}
+              disabled={isImporting}
+              className="text-sm font-bold text-slate-400 transition-colors hover:text-white disabled:opacity-50"
+            >
               Cancel
             </button>
             <button
@@ -121,7 +125,7 @@ export default function ImportPreview({ data, onConfirm, onCancel, isImporting }
             >
               {isImporting ? (
                 <>
-                  <span className="material-symbols-outlined !text-[16px] animate-spin">progress_activity</span>
+                  <span className="material-symbols-outlined animate-spin !text-[16px]">progress_activity</span>
                   Importing...
                 </>
               ) : (

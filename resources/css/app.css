@@ -113,7 +113,7 @@ select:focus {
 
 /* Attendance page */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;

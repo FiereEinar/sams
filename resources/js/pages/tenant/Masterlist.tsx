@@ -23,12 +23,17 @@ export default function Masterlist() {
   async function handleFileSelected(file: File) {
     try {
       setIsUploading(true);
-      console.log(file);
 
       const formData = new FormData();
       formData.append('file', file);
 
-      const { data } = await axios.post('/masterlist/import/preview', formData);
+      const { data } = await axios.post('/masterlist/import/preview', formData, {
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? '',
+          Accept: 'application/json',
+        },
+      });
+
       setPreviewData(data);
       toast({
         title: 'Success',
@@ -36,44 +41,27 @@ export default function Masterlist() {
       });
     } catch (error: any) {
       console.error('Upload failed: ', error);
+
+      let errorMessage = 'Upload failed';
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
       toast({
         title: 'Error',
-        description: error.error || error.message || 'Upload failed',
+        description: errorMessage,
         variant: 'destructive',
       });
-      throw new Error(error.error || error.message || 'Upload failed');
     } finally {
       setIsUploading(false);
     }
-
-    // fetch('/masterlist/import/preview', {
-    //   method: 'POST',
-    //   body: formData,
-    //   headers: {
-    //     'X-CSRF-TOKEN': document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? '',
-    //     Accept: 'application/json',
-    //   },
-    // })
-    //   .then((res) => {
-    //     if (!res.ok) {
-    //       return res.json().then((data) => {
-    //         throw new Error(data.error || data.message || 'Upload failed');
-    //       });
-    //     }
-    //     return res.json();
-    //   })
-    //   .then((data: ImportPreviewData) => {
-    //     setPreviewData(data);
-    //   })
-    //   .catch((err) => {
-    //     alert(err.message || 'Failed to parse file. Please check the format.');
-    //   })
-    //   .finally(() => {
-    //     setIsUploading(false);
-    //   });
   }
 
-  function handleConfirmImport() {
+  async function handleConfirmImport() {
     if (!previewData) return;
 
     const validRows = previewData.rows.filter((r) => r.status === 'valid').map((r) => r.data);
@@ -85,35 +73,41 @@ export default function Masterlist() {
 
     setIsImporting(true);
 
-    fetch('/masterlist/import/store', {
-      method: 'POST',
-      body: JSON.stringify({ rows: validRows }),
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? '',
-        Accept: 'application/json',
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.json().then((data) => {
-            throw new Error(data.message || 'Import failed');
-          });
-        }
-        return res.json();
-      })
-      .then((data) => {
-        alert(data.message);
-        setPreviewData(null);
-        setActiveTab('masterlist');
-        router.reload();
-      })
-      .catch((err) => {
-        alert(err.message || 'Failed to import. Please try again.');
-      })
-      .finally(() => {
-        setIsImporting(false);
+    try {
+      const { data } = await axios.post(
+        '/masterlist/import/store',
+        { rows: validRows },
+        {
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? '',
+            Accept: 'application/json',
+          },
+        },
+      );
+
+      toast({
+        title: 'Success',
+        description: data.message,
       });
+      setPreviewData(null);
+      setActiveTab('masterlist');
+      router.reload();
+    } catch (error: any) {
+      let errorMessage = 'Failed to import. Please try again.';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      toast({
+        title: 'Error',
+        description: errorMessage,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsImporting(false);
+    }
   }
 
   function handleCancelPreview() {

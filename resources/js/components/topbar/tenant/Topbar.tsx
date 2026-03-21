@@ -10,7 +10,7 @@ export default function Topbar({ placeholder = 'Search...', role = 'Admin' }: To
   const user = (props as any).auth?.user;
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-background-light px-8 dark:border-white/10 dark:bg-background-dark">
+    <header className="sticky top-0 z-100 flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-background-light px-8 dark:border-white/10 dark:bg-background-dark">
       <div className="flex flex-1 items-center gap-4">
         <div className="relative w-full max-w-md">
           <span className="material-symbols-outlined absolute top-1/2 left-3 -translate-y-1/2 text-sm text-slate-400">search</span>
