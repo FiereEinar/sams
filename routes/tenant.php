@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use App\Http\Controllers\tenant\AttendanceController;
+use App\Http\Controllers\tenant\MasterlistController;
 
 Route::middleware([
     'web',
@@ -28,9 +30,8 @@ Route::middleware([
         Route::get('/events/{eventID}', [EventController::class, 'eventDetailsPage'])->name('tenant-event-details');
         Route::post('/events', [EventController::class, 'store'])->name('tenant-events-create');
 
-        Route::get('/attendance', fn () => Inertia::render('tenant/Attendance'))->name('tenant-attendance');
-        Route::get('/masterlist', fn () => Inertia::render('tenant/Masterlist'))->name('tenant-masterlist');
-        Route::get('/analytics', fn () => Inertia::render('tenant/Analytics'))->name('tenant-analytics');
+        Route::get('/attendance', [AttendanceController::class, 'index'])->name('tenant-attendance');
+        Route::get('/masterlist', [MasterlistController::class, 'index'])->name('tenant-masterlist');
         Route::get('/settings', fn () => Inertia::render('tenant/Settings'))->name('tenant-settings');
     });
 });
