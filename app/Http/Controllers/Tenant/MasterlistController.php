@@ -3,21 +3,55 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreStudentRequest;
+use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Student;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MasterlistController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = $request->input('search');
+
         $students = Student::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('student_id', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('first_name', 'like', "%{$search}%")
+                    ->orWhere('course', 'like', "%{$search}%");
+            })
             ->orderBy('last_name')
             ->orderBy('first_name')
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return Inertia::render('tenant/Masterlist', [
             'students' => $students,
+            'filters' => $request->only('search'),
         ]);
+    }
+
+    public function store(StoreStudentRequest $request)
+    {
+        Student::create($request->validated());
+
+        return redirect()->back()->with('success', 'Student added successfully.');
+    }
+
+    public function update(UpdateStudentRequest $request, Student $student)
+    {
+        $student->update($request->validated());
+
+        return redirect()->back()->with('success', 'Student updated successfully.');
+    }
+
+    public function destroy(Student $student)
+    {
+        $student->delete();
+
+        return redirect()->back()->with('success', 'Student removed successfully.');
     }
 }

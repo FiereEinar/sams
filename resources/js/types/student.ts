@@ -37,3 +37,18 @@ export type ImportPreviewData = {
     duplicate: number;
   };
 };
+
+export type PaginatedStudents = {
+  data: Student[];
+  current_page: number;
+  last_page: number;
+  total: number;
+  links: {
+    url: string | null;
+    label: string;
+    active: boolean;
+  }[];
+  per_page: number;
+  from: number;
+  to: number;
+};

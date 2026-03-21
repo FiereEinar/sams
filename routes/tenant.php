@@ -33,6 +33,9 @@ Route::middleware([
 
         Route::get('/attendance', [AttendanceController::class, 'index'])->name('tenant-attendance');
         Route::get('/masterlist', [MasterlistController::class, 'index'])->name('tenant-masterlist');
+        Route::post('/masterlist', [MasterlistController::class, 'store'])->name('tenant-masterlist-store');
+        Route::put('/masterlist/{student}', [MasterlistController::class, 'update'])->name('tenant-masterlist-update');
+        Route::delete('/masterlist/{student}', [MasterlistController::class, 'destroy'])->name('tenant-masterlist-destroy');
 
         Route::post('/masterlist/import/preview', [MasterlistImportController::class, 'preview'])->name('tenant-masterlist-import-preview');
         Route::post('/masterlist/import/store', [MasterlistImportController::class, 'store'])->name('tenant-masterlist-import-store');

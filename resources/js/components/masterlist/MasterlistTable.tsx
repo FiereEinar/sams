@@ -1,25 +1,47 @@
-import { useState } from 'react';
-import type { Student } from '@/types/student';
+import { useState, useEffect, useRef } from 'react';
+import { router } from '@inertiajs/react';
+import type { PaginatedStudents, Student } from '@/types/student';
+import Dialog from '@/components/ui/Dialog';
+import EditStudentForm from '@/components/forms/EditStudentForm';
 
 type Props = {
-  students: Student[];
+  students: PaginatedStudents;
 };
 
 export default function MasterlistTable({ students }: Props) {
-  const [search, setSearch] = useState('');
-
-  const filtered = students.filter((s) => {
-    if (!search) return true;
-    const q = search.toLowerCase();
-    return (
-      s.student_id.toLowerCase().includes(q) ||
-      s.last_name.toLowerCase().includes(q) ||
-      s.first_name.toLowerCase().includes(q) ||
-      (s.middle_name?.toLowerCase().includes(q) ?? false) ||
-      (s.course?.toLowerCase().includes(q) ?? false) ||
-      (s.section?.toLowerCase().includes(q) ?? false)
-    );
+  const [search, setSearch] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('search') || '';
   });
+  
+  const initialMount = useRef(true);
+
+  useEffect(() => {
+    if (initialMount.current) {
+      initialMount.current = false;
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      router.get(
+        '/masterlist',
+        { search },
+        { preserveState: true, replace: true }
+      );
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  function handleDelete(student: Student) {
+    if (confirm(`Are you sure you want to delete ${student.first_name} ${student.last_name}?`)) {
+      router.delete(`/masterlist/${student.id}`, {
+        preserveScroll: true,
+      });
+    }
+  }
+
+  const data = students.data;
 
   return (
     <div className="flex flex-col gap-6">
@@ -27,7 +49,7 @@ export default function MasterlistTable({ students }: Props) {
         <div className="flex flex-col gap-1">
           <h2 className="text-3xl font-black tracking-tight text-white">Student Masterlist</h2>
           <p className="text-base text-slate-400">
-            {students.length} {students.length === 1 ? 'student' : 'students'} registered in the masterlist.
+            {students.total} {students.total === 1 ? 'student' : 'students'} registered in the masterlist.
           </p>
         </div>
         <div className="relative">
@@ -44,7 +66,7 @@ export default function MasterlistTable({ students }: Props) {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {data.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-slate-800 bg-surface-dark p-16 text-center">
           <div className="flex size-16 items-center justify-center rounded-full bg-slate-800 text-slate-500">
             <span className="material-symbols-outlined !text-[32px]">school</span>
@@ -69,10 +91,11 @@ export default function MasterlistTable({ students }: Props) {
                   <th className="border-primary-dark/30 border-b px-4 py-3 text-center">Year</th>
                   <th className="border-primary-dark/30 border-b px-4 py-3 text-center">Units</th>
                   <th className="border-primary-dark/30 border-b px-4 py-3 text-center">Section</th>
+                  <th className="border-primary-dark/30 border-b px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800 text-sm">
-                {filtered.map((s, idx) => (
+                {data.map((s, idx) => (
                   <tr key={s.id} className={`transition-colors hover:bg-primary/5 ${idx % 2 === 0 ? 'bg-card-dark/20' : 'bg-card-dark/40'}`}>
                     <td className="text-primary-light px-4 py-3 font-mono font-medium">{s.student_id}</td>
                     <td className="px-4 py-3 font-semibold text-white">{s.last_name}</td>
@@ -91,15 +114,75 @@ export default function MasterlistTable({ students }: Props) {
                     </td>
                     <td className="px-4 py-3 text-center text-slate-400">{s.units ?? '—'}</td>
                     <td className="px-4 py-3 text-center text-slate-400">{s.section ?? '—'}</td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Dialog
+                          trigger={(open) => (
+                            <button
+                              onClick={open}
+                              className="rounded-lg p-2 text-slate-400 transition-all hover:bg-primary/10 hover:text-primary"
+                              title="Edit Student"
+                            >
+                              <span className="material-symbols-outlined text-lg">edit</span>
+                            </button>
+                          )}
+                        >
+                          {(close) => (
+                            <div className="flex items-center justify-center">
+                              <EditStudentForm student={s} close={close} />
+                            </div>
+                          )}
+                        </Dialog>
+                        <button
+                          onClick={() => handleDelete(s)}
+                          className="rounded-lg p-2 text-slate-400 transition-all hover:bg-red-500/10 hover:text-red-500"
+                          title="Delete Student"
+                        >
+                          <span className="material-symbols-outlined text-lg">delete</span>
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="border-t border-slate-800 bg-slate-900/50 px-6 py-3">
-            <p className="text-xs text-slate-400">
-              Showing {filtered.length} of {students.length} students
-            </p>
+          
+          <div className="flex items-center justify-between border-t border-slate-800 bg-slate-900/50 p-6">
+            <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
+              Showing {students.from || 0}-{students.to || 0} of {students.total} Students
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {students.links.map((link, index) => {
+                const label = link.label.replace('&laquo;', '«').replace('&raquo;', '»');
+                const isPrevious = link.label.includes('&laquo;');
+                const isNext = link.label.includes('&raquo;');
+                
+                return (
+                  <button
+                    key={index}
+                    disabled={!link.url}
+                    onClick={() => {
+                      if (link.url) router.get(link.url, { search }, { preserveState: true });
+                    }}
+                    className={`rounded-lg p-2 text-sm transition-colors ${
+                      link.active
+                        ? 'border border-primary bg-primary font-bold text-white'
+                        : !link.url
+                        ? 'cursor-not-allowed border border-slate-800 text-slate-600'
+                        : 'border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white'
+                    }`}
+                    dangerouslySetInnerHTML={{
+                      __html: isPrevious
+                        ? '<span class="material-symbols-outlined text-sm">chevron_left</span>'
+                        : isNext
+                        ? '<span class="material-symbols-outlined text-sm">chevron_right</span>'
+                        : `<span class="px-1 font-bold">${label}</span>`,
+                    }}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
