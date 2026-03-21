@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { router } from '@inertiajs/react';
 import type { PaginatedStudents, Student } from '@/types/student';
 import Dialog from '@/components/ui/Dialog';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import EditStudentForm from '@/components/forms/EditStudentForm';
 
 type Props = {
@@ -13,7 +14,7 @@ export default function MasterlistTable({ students }: Props) {
     const params = new URLSearchParams(window.location.search);
     return params.get('search') || '';
   });
-  
+
   const initialMount = useRef(true);
 
   useEffect(() => {
@@ -23,23 +24,11 @@ export default function MasterlistTable({ students }: Props) {
     }
 
     const timer = setTimeout(() => {
-      router.get(
-        '/masterlist',
-        { search },
-        { preserveState: true, replace: true }
-      );
+      router.get('/masterlist', { search }, { preserveState: true, replace: true });
     }, 300);
 
     return () => clearTimeout(timer);
   }, [search]);
-
-  function handleDelete(student: Student) {
-    if (confirm(`Are you sure you want to delete ${student.first_name} ${student.last_name}?`)) {
-      router.delete(`/masterlist/${student.id}`, {
-        preserveScroll: true,
-      });
-    }
-  }
 
   const data = students.data;
 
@@ -53,7 +42,7 @@ export default function MasterlistTable({ students }: Props) {
           </p>
         </div>
         <div className="relative">
-          <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 !text-[20px] text-slate-500">
+          <span className="material-symbols-outlined pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 !text-[20px] text-slate-500">
             search
           </span>
           <input
@@ -61,7 +50,7 @@ export default function MasterlistTable({ students }: Props) {
             placeholder="Search students..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-surface-dark py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 transition-all focus:border-primary focus:ring-2 focus:ring-primary/40 md:w-72"
+            className="w-full rounded-xl border border-slate-700 bg-surface-dark py-2.5 pr-4 pl-10 text-sm text-white placeholder-slate-500 transition-all focus:border-primary focus:ring-2 focus:ring-primary/40 md:w-72"
           />
         </div>
       </div>
@@ -77,10 +66,10 @@ export default function MasterlistTable({ students }: Props) {
           </div>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-slate-800 bg-surface-dark shadow-2xl">
+        <div className="overflow-hidden rounded-2xl border border-slate-800 bg-surface-dark shadow-2xl">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
-              <thead className="bg-primary text-xs font-bold tracking-wider text-white uppercase">
+              <thead className="bg-slate-50 text-[11px] font-bold tracking-widest text-slate-500 uppercase dark:bg-background-dark/50">
                 <tr>
                   <th className="border-primary-dark/30 border-b px-4 py-3">Student ID</th>
                   <th className="border-primary-dark/30 border-b px-4 py-3">Last Name</th>
@@ -133,13 +122,26 @@ export default function MasterlistTable({ students }: Props) {
                             </div>
                           )}
                         </Dialog>
-                        <button
-                          onClick={() => handleDelete(s)}
-                          className="rounded-lg p-2 text-slate-400 transition-all hover:bg-red-500/10 hover:text-red-500"
+                        <ConfirmDialog
                           title="Delete Student"
-                        >
-                          <span className="material-symbols-outlined text-lg">delete</span>
-                        </button>
+                          description={`Are you sure you want to delete ${s.first_name} ${s.last_name}?`}
+                          confirmText="Delete"
+                          onConfirm={(close) => {
+                            router.delete(`/masterlist/${s.id}`, {
+                              preserveScroll: true,
+                              onSuccess: () => close(),
+                            });
+                          }}
+                          trigger={(open) => (
+                            <button
+                              onClick={open}
+                              className="rounded-lg p-2 text-slate-400 transition-all hover:bg-red-500/10 hover:text-red-500"
+                              title="Delete Student"
+                            >
+                              <span className="material-symbols-outlined text-lg">delete</span>
+                            </button>
+                          )}
+                        />
                       </div>
                     </td>
                   </tr>
@@ -147,7 +149,7 @@ export default function MasterlistTable({ students }: Props) {
               </tbody>
             </table>
           </div>
-          
+
           <div className="flex items-center justify-between border-t border-slate-800 bg-slate-900/50 p-6">
             <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
               Showing {students.from || 0}-{students.to || 0} of {students.total} Students
@@ -157,7 +159,7 @@ export default function MasterlistTable({ students }: Props) {
                 const label = link.label.replace('&laquo;', '«').replace('&raquo;', '»');
                 const isPrevious = link.label.includes('&laquo;');
                 const isNext = link.label.includes('&raquo;');
-                
+
                 return (
                   <button
                     key={index}
@@ -169,15 +171,15 @@ export default function MasterlistTable({ students }: Props) {
                       link.active
                         ? 'border border-primary bg-primary font-bold text-white'
                         : !link.url
-                        ? 'cursor-not-allowed border border-slate-800 text-slate-600'
-                        : 'border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white'
+                          ? 'cursor-not-allowed border border-slate-800 text-slate-600'
+                          : 'border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white'
                     }`}
                     dangerouslySetInnerHTML={{
                       __html: isPrevious
                         ? '<span class="material-symbols-outlined text-sm">chevron_left</span>'
                         : isNext
-                        ? '<span class="material-symbols-outlined text-sm">chevron_right</span>'
-                        : `<span class="px-1 font-bold">${label}</span>`,
+                          ? '<span class="material-symbols-outlined text-sm">chevron_right</span>'
+                          : `<span class="px-1 font-bold">${label}</span>`,
                     }}
                   />
                 );

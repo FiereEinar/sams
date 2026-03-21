@@ -1,6 +1,7 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 import SidebarFooter from './SidebarFooter';
 import SidebarHeader from '../SidebarHeader';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 const sidebarLinks = [
   {
@@ -24,11 +25,6 @@ const sidebarLinks = [
     icon: 'groups',
   },
   {
-    title: 'Analytics',
-    href: '/analytics',
-    icon: 'assessment',
-  },
-  {
     title: 'Settings',
     href: '/settings',
     icon: 'settings',
@@ -48,13 +44,21 @@ export default function Sidebar() {
         ))}
       </nav>
       <div className="px-4 pb-2">
-        <Link
-          href="/logout"
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-red-100 dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
-        >
-          <span className="material-symbols-outlined">logout</span>
-          <span className="text-sm font-medium">Log Out</span>
-        </Link>
+        <ConfirmDialog
+          title="Log Out"
+          description="Are you sure you want to log out of your account?"
+          confirmText="Log Out"
+          onConfirm={() => router.post('/logout')}
+          trigger={(open) => (
+            <button
+              onClick={open}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-red-100 dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+            >
+              <span className="material-symbols-outlined">logout</span>
+              <span className="text-sm font-medium">Log Out</span>
+            </button>
+          )}
+        />
       </div>
       <SidebarFooter />
     </aside>

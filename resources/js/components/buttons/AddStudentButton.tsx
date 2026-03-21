@@ -7,7 +7,7 @@ export default function AddStudentButton() {
       trigger={(open) => (
         <button
           onClick={open}
-          className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-hover"
+          className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-hover"
         >
           <span className="material-symbols-outlined text-lg">person_add</span>
           <span>Add Student</span>
