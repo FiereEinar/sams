@@ -1,14 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\tenant;
+namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Student;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class MasterlistController extends Controller
 {
-    public function index() {
-        return Inertia::render("tenant/Masterlist");
+    public function index(): Response
+    {
+        $students = Student::query()
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->get();
+
+        return Inertia::render('tenant/Masterlist', [
+            'students' => $students,
+        ]);
     }
 }

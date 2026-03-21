@@ -3,14 +3,15 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\tenant\AttendanceController;
 use App\Http\Controllers\Tenant\EventController;
+use App\Http\Controllers\tenant\MasterlistController;
+use App\Http\Controllers\Tenant\MasterlistImportController;
 use App\Http\Middleware\EnsureTenantIsActive;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
-use App\Http\Controllers\tenant\AttendanceController;
-use App\Http\Controllers\tenant\MasterlistController;
 
 Route::middleware([
     'web',
@@ -32,6 +33,11 @@ Route::middleware([
 
         Route::get('/attendance', [AttendanceController::class, 'index'])->name('tenant-attendance');
         Route::get('/masterlist', [MasterlistController::class, 'index'])->name('tenant-masterlist');
+
+        Route::post('/masterlist/import/preview', [MasterlistImportController::class, 'preview'])->name('tenant-masterlist-import-preview');
+        Route::post('/masterlist/import/store', [MasterlistImportController::class, 'store'])->name('tenant-masterlist-import-store');
+        Route::get('/masterlist/import/template', [MasterlistImportController::class, 'downloadTemplate'])->name('tenant-masterlist-import-template');
+
         Route::get('/settings', fn () => Inertia::render('tenant/Settings'))->name('tenant-settings');
     });
 });
