@@ -49,6 +49,18 @@ class MasterlistImportController extends Controller
      */
     public function preview(ImportMasterlistRequest $request): JsonResponse
     {
+        $tenant = tenant();
+        $isBasic = ($tenant->plan ?? 'basic') === 'basic';
+
+        if ($isBasic && $tenant->last_masterlist_import_at) {
+            $lastImport = \Carbon\Carbon::parse($tenant->last_masterlist_import_at);
+            if (now()->diffInHours($lastImport) < 24) {
+                return response()->json([
+                    'error' => 'Your basic plan allows one import per day. Please try again tomorrow.',
+                ], 422);
+            }
+        }
+
         $file = $request->file('file');
         $rawData = Excel::toArray(null, $file);
 
@@ -107,6 +119,12 @@ class MasterlistImportController extends Controller
             $summary[$status]++;
         }
 
+        if ($isBasic && $summary['valid'] > 500) {
+            return response()->json([
+                'error' => 'Your basic plan allows a maximum of 500 students per import. This file contains '.$summary['valid'].' valid rows. Please upgrade to Premium or reduce your file size.',
+            ], 422);
+        }
+
         return response()->json([
             'columns' => $columnMap,
             'detected_headers' => $this->getDetectedHeaders($columnMap),
@@ -133,10 +151,23 @@ class MasterlistImportController extends Controller
             'rows.*.section' => ['nullable', 'string'],
         ]);
 
+        $tenant = tenant();
+        $isBasic = ($tenant->plan ?? 'basic') === 'basic';
+        $rows = $request->input('rows');
+
+        if ($isBasic) {
+            if ($tenant->last_masterlist_import_at && now()->diffInHours(\Carbon\Carbon::parse($tenant->last_masterlist_import_at)) < 24) {
+                return response()->json(['message' => 'Your basic plan allows one import per day.'], 422);
+            }
+            if (count($rows) > 500) {
+                return response()->json(['message' => 'Maximum 500 students per import.'], 422);
+            }
+        }
+
         $imported = 0;
         $skipped = 0;
 
-        foreach ($request->input('rows') as $row) {
+        foreach ($rows as $row) {
             $exists = Student::where('student_id', $row['student_id'])->exists();
 
             if ($exists) {
@@ -158,6 +189,10 @@ class MasterlistImportController extends Controller
             ]);
 
             $imported++;
+        }
+
+        if ($isBasic) {
+            $tenant->update(['last_masterlist_import_at' => now()->toDateTimeString()]);
         }
 
         return response()->json([

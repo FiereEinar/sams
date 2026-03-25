@@ -71,16 +71,16 @@ export default function MasterlistTable({ students }: Props) {
             <table className="w-full border-collapse text-left">
               <thead className="bg-slate-50 text-[11px] font-bold tracking-widest text-slate-500 uppercase dark:bg-background-dark/50">
                 <tr>
-                  <th className="border-primary-dark/30 border-b px-4 py-3">Student ID</th>
-                  <th className="border-primary-dark/30 border-b px-4 py-3">Last Name</th>
-                  <th className="border-primary-dark/30 border-b px-4 py-3">First Name</th>
-                  <th className="border-primary-dark/30 border-b px-4 py-3">Middle Name</th>
-                  <th className="border-primary-dark/30 border-b px-4 py-3 text-center">Sex</th>
-                  <th className="border-primary-dark/30 border-b px-4 py-3">Course</th>
-                  <th className="border-primary-dark/30 border-b px-4 py-3 text-center">Year</th>
-                  <th className="border-primary-dark/30 border-b px-4 py-3 text-center">Units</th>
-                  <th className="border-primary-dark/30 border-b px-4 py-3 text-center">Section</th>
-                  <th className="border-primary-dark/30 border-b px-4 py-3 text-right">Actions</th>
+                  <th className="border-b border-slate-800 px-6 py-4">Student ID</th>
+                  <th className="border-b border-slate-800 px-6 py-4">Last Name</th>
+                  <th className="border-b border-slate-800 px-6 py-4">First Name</th>
+                  <th className="border-b border-slate-800 px-6 py-4">Middle Name</th>
+                  <th className="border-b border-slate-800 px-6 py-4 text-center">Sex</th>
+                  <th className="border-b border-slate-800 px-6 py-4">Course</th>
+                  <th className="border-b border-slate-800 px-6 py-4 text-center">Year</th>
+                  <th className="border-b border-slate-800 px-6 py-4 text-center">Units</th>
+                  <th className="border-b border-slate-800 px-6 py-4 text-center">Section</th>
+                  <th className="border-b border-slate-800 px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800 text-sm">

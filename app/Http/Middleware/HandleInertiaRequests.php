@@ -41,6 +41,13 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'tenantPlan' => function () {
+                if (function_exists('tenant') && tenant()) {
+                    return tenant('plan') ?? 'basic';
+                }
+
+                return null;
+            },
         ];
     }
 }

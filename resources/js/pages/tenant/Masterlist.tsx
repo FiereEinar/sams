@@ -14,14 +14,30 @@ import { useToast } from '@/hooks/use-toast';
 type Tab = 'import' | 'masterlist';
 
 export default function Masterlist() {
-  const { students } = usePage<{ students: PaginatedStudents }>().props;
+  const { students, tenantPlan, nextImportAt } = usePage<{ 
+    students: PaginatedStudents; 
+    tenantPlan: 'basic' | 'premium'; 
+    nextImportAt: string | null; 
+  }>().props;
+  
   const [activeTab, setActiveTab] = useState<Tab>('masterlist');
   const [previewData, setPreviewData] = useState<ImportPreviewData | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const { toast } = useToast();
 
+  const isCooldownActive = Boolean(tenantPlan === 'basic' && nextImportAt && new Date(nextImportAt) > new Date());
+
   async function handleFileSelected(file: File) {
+    if (isCooldownActive) {
+      toast({
+        title: 'Cooldown Active',
+        description: 'You cannot upload a new masterlist until the cooldown expires.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     try {
       setIsUploading(true);
 
@@ -148,12 +164,12 @@ export default function Masterlist() {
 
         {activeTab === 'import' && (
           <>
-            <ImportCooldown />
-            <ImportMasterlist onFileSelected={handleFileSelected} isUploading={isUploading} />
+            {isCooldownActive && <ImportCooldown nextImportAt={nextImportAt!} />}
+            <ImportMasterlist onFileSelected={handleFileSelected} isUploading={isUploading} isCooldownActive={isCooldownActive} />
             {previewData && (
               <ImportPreview data={previewData} onConfirm={handleConfirmImport} onCancel={handleCancelPreview} isImporting={isImporting} />
             )}
-            <ImportInformation />
+            <ImportInformation tenantPlan={tenantPlan} />
           </>
         )}
 

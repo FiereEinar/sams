@@ -28,9 +28,20 @@ class MasterlistController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $tenant = tenant();
+        $tenantPlan = $tenant->plan ?? 'basic';
+        $nextImportAt = null;
+
+        if ($tenantPlan === 'basic' && $tenant->last_masterlist_import_at) {
+            $lastImportDate = \Carbon\Carbon::parse($tenant->last_masterlist_import_at);
+            $nextImportAt = $lastImportDate->addDay()->toIso8601String();
+        }
+
         return Inertia::render('tenant/Masterlist', [
             'students' => $students,
             'filters' => $request->only('search'),
+            'tenantPlan' => $tenantPlan,
+            'nextImportAt' => $nextImportAt,
         ]);
     }
 

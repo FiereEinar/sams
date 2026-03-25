@@ -39,11 +39,11 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
     <div className="modal-glow flex w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/5 bg-white shadow-2xl dark:bg-[#16212b]">
       <header className="flex items-center justify-between border-b border-gray-200 px-8 py-6 dark:border-white/10">
         <div className="flex items-center gap-3">
-          <div className="rounded-lg bg-primary/10 p-2">
+          <div className="flex size-12 items-center justify-center rounded-lg bg-primary/10">
             <span className="material-symbols-outlined text-primary">edit</span>
           </div>
           <div>
-            <h2 className="text-xl font-bold leading-tight text-gray-900 dark:text-white">Edit Student</h2>
+            <h2 className="text-xl leading-tight font-bold text-gray-900 dark:text-white">Edit Student</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">BukSU Student Attendance System</p>
           </div>
         </div>
@@ -51,7 +51,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
           <span className="material-symbols-outlined">close</span>
         </button>
       </header>
-      <div className="max-h-[80vh] overflow-y-auto p-8 custom-scrollbar">
+      <div className="custom-scrollbar max-h-[80vh] overflow-y-auto p-8">
         <form id="edit-student-form" onSubmit={submit} className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Column 1: Personal Info */}
           <div className="space-y-6">
@@ -60,7 +60,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
               <input
                 value={data.student_id}
                 onChange={(e) => setData('student_id', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
                 placeholder="e.g. 2024-0001"
                 type="text"
                 required
@@ -73,7 +73,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
               <input
                 value={data.first_name}
                 onChange={(e) => setData('first_name', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
                 placeholder="First Name"
                 type="text"
                 required
@@ -86,7 +86,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
               <input
                 value={data.last_name}
                 onChange={(e) => setData('last_name', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
                 placeholder="Last Name"
                 type="text"
                 required
@@ -99,7 +99,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
               <input
                 value={data.middle_name}
                 onChange={(e) => setData('middle_name', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
                 placeholder="Middle Name"
                 type="text"
               />
@@ -111,7 +111,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
               <select
                 value={data.sex}
                 onChange={(e) => setData('sex', e.target.value)}
-                className="w-full cursor-pointer appearance-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white"
+                className="w-full cursor-pointer appearance-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white"
               >
                 <option value="">Select Sex</option>
                 <option value="Male">Male</option>
@@ -128,7 +128,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
               <input
                 value={data.course}
                 onChange={(e) => setData('course', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
                 placeholder="e.g. BSIT"
                 type="text"
               />
@@ -140,7 +140,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
               <input
                 value={data.year}
                 onChange={(e) => setData('year', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
                 placeholder="e.g. 1"
                 type="text"
               />
@@ -152,7 +152,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
               <input
                 value={data.section}
                 onChange={(e) => setData('section', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
                 placeholder="e.g. A"
                 type="text"
               />
@@ -164,7 +164,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
               <input
                 value={data.units}
                 onChange={(e) => setData('units', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
                 placeholder="e.g. 21"
                 type="text"
               />
@@ -188,7 +188,7 @@ export default function EditStudentForm({ student, close }: EditStudentFormProps
           className="flex items-center gap-2 rounded-lg bg-primary px-8 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 disabled:opacity-50"
         >
           {processing ? (
-             <span className="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>
+            <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
           ) : (
             <span className="material-symbols-outlined text-[20px]">check_circle</span>
           )}
