@@ -39,6 +39,7 @@ class TenantRequestController extends Controller
                     'admin_email' => $adminEmail,
                     'email' => $tenant->email,
                     'created_at' => $tenant->created_at->format('M d, Y'),
+                    'subscription_expires_at' => $tenant->created_at->copy()->addYear()->format('M d, Y'),
                 ];
             });
 
