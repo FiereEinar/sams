@@ -4,6 +4,7 @@ import type { PaginatedStudents, Student } from '@/types/student';
 import Dialog from '@/components/ui/Dialog';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import EditStudentForm from '@/components/forms/EditStudentForm';
+import AddStudentButton from '@/components/buttons/AddStudentButton';
 
 type Props = {
   students: PaginatedStudents;
@@ -41,17 +42,20 @@ export default function MasterlistTable({ students }: Props) {
             {students.total} {students.total === 1 ? 'student' : 'students'} registered in the masterlist.
           </p>
         </div>
-        <div className="relative">
-          <span className="material-symbols-outlined pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 !text-[20px] text-slate-500">
-            search
-          </span>
-          <input
-            type="text"
-            placeholder="Search students..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-slate-200 bg-surface-light py-2.5 pr-4 pl-10 text-sm text-slate-800 placeholder-slate-500 transition-all focus:border-primary focus:ring-2 focus:ring-primary/40 md:w-72 dark:border-slate-700 dark:bg-surface-dark dark:text-white"
-          />
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <span className="material-symbols-outlined pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 !text-[20px] text-slate-500">
+              search
+            </span>
+            <input
+              type="text"
+              placeholder="Search students..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-xl border border-slate-200 bg-surface-light py-2.5 pr-4 pl-10 text-sm text-slate-800 placeholder-slate-500 transition-all focus:border-primary focus:ring-2 focus:ring-primary/40 md:w-72 dark:border-slate-700 dark:bg-surface-dark dark:text-white"
+            />
+          </div>
+          <AddStudentButton />
         </div>
       </div>
 

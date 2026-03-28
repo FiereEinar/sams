@@ -32,6 +32,8 @@ type ThemeContextValue = {
   setSidebarPosition: (pos: SidebarPosition) => void;
   topbarVisibility: TopbarVisibility;
   setTopbarVisibility: (vis: TopbarVisibility) => void;
+  topbarMenu: TopbarVisibility;
+  setTopbarMenu: (vis: TopbarVisibility) => void;
   isSidebarCollapsed: boolean;
   toggleSidebar: () => void;
 };
@@ -128,12 +130,14 @@ export function ThemeProvider({
   const initialAccent = resolveAccentFromValue(initialSettings?.accent_color);
   const initialSidebar = (initialSettings?.layout_sidebar_position as SidebarPosition) || 'left';
   const initialTopbar = (initialSettings?.layout_topbar_visibility as TopbarVisibility) || 'visible';
+  const initialTopbarMenu = (initialSettings?.layout_topbar_menu as TopbarVisibility) || 'hidden';
   const initialCollapsed = initialSettings?.layout_sidebar_collapsed === 'true';
 
   const [mode, setModeState] = useState<ThemeMode>(initialMode);
   const [accentColor, setAccentColorState] = useState<AccentColor>(initialAccent);
   const [sidebarPosition, setSidebarPosState] = useState<SidebarPosition>(initialSidebar);
   const [topbarVisibility, setTopbarVisState] = useState<TopbarVisibility>(initialTopbar);
+  const [topbarMenu, setTopbarMenuState] = useState<TopbarVisibility>(initialTopbarMenu);
   const [isSidebarCollapsed, setIsSidebarCollapsedState] = useState<boolean>(initialCollapsed);
   const [systemDark, setSystemDark] = useState(() =>
     typeof window !== 'undefined' ? resolveSystemDark() : true,
@@ -182,6 +186,11 @@ export function ThemeProvider({
     persistSetting('layout_topbar_visibility', vis);
   }, []);
 
+  const setTopbarMenu = useCallback((vis: TopbarVisibility) => {
+    setTopbarMenuState(vis);
+    persistSetting('layout_topbar_menu', vis);
+  }, []);
+
   const toggleSidebar = useCallback(() => {
     setIsSidebarCollapsedState(prev => {
       const next = !prev;
@@ -197,9 +206,10 @@ export function ThemeProvider({
       resolvedDark,
       sidebarPosition, setSidebarPosition,
       topbarVisibility, setTopbarVisibility,
+      topbarMenu, setTopbarMenu,
       isSidebarCollapsed, toggleSidebar
     }),
-    [mode, setMode, accentColor, setAccentColor, resolvedDark, sidebarPosition, setSidebarPosition, topbarVisibility, setTopbarVisibility, isSidebarCollapsed, toggleSidebar],
+    [mode, setMode, accentColor, setAccentColor, resolvedDark, sidebarPosition, setSidebarPosition, topbarVisibility, setTopbarVisibility, topbarMenu, setTopbarMenu, isSidebarCollapsed, toggleSidebar],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

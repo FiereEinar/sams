@@ -58,7 +58,8 @@ export default function Settings() {
     accentColor, setAccentColor, 
     resolvedDark, 
     sidebarPosition, setSidebarPosition, 
-    topbarVisibility, setTopbarVisibility 
+    topbarVisibility, setTopbarVisibility,
+    topbarMenu, setTopbarMenu
   } = useTheme();
   const colorInputRef = useRef<HTMLInputElement>(null);
   const [customColor, setCustomColor] = useState(accentColor.name === 'Custom' ? accentColor.primary : '#6366f1');
@@ -318,6 +319,33 @@ export default function Settings() {
                   >
                     <span className="material-symbols-outlined text-lg">visibility_off</span>
                     <span>Hidden</span>
+                  </button>
+                </div>
+              </div>
+              
+              {/* Topbar Menu Visibility */}
+              <div>
+                <h3 className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">Show Menu in Topbar</h3>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setTopbarMenu('visible')}
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl border-2 py-3 transition-all ${
+                      topbarMenu === 'visible'
+                        ? 'border-primary bg-primary/5 font-semibold text-primary shadow-sm'
+                        : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:text-slate-400 dark:hover:border-white/20 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <span>Yes</span>
+                  </button>
+                  <button
+                    onClick={() => setTopbarMenu('hidden')}
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl border-2 py-3 transition-all ${
+                      topbarMenu === 'hidden'
+                        ? 'border-primary bg-primary/5 font-semibold text-primary shadow-sm'
+                        : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:text-slate-400 dark:hover:border-white/20 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <span>No</span>
                   </button>
                 </div>
               </div>

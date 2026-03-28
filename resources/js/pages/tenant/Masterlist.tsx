@@ -7,7 +7,6 @@ import ImportInformation from '@/components/masterlist/ImportInformation';
 import Layout from './Layout';
 import type { PaginatedStudents, ImportPreviewData } from '@/types/student';
 import MasterlistTable from '@/components/masterlist/MasterlistTable';
-import AddStudentButton from '@/components/buttons/AddStudentButton';
 import axios from 'axios';
 import { useToast } from '@/hooks/use-toast';
 
@@ -134,34 +133,27 @@ export default function Masterlist() {
   return (
     <Layout>
       <main className="mx-auto flex w-full flex-1 flex-col gap-8">
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          {/* Tabs */}
-          <div className="flex w-fit items-center gap-1 rounded-xl bg-surface-light p-1 dark:bg-surface-dark">
-            <button
-              onClick={() => setActiveTab('masterlist')}
-              className={`flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold transition-all ${
-                activeTab === 'masterlist'
-                  ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                  : 'text-slate-400 hover:text-slate-600 dark:hover:text-white'
-              }`}
-            >
-              <span className="material-symbols-outlined !text-[18px]">groups</span>
-              Current Masterlist
-            </button>
-            <button
-              onClick={() => setActiveTab('import')}
-              className={`flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold transition-all ${
-                activeTab === 'import'
-                  ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                  : 'text-slate-400 hover:text-slate-600 dark:hover:text-white'
-              }`}
-            >
-              <span className="material-symbols-outlined !text-[18px]">upload_file</span>
-              Import Masterlist
-            </button>
-          </div>
-
-          {activeTab === 'masterlist' && <AddStudentButton />}
+        <div className="mb-4 flex gap-6 border-b border-slate-200 dark:border-white/10">
+          <button
+            onClick={() => setActiveTab('masterlist')}
+            className={`pb-3 text-sm font-medium transition-colors ${
+              activeTab === 'masterlist'
+                ? 'border-b-2 border-primary text-primary'
+                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+            }`}
+          >
+            Current Masterlist
+          </button>
+          <button
+            onClick={() => setActiveTab('import')}
+            className={`pb-3 text-sm font-medium transition-colors ${
+              activeTab === 'import'
+                ? 'border-b-2 border-primary text-primary'
+                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+            }`}
+          >
+            Import Masterlist
+          </button>
         </div>
 
         {activeTab === 'import' && (
