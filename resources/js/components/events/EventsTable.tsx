@@ -31,18 +31,18 @@ export default function EventsTable({ events }: EventsTableProps) {
                       <span className="material-symbols-outlined">sports_soccer</span>
                     </div>
                     <div>
-                      <span className="block text-sm font-bold">University Intramurals 2024</span>
+                      <span className="block text-sm font-bold text-slate-800 dark:text-white">University Intramurals 2024</span>
                       <span className="text-[10px] text-slate-400">ID: EVT-2024-001</span>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-sm">
-                    <div className="font-medium">Oct 24-27, 2024</div>
+                    <div className="font-medium text-slate-700 dark:text-slate-300">Oct 24-27, 2024</div>
                     <div className="text-xs text-slate-500">08:00 AM - 05:00 PM</div>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm font-medium">Main Campus Gym</td>
+                <td className="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">Main Campus Gym</td>
                 <td className="px-6 py-4">
                   <span className="status-badge border border-emerald-500/20 bg-emerald-500/10 text-emerald-500">Live</span>
                 </td>
@@ -67,18 +67,18 @@ export default function EventsTable({ events }: EventsTableProps) {
                       <span className="material-symbols-outlined">school</span>
                     </div>
                     <div>
-                      <span className="block text-sm font-bold">General Assembly</span>
+                      <span className="block text-sm font-bold text-slate-800 dark:text-white">General Assembly</span>
                       <span className="text-[10px] text-slate-400">ID: EVT-2024-002</span>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-sm">
-                    <div className="font-medium">Nov 05, 2024</div>
+                    <div className="font-medium text-slate-700 dark:text-slate-300">Nov 05, 2024</div>
                     <div className="text-xs text-slate-500">01:00 PM - 04:00 PM</div>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm font-medium">BukSU Auditorium</td>
+                <td className="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">BukSU Auditorium</td>
                 <td className="px-6 py-4">
                   <span className="status-badge border border-blue-500/20 bg-blue-500/10 text-blue-500">Upcoming</span>
                 </td>
@@ -103,18 +103,18 @@ export default function EventsTable({ events }: EventsTableProps) {
                       <span className="material-symbols-outlined">psychology</span>
                     </div>
                     <div>
-                      <span className="block text-sm font-bold">Leadership Training</span>
+                      <span className="block text-sm font-bold text-slate-800 dark:text-white">Leadership Training</span>
                       <span className="text-[10px] text-slate-400">ID: EVT-2024-003</span>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-sm">
-                    <div className="font-medium">Nov 12, 2024</div>
+                    <div className="font-medium text-slate-700 dark:text-slate-300">Nov 12, 2024</div>
                     <div className="text-xs text-slate-500">09:00 AM - 03:00 PM</div>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm font-medium">Conference Hall B</td>
+                <td className="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">Conference Hall B</td>
                 <td className="px-6 py-4">
                   <span className="status-badge border border-blue-500/20 bg-blue-500/10 text-blue-500">Upcoming</span>
                 </td>
@@ -139,18 +139,18 @@ export default function EventsTable({ events }: EventsTableProps) {
                       <span className="material-symbols-outlined">campaign</span>
                     </div>
                     <div>
-                      <span className="block text-sm font-bold">Org Orientation</span>
+                      <span className="block text-sm font-bold text-slate-800 dark:text-white">Org Orientation</span>
                       <span className="text-[10px] text-slate-400">ID: EVT-2024-004</span>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-sm">
-                    <div className="font-medium">Oct 10, 2024</div>
+                    <div className="font-medium text-slate-700 dark:text-slate-300">Oct 10, 2024</div>
                     <div className="text-xs text-slate-500">10:00 AM - 12:00 PM</div>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm font-medium">Activity Center</td>
+                <td className="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">Activity Center</td>
                 <td className="px-6 py-4">
                   <span className="status-badge border border-slate-500/20 bg-slate-500/10 text-slate-500">Completed</span>
                 </td>
@@ -205,7 +205,7 @@ function TableRow({ event }: { event: Event }) {
             <span className="material-symbols-outlined">sports_soccer</span>
           </div>
           <div>
-            <span className="block text-sm font-bold">{event.title}</span>
+            <span className="block text-sm font-bold text-slate-800 dark:text-white">{event.title}</span>
             <span className="text-[10px] text-slate-400">ID: {event.code}</span>
           </div>
         </div>
@@ -218,7 +218,7 @@ function TableRow({ event }: { event: Event }) {
           </div>
         </div>
       </td>
-      <td className="px-6 py-4 text-sm font-medium">{event.venue}</td>
+      <td className="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">{event.venue}</td>
       <td className="px-6 py-4">
         <span className="status-badge border border-emerald-500/20 bg-emerald-500/10 text-emerald-500">Live</span>
       </td>

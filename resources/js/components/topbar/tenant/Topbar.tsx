@@ -29,7 +29,7 @@ export default function Topbar({ placeholder = 'Search...', role = 'Admin' }: To
         <div className="mx-2 h-8 w-px bg-slate-200 dark:bg-white/10"></div>
         <div className="flex items-center gap-3">
           <div className="hidden text-right sm:block">
-            <p className="text-sm leading-none font-bold">{user?.name ?? 'User'}</p>
+            <p className="text-sm font-bold leading-none text-slate-800 dark:text-white">{user?.name ?? 'User'}</p>
             <p className="text-xs text-slate-500">{role}</p>
           </div>
           <div className="flex size-10 items-center justify-center rounded-full border-2 border-primary bg-primary/10">

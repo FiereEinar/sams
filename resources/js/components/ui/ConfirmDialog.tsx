@@ -33,34 +33,34 @@ export default function ConfirmDialog({
         };
 
         return (
-          <div className="modal-glow flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-white/5 bg-white shadow-2xl dark:bg-[#16212b]">
+          <div className="modal-glow flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-slate-200 bg-surface-light shadow-2xl dark:border-white/5 dark:bg-surface-dark">
             <header className="flex items-center justify-between px-6 py-5">
               <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-red-500/10 size-12 flex items-center justify-center">
+                <div className="flex size-12 items-center justify-center rounded-lg bg-red-500/10">
                   <span className="material-symbols-outlined text-red-500">warning</span>
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold leading-tight text-gray-900 dark:text-white">{title}</h2>
+                  <h2 className="text-lg font-bold leading-tight text-slate-800 dark:text-white">{title}</h2>
                 </div>
               </div>
               <button
                 onClick={handleCancel}
-                className="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-white"
+                className="text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-white"
               >
                 <span className="material-symbols-outlined text-[20px]">close</span>
               </button>
             </header>
             
             <div className="flex-1 px-6 pb-6">
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-sm text-slate-600 dark:text-slate-300">
                 {description}
               </p>
             </div>
             
-            <footer className="flex items-center justify-end gap-3 border-t border-gray-200 bg-gray-50 px-6 py-4 dark:border-white/10 dark:bg-[#111a22]">
+            <footer className="flex items-center justify-end gap-3 border-t border-slate-200 bg-slate-50 px-6 py-4 dark:border-white/5 dark:bg-background-dark">
               <button
                 onClick={handleCancel}
-                className="rounded-lg px-4 py-2 text-sm font-semibold text-gray-600 transition-all hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-white/5"
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-white/5"
               >
                 {cancelText}
               </button>

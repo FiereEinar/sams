@@ -8,7 +8,7 @@ export default function EventsOverview() {
           </div>
         </div>
         <p className="text-sm font-medium tracking-wider text-slate-500 uppercase dark:text-slate-400">Upcoming Events</p>
-        <h3 className="mt-1 text-3xl font-black">12</h3>
+        <h3 className="mt-1 text-3xl font-black text-slate-800 dark:text-white">12</h3>
         <div className="absolute -right-4 -bottom-4 opacity-5 transition-opacity group-hover:opacity-10">
           <span className="material-symbols-outlined text-8xl">calendar_month</span>
         </div>
@@ -23,7 +23,7 @@ export default function EventsOverview() {
           </span>
         </div>
         <p className="text-sm font-medium tracking-wider text-slate-500 uppercase dark:text-slate-400">Active Events</p>
-        <h3 className="mt-1 text-3xl font-black">2</h3>
+        <h3 className="mt-1 text-3xl font-black text-slate-800 dark:text-white">2</h3>
         <div className="absolute -right-4 -bottom-4 opacity-5 transition-opacity group-hover:opacity-10">
           <span className="material-symbols-outlined text-8xl">bolt</span>
         </div>
@@ -35,7 +35,7 @@ export default function EventsOverview() {
           </div>
         </div>
         <p className="text-sm font-medium tracking-wider text-slate-500 uppercase dark:text-slate-400">Completed (This Sem)</p>
-        <h3 className="mt-1 text-3xl font-black">45</h3>
+        <h3 className="mt-1 text-3xl font-black text-slate-800 dark:text-white">45</h3>
         <div className="absolute -right-4 -bottom-4 opacity-5 transition-opacity group-hover:opacity-10">
           <span className="material-symbols-outlined text-8xl">history</span>
         </div>

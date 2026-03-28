@@ -35,18 +35,18 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
   }
 
   return (
-    <div className="modal-glow flex w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/5 bg-white shadow-2xl dark:bg-[#16212b]">
-      <header className="flex items-center justify-between border-b border-gray-200 px-8 py-6 dark:border-white/10">
+    <div className="modal-glow flex w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-slate-200 bg-surface-light shadow-2xl dark:border-white/5 dark:bg-surface-dark">
+      <header className="flex items-center justify-between border-b border-slate-200 px-8 py-6 dark:border-white/5">
         <div className="flex items-center gap-3">
           <div className="flex size-12 items-center justify-center rounded-lg bg-primary/10">
             <span className="material-symbols-outlined text-primary">person_add</span>
           </div>
           <div>
-            <h2 className="text-xl leading-tight font-bold text-gray-900 dark:text-white">Add New Student</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">BukSU Student Attendance System</p>
+            <h2 className="text-xl font-bold leading-tight text-slate-800 dark:text-white">Add New Student</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">BukSU Student Attendance System</p>
           </div>
         </div>
-        <button onClick={close} className="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-white">
+        <button onClick={close} className="text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-white">
           <span className="material-symbols-outlined">close</span>
         </button>
       </header>
@@ -55,11 +55,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
           {/* Column 1: Personal Info */}
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Student ID *</label>
+              <label className="text-sm font-semibold text-slate-600 dark:text-slate-300">Student ID *</label>
               <input
                 value={data.student_id}
                 onChange={(e) => setData('student_id', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/5 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500"
                 placeholder="e.g. 2024-0001"
                 type="text"
                 required
@@ -68,11 +68,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">First Name *</label>
+              <label className="text-sm font-semibold text-slate-600 dark:text-slate-300">First Name *</label>
               <input
                 value={data.first_name}
                 onChange={(e) => setData('first_name', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/5 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500"
                 placeholder="First Name"
                 type="text"
                 required
@@ -81,11 +81,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Last Name *</label>
+              <label className="text-sm font-semibold text-slate-600 dark:text-slate-300">Last Name *</label>
               <input
                 value={data.last_name}
                 onChange={(e) => setData('last_name', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/5 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500"
                 placeholder="Last Name"
                 type="text"
                 required
@@ -94,11 +94,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Middle Name</label>
+              <label className="text-sm font-semibold text-slate-600 dark:text-slate-300">Middle Name</label>
               <input
                 value={data.middle_name}
                 onChange={(e) => setData('middle_name', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/5 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500"
                 placeholder="Middle Name"
                 type="text"
               />
@@ -106,11 +106,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Sex</label>
+              <label className="text-sm font-semibold text-slate-600 dark:text-slate-300">Sex</label>
               <select
                 value={data.sex}
                 onChange={(e) => setData('sex', e.target.value)}
-                className="w-full cursor-pointer appearance-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white"
+                className="w-full cursor-pointer appearance-none rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/5 dark:bg-background-dark dark:text-white"
               >
                 <option value="">Select Sex</option>
                 <option value="Male">Male</option>
@@ -123,11 +123,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
           {/* Column 2: Academic Info */}
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Course / Program</label>
+              <label className="text-sm font-semibold text-slate-600 dark:text-slate-300">Course / Program</label>
               <input
                 value={data.course}
                 onChange={(e) => setData('course', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/5 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500"
                 placeholder="e.g. BSIT"
                 type="text"
               />
@@ -135,11 +135,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Year Level</label>
+              <label className="text-sm font-semibold text-slate-600 dark:text-slate-300">Year Level</label>
               <input
                 value={data.year}
                 onChange={(e) => setData('year', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/5 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500"
                 placeholder="e.g. 1"
                 type="text"
               />
@@ -147,11 +147,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Section</label>
+              <label className="text-sm font-semibold text-slate-600 dark:text-slate-300">Section</label>
               <input
                 value={data.section}
                 onChange={(e) => setData('section', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/5 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500"
                 placeholder="e.g. A"
                 type="text"
               />
@@ -159,11 +159,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Units</label>
+              <label className="text-sm font-semibold text-slate-600 dark:text-slate-300">Units</label>
               <input
                 value={data.units}
                 onChange={(e) => setData('units', e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-all outline-none placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-[#324d67] dark:bg-[#1c2a38] dark:text-white dark:placeholder:text-gray-500"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/5 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500"
                 placeholder="e.g. 21"
                 type="text"
               />
@@ -172,11 +172,11 @@ export default function CreateStudentForm({ close }: CreateStudentFormProps) {
           </div>
         </form>
       </div>
-      <footer className="flex items-center justify-end gap-4 border-t border-gray-200 bg-gray-50 px-8 py-6 dark:border-white/10 dark:bg-[#111a22]">
+      <footer className="flex items-center justify-end gap-4 border-t border-slate-200 bg-slate-50 px-8 py-6 dark:border-white/5 dark:bg-background-dark">
         <button
           onClick={close}
           disabled={processing}
-          className="rounded-lg px-6 py-2.5 text-sm font-semibold text-gray-600 transition-all hover:bg-gray-200 disabled:opacity-50 dark:text-gray-400 dark:hover:bg-white/5"
+          className="rounded-lg px-6 py-2.5 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-200 disabled:opacity-50 dark:text-slate-400 dark:hover:bg-white/5"
         >
           Cancel
         </button>
