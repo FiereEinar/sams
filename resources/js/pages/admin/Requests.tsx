@@ -72,10 +72,6 @@ export default function Requests({ requests }: { requests: TenantRequest[] }) {
                         <h3 className="text-lg font-bold">{req.organization_name}</h3>
                         <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-400">
                           <span className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">category</span>
-                            {req.organization_type}
-                          </span>
-                          <span className="flex items-center gap-1">
                             <span className="material-symbols-outlined text-sm">link</span>
                             <a
                               href={`${window.location.protocol}//${req.domain}:${import.meta.env.VITE_APP_PORT}/login`}
@@ -85,16 +81,6 @@ export default function Requests({ requests }: { requests: TenantRequest[] }) {
                             >
                               {req.domain}
                             </a>
-                          </span>
-                          {req.admin_email && (
-                            <span className="flex items-center gap-1">
-                              <span className="material-symbols-outlined text-sm">mail</span>
-                              {req.admin_email}
-                            </span>
-                          )}
-                          <span className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">schedule</span>
-                            {req.created_at}
                           </span>
                         </div>
                       </div>

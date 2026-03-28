@@ -19,7 +19,7 @@ foreach (config('tenancy.central_domains') as $domain) {
         Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
         Route::post('/login', [AuthController::class, 'login'])->name('login-api');
 
-        Route::get('/logout', [AuthController::class, 'logout'])->name('logout-api');
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout-api');
 
         Route::get('/signup', [AuthController::class, 'signupPage'])->name('signup-page');
         Route::post('/signup', [AuthController::class, 'signup'])->name('signup-api');

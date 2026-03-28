@@ -21,7 +21,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/login', [AuthController::class, 'loginPage'])->name('tenant-login');
     Route::post('/login', [AuthController::class, 'login'])->name('tenant-login-api');
-    Route::get('/logout', [AuthController::class, 'logout'])->name('tenant-logout-api');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('tenant-logout-api');
 
     Route::middleware(['auth'])->group(function () {
         Route::get('/', fn () => redirect('/dashboard'));

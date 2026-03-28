@@ -1,6 +1,7 @@
 import { Head, router } from '@inertiajs/react';
 import Layout from './Layout';
 import TenantDetailsModal from '../../components/admin/TenantDetailsModal';
+import _ from 'lodash';
 
 interface TenantItem {
   id: string;
@@ -78,10 +79,6 @@ export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
                         </div>
                         <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-400">
                           <span className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">category</span>
-                            {tenant.organization_type}
-                          </span>
-                          <span className="flex items-center gap-1">
                             <span className="material-symbols-outlined text-sm">link</span>
                             <a
                               href={`${window.location.protocol}//${tenant.domain}:${import.meta.env.VITE_APP_PORT}/login`}
@@ -91,25 +88,6 @@ export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
                             >
                               {tenant.domain}
                             </a>
-                          </span>
-
-                          {tenant.name && (
-                            <span className="flex items-center gap-1">
-                              <span className="material-symbols-outlined text-sm">person</span>
-                              {tenant.name}
-                            </span>
-                          )}
-
-                          {tenant.address && (
-                            <span className="flex items-center gap-1">
-                              <span className="material-symbols-outlined text-sm">location_on</span>
-                              {tenant.address}
-                            </span>
-                          )}
-
-                          <span className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">schedule</span>
-                            {tenant.created_at}
                           </span>
                         </div>
                       </div>

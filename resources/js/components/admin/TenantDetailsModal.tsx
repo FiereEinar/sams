@@ -1,6 +1,7 @@
 import React, { useState, ReactNode } from 'react';
 import { router } from '@inertiajs/react';
 import Dialog from '../ui/Dialog';
+import _ from 'lodash';
 
 export interface TenantDetails {
   id: string;
@@ -34,19 +35,19 @@ export default function TenantDetailsModal({ tenant, trigger, isRequest = false 
       {},
       {
         onFinish: () => setIsSending(false),
-      }
+      },
     );
   };
 
   return (
     <Dialog trigger={trigger}>
       {(close) => (
-        <div className="flex w-full max-w-2xl flex-col gap-6 rounded-xl border border-white/5 bg-[#16212b] p-6 shadow-2xl">
+        <div className="flex w-full max-w-2xl flex-col gap-6 rounded-xl border border-white/5 bg-[#16212b] p-6 shadow-2xl md:min-w-[700px]">
           <div>
             <h2 className="text-2xl font-black text-white">{tenant.organization_name}</h2>
             <p className="mt-1 flex items-center gap-2 text-sm text-slate-400">
               <span className="material-symbols-outlined text-[16px]">domain</span>
-              {tenant.organization_type}
+              {_.startCase(tenant.organization_type)}
             </p>
           </div>
 
@@ -59,11 +60,16 @@ export default function TenantDetailsModal({ tenant, trigger, isRequest = false 
                   <dt className="text-slate-500">Domain / URL</dt>
                   <dd className="font-medium text-white">
                     {tenant.domain ? (
-                      <a href={`${window.location.protocol}//${tenant.domain}:${import.meta.env.VITE_APP_PORT}/login`} target="_blank" className="text-primary hover:underline" onClick={(e) => e.stopPropagation()}>
+                      <a
+                        href={`${window.location.protocol}//${tenant.domain}:${import.meta.env.VITE_APP_PORT}/login`}
+                        target="_blank"
+                        className="text-primary hover:underline"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         {tenant.domain}
                       </a>
                     ) : (
-                      <span className="italic text-slate-500">Pending</span>
+                      <span className="text-slate-500 italic">Pending</span>
                     )}
                   </dd>
                 </div>
@@ -103,12 +109,14 @@ export default function TenantDetailsModal({ tenant, trigger, isRequest = false 
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold tracking-widest text-slate-400 uppercase">Subscription Details</h3>
               {!isRequest && tenant.plan && (
-                <span className={`rounded-lg px-2.5 py-0.5 text-xs font-bold tracking-wider uppercase ${tenant.plan === 'premium' ? 'bg-primary/20 text-primary' : 'bg-slate-700 text-slate-300'}`}>
+                <span
+                  className={`rounded-lg px-2.5 py-0.5 text-xs font-bold tracking-wider uppercase ${tenant.plan === 'premium' ? 'bg-primary/20 text-primary' : 'bg-slate-700 text-slate-300'}`}
+                >
                   {tenant.plan}
                 </span>
               )}
             </div>
-            
+
             <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-col gap-1 text-sm">
                 <span className="text-slate-500">Expires On</span>
@@ -128,7 +136,10 @@ export default function TenantDetailsModal({ tenant, trigger, isRequest = false 
           </div>
 
           <div className="flex justify-end pt-4">
-            <button onClick={() => close()} className="rounded-xl bg-slate-800 px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-slate-700">
+            <button
+              onClick={() => close()}
+              className="rounded-xl bg-slate-800 px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-slate-700"
+            >
               Close
             </button>
           </div>
