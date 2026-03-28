@@ -2,20 +2,11 @@ import { Head, router } from '@inertiajs/react';
 import Layout from './Layout';
 import TenantDetailsModal from '../../components/admin/TenantDetailsModal';
 import _ from 'lodash';
+import { Tenant } from '@/types/tenant';
 
-interface TenantItem {
-  id: string;
-  organization_name: string;
-  organization_type: string;
-  plan: string;
-  status: string;
-  domain: string | null;
-  address: string | null;
-  name: string | null;
-  email: string | null;
-  created_at: string;
+type TenantItem = Tenant & {
   subscription_expires_at: string;
-}
+};
 
 export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
   const handleToggle = (e: React.MouseEvent, id: string, currentStatus: string) => {

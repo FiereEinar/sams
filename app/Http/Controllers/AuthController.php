@@ -11,7 +11,9 @@ class AuthController extends Controller
 {
     public function loginPage()
     {
-        return Inertia::render('Login');
+        $tenant = tenant();
+
+        return Inertia::render('Login', compact('tenant'));
     }
 
     public function signupPage()

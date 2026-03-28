@@ -1,13 +1,18 @@
 import LoginForm from '@/components/forms/LoginForm';
 import TrustedBy from '@/components/TrustedBy';
+import { Tenant } from '@/types/tenant';
 
-export default function LoginPage() {
+type LoginPageProps = {
+  tenant?: Tenant;
+};
+
+export default function LoginPage({ tenant }: LoginPageProps) {
   return (
     <div className="flex min-h-screen items-center justify-center overflow-hidden bg-background-dark text-white">
       <div className="pointer-events-none fixed top-[-10%] left-[-10%] h-[40%] w-[40%] rounded-full bg-primary/20 blur-[120px]"></div>
       <div className="pointer-events-none fixed right-[-10%] bottom-[-10%] h-[40%] w-[40%] rounded-full bg-blue-600/10 blur-[120px]"></div>
       <div className="relative z-10 mx-4 flex h-175 w-full max-w-6xl overflow-hidden lg:mx-auto lg:rounded-3xl lg:shadow-2xl lg:shadow-black/50">
-        <LeftCard />
+        <LeftCard tenant={tenant} />
         <div className="flex w-full flex-col justify-center border-l border-white/5 bg-surface-dark/50 p-8 backdrop-blur-xl md:p-16 lg:w-1/2">
           <div className="mx-auto w-full max-w-md">
             <div className="mb-8 flex items-center gap-3 lg:hidden">
@@ -43,7 +48,7 @@ export default function LoginPage() {
   );
 }
 
-function LeftCard() {
+function LeftCard({ tenant }: { tenant?: Tenant }) {
   return (
     <div className="relative hidden flex-col justify-end overflow-hidden bg-slate-900 p-12 lg:flex lg:w-1/2">
       <div className="absolute inset-0 opacity-40">
@@ -59,13 +64,13 @@ function LeftCard() {
           <span className="material-symbols-outlined text-2xl font-bold">account_balance</span>
         </div>
         <div>
-          <h1 className="text-xl leading-none font-bold tracking-tight">BukSU</h1>
+          <h1 className="text-xl leading-none font-bold tracking-tight">{tenant?.organization_name || 'BukSU'}</h1>
           <p className="text-xs font-semibold tracking-wider text-primary/80 uppercase">Attendance System</p>
         </div>
       </div>
       <div className="relative z-10">
         <h2 className="mb-4 text-4xl leading-tight font-black">
-          Empowering BukSU <br />
+          Empowering {tenant?.organization_name || 'BukSU'} <br />
           <span className="text-primary">Student Leaders</span>
         </h2>
         <p className="max-w-md text-lg leading-relaxed text-slate-400">

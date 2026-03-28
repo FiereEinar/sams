@@ -66,4 +66,47 @@ class AttendanceRecordController extends Controller
             'total' => $records->count(),
         ]);
     }
+
+    public function export(Request $request, EventSession $session): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        $query = $session->attendanceRecords()->with('student')->orderByDesc('recorded_at');
+
+        $course = $request->query('course');
+        $section = $request->query('section');
+
+        if ($course) {
+            $query->whereHas('student', fn ($q) => $q->where('course', $course));
+        }
+
+        if ($section) {
+            $query->whereHas('student', fn ($q) => $q->where('section', $section));
+        }
+
+        $records = $query->get();
+        $sessionName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $session->name);
+        $filename = "attendance_{$sessionName}_".now()->format('Y-m-d').'.csv';
+
+        return response()->streamDownload(function () use ($records) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, ['Student ID', 'Last Name', 'First Name', 'Middle Name', 'Course', 'Year', 'Section', 'Method', 'Recorded At']);
+
+            foreach ($records as $record) {
+                fputcsv($handle, [
+                    $record->student_id_input,
+                    $record->student?->last_name ?? '',
+                    $record->student?->first_name ?? '',
+                    $record->student?->middle_name ?? '',
+                    $record->student?->course ?? '',
+                    $record->student?->year ?? '',
+                    $record->student?->section ?? '',
+                    $record->method,
+                    $record->recorded_at->format('Y-m-d H:i:s'),
+                ]);
+            }
+
+            fclose($handle);
+        }, $filename, [
+            'Content-Type' => 'text/csv',
+        ]);
+    }
 }

@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { EventSession } from '@/types/event';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import ExportAttendanceDialog from '@/components/attendance/ExportAttendanceDialog';
 
 interface SessionCardProps {
   session: EventSession;
@@ -54,6 +55,23 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
           </span>
         )}
       </div>
+
+      {recordCount > 0 && (
+        <div className="mb-3">
+          <ExportAttendanceDialog
+            sessionId={session.id}
+            trigger={(open) => (
+              <button
+                onClick={(e) => { e.stopPropagation(); open(); }}
+                className="flex w-full items-center justify-center gap-1 rounded-xl bg-primary/10 py-2 text-xs font-bold text-primary transition-all hover:bg-primary/20"
+              >
+                <span className="material-symbols-outlined text-sm">download</span>
+                Export
+              </button>
+            )}
+          />
+        </div>
+      )}
 
       <div className="flex gap-2">
         {session.status === 'pending' && (

@@ -43,6 +43,7 @@ Route::middleware([
         // Attendance Records
         Route::post('/sessions/{session}/attendance', [AttendanceRecordController::class, 'store'])->name('tenant-attendance-store');
         Route::get('/sessions/{session}/attendance', [AttendanceRecordController::class, 'index'])->name('tenant-attendance-index');
+        Route::get('/sessions/{session}/attendance/export', [AttendanceRecordController::class, 'export'])->name('tenant-attendance-export');
 
         Route::get('/attendance', [AttendanceController::class, 'index'])->name('tenant-attendance');
         Route::get('/masterlist', [MasterlistController::class, 'index'])->name('tenant-masterlist');
