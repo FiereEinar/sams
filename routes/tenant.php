@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\tenant\AttendanceController;
+use App\Http\Controllers\Tenant\AttendanceRecordController;
 use App\Http\Controllers\Tenant\EventController;
+use App\Http\Controllers\Tenant\EventSessionController;
 use App\Http\Controllers\tenant\MasterlistController;
 use App\Http\Controllers\Tenant\MasterlistImportController;
 use App\Http\Middleware\EnsureTenantIsActive;
@@ -30,6 +32,17 @@ Route::middleware([
         Route::get('/events', [EventController::class, 'eventsPage'])->name('tenant-events');
         Route::get('/events/{eventID}', [EventController::class, 'eventDetailsPage'])->name('tenant-event-details');
         Route::post('/events', [EventController::class, 'store'])->name('tenant-events-create');
+
+        // Event Sessions
+        Route::post('/events/{event}/sessions', [EventSessionController::class, 'store'])->name('tenant-session-create');
+        Route::post('/sessions/{session}/start', [EventSessionController::class, 'start'])->name('tenant-session-start');
+        Route::post('/sessions/{session}/pause', [EventSessionController::class, 'pause'])->name('tenant-session-pause');
+        Route::post('/sessions/{session}/resume', [EventSessionController::class, 'resume'])->name('tenant-session-resume');
+        Route::post('/sessions/{session}/end', [EventSessionController::class, 'end'])->name('tenant-session-end');
+
+        // Attendance Records
+        Route::post('/sessions/{session}/attendance', [AttendanceRecordController::class, 'store'])->name('tenant-attendance-store');
+        Route::get('/sessions/{session}/attendance', [AttendanceRecordController::class, 'index'])->name('tenant-attendance-index');
 
         Route::get('/attendance', [AttendanceController::class, 'index'])->name('tenant-attendance');
         Route::get('/masterlist', [MasterlistController::class, 'index'])->name('tenant-masterlist');

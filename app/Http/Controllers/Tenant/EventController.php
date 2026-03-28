@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,7 +16,7 @@ class EventController extends Controller
         $year = now()->year;
         $count = Event::whereYear('created_at', $year)->count() + 1;
 
-        return "EVT-{$year}-" . str_pad($count, 3, '0', STR_PAD_LEFT);
+        return "EVT-{$year}-".str_pad($count, 3, '0', STR_PAD_LEFT);
     }
 
     public function eventsPage()
@@ -23,16 +24,23 @@ class EventController extends Controller
         $events = Event::all()->sortBy('created_at')->values();
 
         return Inertia::render('tenant/Events', [
-            'events' => $events
+            'events' => $events,
         ]);
     }
 
     public function eventDetailsPage(string $event)
     {
-        $event = Event::where('id', $event)->firstOrFail();
+        $event = Event::where('id', $event)
+            ->with(['sessions' => function ($query) {
+                $query->orderByDesc('created_at');
+            }, 'sessions.attendanceRecords'])
+            ->firstOrFail();
+
+        $totalStudents = Student::count();
 
         return Inertia::render('tenant/EventDetails', [
             'event' => $event,
+            'totalStudents' => $totalStudents,
         ]);
     }
 
