@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Event, EventSession } from '@/types/event';
 import Layout from './Layout';
 import Header from '@/components/ui/Header';
@@ -13,8 +13,14 @@ type EventDetailsProps = {
 
 export default function EventDetails({ event, totalStudents }: EventDetailsProps) {
   const sessions = event.sessions ?? [];
-  const [selectedSession, setSelectedSession] = useState<EventSession | null>(
-    sessions.find((s) => s.status === 'active') ?? sessions[0] ?? null
+  const [selectedSessionId, setSelectedSessionId] = useState<number | null>(
+    sessions.find((s) => s.status === 'active')?.id ?? sessions[0]?.id ?? null
+  );
+
+  // Always derive selectedSession from the latest props so status changes propagate
+  const selectedSession = useMemo(
+    () => sessions.find((s) => s.id === selectedSessionId) ?? null,
+    [sessions, selectedSessionId]
   );
 
   const activeSessions = sessions.filter((s) => s.status === 'active' || s.status === 'paused');
@@ -121,7 +127,7 @@ export default function EventDetails({ event, totalStudents }: EventDetailsProps
                   key={session.id}
                   session={session}
                   isSelected={selectedSession?.id === session.id}
-                  onSelect={setSelectedSession}
+                  onSelect={(s) => setSelectedSessionId(s.id)}
                 />
               ))}
             </div>

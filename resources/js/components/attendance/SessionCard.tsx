@@ -1,5 +1,6 @@
 import { router } from '@inertiajs/react';
 import { EventSession } from '@/types/event';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 interface SessionCardProps {
   session: EventSession;
@@ -73,13 +74,21 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
               <span className="material-symbols-outlined text-sm">pause</span>
               Pause
             </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); handleAction('end'); }}
-              className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-red-500/10 py-2 text-xs font-bold text-red-400 transition-all hover:bg-red-500/20"
-            >
-              <span className="material-symbols-outlined text-sm">stop</span>
-              End
-            </button>
+            <ConfirmDialog
+              title="End Session"
+              description={`Are you sure you want to end "${session.name}"? This action cannot be undone and no more attendance can be recorded.`}
+              confirmText="End Session"
+              onConfirm={(close) => { handleAction('end'); close(); }}
+              trigger={(open) => (
+                <button
+                  onClick={(e) => { e.stopPropagation(); open(); }}
+                  className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-red-500/10 py-2 text-xs font-bold text-red-400 transition-all hover:bg-red-500/20"
+                >
+                  <span className="material-symbols-outlined text-sm">stop</span>
+                  End
+                </button>
+              )}
+            />
           </>
         )}
         {session.status === 'paused' && (
@@ -91,13 +100,21 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
               <span className="material-symbols-outlined text-sm">play_arrow</span>
               Resume
             </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); handleAction('end'); }}
-              className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-red-500/10 py-2 text-xs font-bold text-red-400 transition-all hover:bg-red-500/20"
-            >
-              <span className="material-symbols-outlined text-sm">stop</span>
-              End
-            </button>
+            <ConfirmDialog
+              title="End Session"
+              description={`Are you sure you want to end "${session.name}"? This action cannot be undone and no more attendance can be recorded.`}
+              confirmText="End Session"
+              onConfirm={(close) => { handleAction('end'); close(); }}
+              trigger={(open) => (
+                <button
+                  onClick={(e) => { e.stopPropagation(); open(); }}
+                  className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-red-500/10 py-2 text-xs font-bold text-red-400 transition-all hover:bg-red-500/20"
+                >
+                  <span className="material-symbols-outlined text-sm">stop</span>
+                  End
+                </button>
+              )}
+            />
           </>
         )}
         {session.status === 'ended' && (
