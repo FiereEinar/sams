@@ -9,6 +9,7 @@ use App\Http\Controllers\Tenant\EventController;
 use App\Http\Controllers\Tenant\EventSessionController;
 use App\Http\Controllers\tenant\MasterlistController;
 use App\Http\Controllers\Tenant\MasterlistImportController;
+use App\Http\Controllers\Tenant\TenantSettingController;
 use App\Http\Middleware\EnsureTenantIsActive;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -55,6 +56,7 @@ Route::middleware([
         Route::post('/masterlist/import/store', [MasterlistImportController::class, 'store'])->name('tenant-masterlist-import-store');
         Route::get('/masterlist/import/template', [MasterlistImportController::class, 'downloadTemplate'])->name('tenant-masterlist-import-template');
 
-        Route::get('/settings', fn () => Inertia::render('tenant/Settings'))->name('tenant-settings');
+        Route::get('/settings', [TenantSettingController::class, 'index'])->name('tenant-settings');
+        Route::put('/settings', [TenantSettingController::class, 'update'])->name('tenant-settings-update');
     });
 });

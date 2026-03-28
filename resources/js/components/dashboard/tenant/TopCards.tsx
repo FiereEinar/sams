@@ -3,8 +3,8 @@ export default function TopCards() {
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
       <div className="rounded-2xl border border-slate-200 bg-surface-light p-6 dark:border-white/5 dark:bg-surface-dark">
         <div className="mb-4 flex items-start justify-between">
-          <div className="flex size-12 items-center justify-center rounded-lg bg-primary/20">
-            <span className="material-symbols-outlined text-primary">person_check</span>
+          <div className="flex size-12 items-center justify-center rounded-lg bg-blue-500/20">
+            <span className="material-symbols-outlined text-blue-500">person_check</span>
           </div>
           <span className="text-xs font-bold text-blue-500">+12.4%</span>
         </div>

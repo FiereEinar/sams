@@ -44,17 +44,19 @@ export default function ImportMasterlist({ onFileSelected, isUploading, isCooldo
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         className={`group flex flex-col items-center justify-center gap-6 rounded-xl border-2 border-dashed bg-[#111827] p-12 text-center transition-all ${
-          isCooldownActive 
+          isCooldownActive
             ? 'cursor-not-allowed border-slate-700 opacity-60'
-            : isUploading 
-              ? 'border-primary/60 bg-primary/5' 
-              : 'cursor-pointer border-blue-500/40 hover:border-primary hover:bg-[#1e293b]/50'
+            : isUploading
+              ? 'border-primary/60 bg-primary/5'
+              : 'cursor-pointer border-primary/40 hover:border-primary hover:bg-[#1e293b]/50'
         }`}
         onClick={() => !isUploading && !isCooldownActive && fileInputRef.current?.click()}
       >
-        <div className={`flex size-16 items-center justify-center rounded-full text-primary ring-1 ring-primary/20 transition-transform ${isCooldownActive ? 'bg-slate-800 text-slate-500 ring-slate-700' : 'bg-primary/10 group-hover:scale-110'}`}>
+        <div
+          className={`flex size-16 items-center justify-center rounded-full text-primary ring-1 ring-primary/20 transition-transform ${isCooldownActive ? 'bg-slate-800 text-slate-500 ring-slate-700' : 'bg-primary/10 group-hover:scale-110'}`}
+        >
           {isUploading ? (
-            <span className="material-symbols-outlined !text-[32px] animate-spin">progress_activity</span>
+            <span className="material-symbols-outlined animate-spin !text-[32px]">progress_activity</span>
           ) : isCooldownActive ? (
             <span className="material-symbols-outlined !text-[32px]">block</span>
           ) : (
@@ -66,7 +68,11 @@ export default function ImportMasterlist({ onFileSelected, isUploading, isCooldo
             {isCooldownActive ? 'Upload Unavailable' : isUploading ? 'Processing File...' : 'Upload New Masterlist'}
           </h3>
           <p className="max-w-md text-slate-400">
-            {isCooldownActive ? 'Your basic plan cooldown is active.' : isUploading ? 'Parsing and validating your file. This may take a moment.' : 'Drag and drop your .csv or .xlsx file here, or click to browse. Ensure columns match the template.'}
+            {isCooldownActive
+              ? 'Your basic plan cooldown is active.'
+              : isUploading
+                ? 'Parsing and validating your file. This may take a moment.'
+                : 'Drag and drop your .csv or .xlsx file here, or click to browse. Ensure columns match the template.'}
           </p>
         </div>
         <button

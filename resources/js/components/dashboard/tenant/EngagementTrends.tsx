@@ -15,12 +15,18 @@ export default function EngagementTrends() {
         <svg className="h-full w-full" preserveAspectRatio="none" viewBox="0 0 400 150">
           <defs>
             <linearGradient id="gradient" x1="0%" x2="0%" y1="0%" y2="100%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3"></stop>
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0"></stop>
+              <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.3"></stop>
+              <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0"></stop>
             </linearGradient>
           </defs>
           <path d="M0,120 Q50,110 80,70 T160,40 T240,90 T320,30 T400,50 L400,150 L0,150 Z" fill="url(#gradient)"></path>
-          <path d="M0,120 Q50,110 80,70 T160,40 T240,90 T320,30 T400,50" fill="none" stroke="#3b82f6" strokeLinecap="round" strokeWidth="3"></path>
+          <path
+            d="M0,120 Q50,110 80,70 T160,40 T240,90 T320,30 T400,50"
+            fill="none"
+            stroke="var(--color-primary)"
+            strokeLinecap="round"
+            strokeWidth="3"
+          ></path>
           <line stroke="currentColor" strokeOpacity="0.05" x1="0" x2="0" y1="0" y2="150"></line>
           <line stroke="currentColor" strokeOpacity="0.05" x1="80" x2="80" y1="0" y2="150"></line>
           <line stroke="currentColor" strokeOpacity="0.05" x1="160" x2="160" y1="0" y2="150"></line>

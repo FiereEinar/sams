@@ -15,8 +15,8 @@
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
   --radius-full: 9999px;
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
+  --color-primary: var(--app-primary);
+  --color-primary-hover: var(--app-primary-hover);
   --color-buksu-blue: #1e3a8a;
   --color-buksu-accent: #60a5fa;
   --color-buksu-gold: #fbbf24;
@@ -35,6 +35,11 @@
 }
 
 @layer base {
+  :root {
+    --app-primary: #3b82f6;
+    --app-primary-hover: #2563eb;
+  }
+
   body {
     font-family: 'Poppins';
   }
@@ -45,8 +50,21 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-text-fill-color: white;
   transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+  -webkit-text-fill-color: white;
+}
+
+:not(.dark) input:-webkit-autofill,
+:not(.dark) input:-webkit-autofill:hover,
+:not(.dark) input:-webkit-autofill:focus,
+:not(.dark) input:-webkit-autofill:active {
+  -webkit-text-fill-color: #0f172a;
 }
 
 /* Landing page */
@@ -99,12 +117,6 @@ select:focus {
 }
 
 /* TENANT */
-
-/* Sidebar */
-.active-nav {
-  background-color: color-mix(in oklab, #3b82f6 10%, transparent);
-  color: #3b82f6 !important;
-}
 
 /* Events page */
 .status-badge {

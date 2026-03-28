@@ -25,7 +25,7 @@ export default function CreateEventForm({ close }: CreateEventFormProps) {
     <div className="modal-glow flex w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/5 bg-white shadow-2xl dark:bg-[#16212b]">
       <header className="flex items-center justify-between border-b border-gray-200 px-8 py-6 dark:border-white/10">
         <div className="flex items-center gap-3">
-          <div className="rounded-lg bg-primary/10 p-2">
+          <div className="flex size-12 items-center justify-center rounded-lg bg-primary/10">
             <span className="material-symbols-outlined text-primary">calendar_add_on</span>
           </div>
           <div>

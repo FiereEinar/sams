@@ -75,7 +75,7 @@ type SidebarLinkProps = {
 export function SidebarLink({ title, icon, href, isActive }: SidebarLinkProps) {
   return (
     <Link
-      className={`${isActive ? 'active-nav' : ''} flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-primary/10`}
+      className={`${isActive ? 'bg-primary/10 !text-primary' : ''} flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-primary/10`}
       href={href}
     >
       {/* <a className={`${isActive ? 'active-nav' : ''} flex items-center gap-3 rounded-xl px-3 py-2.5`} href={href}> */}

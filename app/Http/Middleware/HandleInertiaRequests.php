@@ -48,6 +48,13 @@ class HandleInertiaRequests extends Middleware
 
                 return null;
             },
+            'tenantSettings' => function () {
+                if (function_exists('tenant') && tenant()) {
+                    return \App\Models\TenantSetting::getSettings();
+                }
+
+                return [];
+            },
         ];
     }
 }
