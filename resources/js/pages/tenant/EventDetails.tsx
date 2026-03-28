@@ -14,20 +14,14 @@ type EventDetailsProps = {
 export default function EventDetails({ event, totalStudents }: EventDetailsProps) {
   const sessions = event.sessions ?? [];
   const [selectedSessionId, setSelectedSessionId] = useState<number | null>(
-    sessions.find((s) => s.status === 'active')?.id ?? sessions[0]?.id ?? null
+    sessions.find((s) => s.status === 'active')?.id ?? sessions[0]?.id ?? null,
   );
 
   // Always derive selectedSession from the latest props so status changes propagate
-  const selectedSession = useMemo(
-    () => sessions.find((s) => s.id === selectedSessionId) ?? null,
-    [sessions, selectedSessionId]
-  );
+  const selectedSession = useMemo(() => sessions.find((s) => s.id === selectedSessionId) ?? null, [sessions, selectedSessionId]);
 
   const activeSessions = sessions.filter((s) => s.status === 'active' || s.status === 'paused');
-  const totalCheckedIn = sessions.reduce(
-    (sum, s) => sum + (s.attendance_records_count ?? s.attendance_records?.length ?? 0),
-    0
-  );
+  const totalCheckedIn = sessions.reduce((sum, s) => sum + (s.attendance_records_count ?? s.attendance_records?.length ?? 0), 0);
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('en-US', {
@@ -46,9 +40,7 @@ export default function EventDetails({ event, totalStudents }: EventDetailsProps
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <span className="rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-bold tracking-wider text-primary uppercase">
-                {event.code}
-              </span>
+              <span className="rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-bold tracking-wider text-primary uppercase">{event.code}</span>
               {activeSessions.length > 0 && (
                 <span className="flex items-center gap-1.5 rounded-lg bg-green-500/10 px-2.5 py-1 text-xs font-bold tracking-wider text-green-400 uppercase">
                   <span className="size-1.5 animate-pulse rounded-full bg-green-400"></span>
@@ -59,11 +51,11 @@ export default function EventDetails({ event, totalStudents }: EventDetailsProps
             <Header>{event.title}</Header>
             <div className="flex flex-wrap gap-4 text-sm text-slate-400">
               <span className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-primary text-sm">location_on</span>
+                <span className="material-symbols-outlined text-sm text-primary">location_on</span>
                 {event.venue}
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-primary text-sm">calendar_today</span>
+                <span className="material-symbols-outlined text-sm text-primary">calendar_today</span>
                 {formatDate(event.start_at)}
               </span>
             </div>
@@ -72,34 +64,34 @@ export default function EventDetails({ event, totalStudents }: EventDetailsProps
 
         {/* Stats Row */}
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-2xl border border-white/5 bg-surface-dark p-5">
+          <div className="rounded-2xl border border-slate-200 bg-surface-light p-5 dark:border-white/5 dark:bg-surface-dark">
             <p className="text-xs font-bold tracking-widest text-slate-500 uppercase">Total Sessions</p>
-            <p className="mt-1 text-2xl font-black text-white">{sessions.length}</p>
+            <p className="mt-1 text-2xl font-black text-primary dark:text-white">{sessions.length}</p>
           </div>
-          <div className="rounded-2xl border border-white/5 bg-surface-dark p-5">
+          <div className="rounded-2xl border border-slate-200 bg-surface-light p-5 dark:border-white/5 dark:bg-surface-dark">
             <p className="text-xs font-bold tracking-widest text-slate-500 uppercase">Active</p>
             <p className="mt-1 text-2xl font-black text-green-400">{activeSessions.length}</p>
           </div>
-          <div className="rounded-2xl border border-white/5 bg-surface-dark p-5">
+          <div className="rounded-2xl border border-slate-200 bg-surface-light p-5 dark:border-white/5 dark:bg-surface-dark">
             <p className="text-xs font-bold tracking-widest text-slate-500 uppercase">Total Check-ins</p>
             <p className="mt-1 text-2xl font-black text-primary">{totalCheckedIn}</p>
           </div>
-          <div className="rounded-2xl border border-white/5 bg-surface-dark p-5">
+          <div className="rounded-2xl border border-slate-200 bg-surface-light p-5 dark:border-white/5 dark:bg-surface-dark">
             <p className="text-xs font-bold tracking-widest text-slate-500 uppercase">Masterlist</p>
-            <p className="mt-1 text-2xl font-black text-white">{totalStudents}</p>
+            <p className="mt-1 text-2xl font-black text-primary dark:text-white">{totalStudents}</p>
           </div>
         </div>
 
         {/* Event Description */}
-        <div className="rounded-2xl border border-white/5 bg-surface-dark p-6">
+        <div className="rounded-2xl border border-slate-200 bg-surface-light p-6 dark:border-white/5 dark:bg-surface-dark">
           <h3 className="mb-2 text-xs font-bold tracking-widest text-slate-500 uppercase">Description</h3>
-          <p className="text-sm leading-relaxed text-slate-300">{event.description}</p>
+          <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-300">{event.description}</p>
         </div>
 
         {/* Sessions Section */}
         <div>
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-bold text-white">Sessions</h3>
+            <h3 className="text-lg font-bold text-slate-500 dark:text-white">Sessions</h3>
             <CreateSessionForm
               eventId={event.id}
               trigger={(open) => (
@@ -137,11 +129,17 @@ export default function EventDetails({ event, totalStudents }: EventDetailsProps
         {/* Attendance Recorder (for selected session) */}
         {selectedSession && (
           <div>
-            <h3 className="mb-4 text-lg font-bold text-white">
+            <h3 className="mb-4 text-lg font-bold text-slate-500 dark:text-slate-300">
               Recording: <span className="text-primary">{selectedSession.name}</span>
               {selectedSession.status !== 'active' && (
                 <span className="ml-2 text-sm font-normal text-slate-500">
-                  ({selectedSession.status === 'paused' ? 'Paused — resume to record' : selectedSession.status === 'ended' ? 'Session ended' : 'Start session to begin recording'})
+                  (
+                  {selectedSession.status === 'paused'
+                    ? 'Paused — resume to record'
+                    : selectedSession.status === 'ended'
+                      ? 'Session ended'
+                      : 'Start session to begin recording'}
+                  )
                 </span>
               )}
             </h3>

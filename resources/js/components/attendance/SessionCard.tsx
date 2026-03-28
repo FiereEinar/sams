@@ -21,9 +21,13 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
   const recordCount = session.attendance_records_count ?? session.attendance_records?.length ?? 0;
 
   const handleAction = (action: string) => {
-    router.post(`/sessions/${session.id}/${action}`, {}, {
-      preserveScroll: true,
-    });
+    router.post(
+      `/sessions/${session.id}/${action}`,
+      {},
+      {
+        preserveScroll: true,
+      },
+    );
   };
 
   return (
@@ -32,11 +36,11 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
       className={`cursor-pointer rounded-2xl border p-5 transition-all ${
         isSelected
           ? 'border-primary/50 bg-primary/5 ring-2 ring-primary/20'
-          : 'border-white/5 bg-surface-dark hover:border-white/10'
+          : 'border-white/5 bg-surface-light hover:border-white/10 dark:bg-surface-dark'
       }`}
     >
       <div className="mb-3 flex items-start justify-between">
-        <h5 className="font-bold text-white">{session.name}</h5>
+        <h5 className="font-bold text-slate-500 dark:text-slate-300">{session.name}</h5>
         <span className={`flex items-center gap-1.5 rounded-lg px-2 py-1 text-[10px] font-bold tracking-wider uppercase ${config.color}`}>
           <span className={`size-1.5 rounded-full ${config.dot}`}></span>
           {config.label}
@@ -62,7 +66,10 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
             sessionId={session.id}
             trigger={(open) => (
               <button
-                onClick={(e) => { e.stopPropagation(); open(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  open();
+                }}
                 className="flex w-full items-center justify-center gap-1 rounded-xl bg-primary/10 py-2 text-xs font-bold text-primary transition-all hover:bg-primary/20"
               >
                 <span className="material-symbols-outlined text-sm">download</span>
@@ -76,7 +83,10 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
       <div className="flex gap-2">
         {session.status === 'pending' && (
           <button
-            onClick={(e) => { e.stopPropagation(); handleAction('start'); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAction('start');
+            }}
             className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-green-500/10 py-2 text-xs font-bold text-green-400 transition-all hover:bg-green-500/20"
           >
             <span className="material-symbols-outlined text-sm">play_arrow</span>
@@ -86,7 +96,10 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
         {session.status === 'active' && (
           <>
             <button
-              onClick={(e) => { e.stopPropagation(); handleAction('pause'); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAction('pause');
+              }}
               className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-amber-500/10 py-2 text-xs font-bold text-amber-400 transition-all hover:bg-amber-500/20"
             >
               <span className="material-symbols-outlined text-sm">pause</span>
@@ -96,10 +109,16 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
               title="End Session"
               description={`Are you sure you want to end "${session.name}"? This action cannot be undone and no more attendance can be recorded.`}
               confirmText="End Session"
-              onConfirm={(close) => { handleAction('end'); close(); }}
+              onConfirm={(close) => {
+                handleAction('end');
+                close();
+              }}
               trigger={(open) => (
                 <button
-                  onClick={(e) => { e.stopPropagation(); open(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    open();
+                  }}
                   className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-red-500/10 py-2 text-xs font-bold text-red-400 transition-all hover:bg-red-500/20"
                 >
                   <span className="material-symbols-outlined text-sm">stop</span>
@@ -112,7 +131,10 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
         {session.status === 'paused' && (
           <>
             <button
-              onClick={(e) => { e.stopPropagation(); handleAction('resume'); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAction('resume');
+              }}
               className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-green-500/10 py-2 text-xs font-bold text-green-400 transition-all hover:bg-green-500/20"
             >
               <span className="material-symbols-outlined text-sm">play_arrow</span>
@@ -122,10 +144,16 @@ export default function SessionCard({ session, isSelected, onSelect }: SessionCa
               title="End Session"
               description={`Are you sure you want to end "${session.name}"? This action cannot be undone and no more attendance can be recorded.`}
               confirmText="End Session"
-              onConfirm={(close) => { handleAction('end'); close(); }}
+              onConfirm={(close) => {
+                handleAction('end');
+                close();
+              }}
               trigger={(open) => (
                 <button
-                  onClick={(e) => { e.stopPropagation(); open(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    open();
+                  }}
                   className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-red-500/10 py-2 text-xs font-bold text-red-400 transition-all hover:bg-red-500/20"
                 >
                   <span className="material-symbols-outlined text-sm">stop</span>

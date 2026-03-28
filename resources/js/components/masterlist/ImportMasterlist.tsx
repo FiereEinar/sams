@@ -36,19 +36,19 @@ export default function ImportMasterlist({ onFileSelected, isUploading, isCooldo
     <div className="space-y-8">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div className="flex flex-col gap-1">
-          <h2 className="text-3xl font-black tracking-tight text-white">Import Masterlist</h2>
+          <h2 className="text-3xl font-black tracking-tight text-slate-800 dark:text-white">Import Masterlist</h2>
           <p className="text-base text-slate-400">Upload a CSV or Excel file to import your student masterlist.</p>
         </div>
       </div>
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        className={`group flex flex-col items-center justify-center gap-6 rounded-xl border-2 border-dashed bg-[#111827] p-12 text-center transition-all ${
+        className={`group flex flex-col items-center justify-center gap-6 rounded-xl border-2 border-dashed bg-surface-light p-12 text-center transition-all ${
           isCooldownActive
             ? 'cursor-not-allowed border-slate-700 opacity-60'
             : isUploading
-              ? 'border-primary/60 bg-primary/5'
-              : 'cursor-pointer border-primary/40 hover:border-primary hover:bg-[#1e293b]/50'
+              ? 'border-primary/60 bg-primary/5 dark:bg-surface-dark'
+              : 'cursor-pointer border-primary/40 hover:border-primary hover:bg-surface-light dark:bg-surface-dark dark:hover:bg-surface-dark'
         }`}
         onClick={() => !isUploading && !isCooldownActive && fileInputRef.current?.click()}
       >
@@ -64,7 +64,7 @@ export default function ImportMasterlist({ onFileSelected, isUploading, isCooldo
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <h3 className="text-xl font-bold text-white">
+          <h3 className="text-xl font-bold text-slate-800 dark:text-white">
             {isCooldownActive ? 'Upload Unavailable' : isUploading ? 'Processing File...' : 'Upload New Masterlist'}
           </h3>
           <p className="max-w-md text-slate-400">
@@ -85,7 +85,7 @@ export default function ImportMasterlist({ onFileSelected, isUploading, isCooldo
         <a
           href="/masterlist/import/template"
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-2 rounded-xl border border-slate-700 px-4 py-2 text-sm font-bold text-slate-300 transition-all hover:bg-slate-800"
+          className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-slate-800 transition-all hover:bg-slate-800 dark:border-slate-600 dark:text-slate-300"
         >
           <span className="material-symbols-outlined !text-[18px]">download</span>
           Download Template

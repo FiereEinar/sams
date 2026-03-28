@@ -69,30 +69,30 @@ export default function ImportPreview({ data, onConfirm, onCancel, isImporting }
         ))}
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-slate-800 bg-surface-dark shadow-2xl">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-surface-light dark:border-white/5 dark:bg-surface-dark">
         <div className="overflow-x-auto">
           {/* Scrollable table body with 5-row height */}
           <div className="custom-scrollbar max-h-[480px] overflow-y-auto">
             <table className="w-full border-collapse text-left">
-              <thead className="sticky top-0 z-10 bg-primary text-xs font-bold tracking-wider text-white uppercase">
+              <thead className="sticky top-0 z-10 border-b border-slate-200 bg-surface-light text-xs font-bold tracking-wider text-slate-500 uppercase dark:border-white/5 dark:bg-surface-dark">
                 <tr>
-                  <th className="border-primary-dark/30 border-b px-4 py-3 text-center">#</th>
+                  <th className="px-4 py-3 text-center">#</th>
                   {visibleColumns.map((col) => (
-                    <th key={col} className="border-primary-dark/30 border-b px-4 py-3">
+                    <th key={col} className="px-4 py-3">
                       {data.detected_headers[col]}
                     </th>
                   ))}
-                  <th className="border-primary-dark/30 border-b px-4 py-3 text-center">Status</th>
+                  <th className="px-4 py-3 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 text-sm">
+              <tbody className="divide-y divide-slate-200 text-sm dark:divide-white/5">
                 {data.rows.map((row, idx) => {
                   const style = STATUS_STYLES[row.status] ?? STATUS_STYLES.valid;
                   return (
                     <tr key={idx} className={`transition-colors ${style.row}`}>
-                      <td className="px-4 py-3 text-center font-mono text-xs text-slate-500">{row.row_number}</td>
+                      <td className="px-4 py-3 text-center font-mono text-xs text-slate-800 dark:text-slate-400">{row.row_number}</td>
                       {visibleColumns.map((col) => (
-                        <td key={col} className="px-4 py-3 text-slate-300">
+                        <td key={col} className="px-4 py-3 text-slate-800 dark:text-slate-400">
                           {row.data[col] ?? <span className="text-slate-600">—</span>}
                         </td>
                       ))}
@@ -106,7 +106,7 @@ export default function ImportPreview({ data, onConfirm, onCancel, isImporting }
             </table>
           </div>
         </div>
-        <div className="flex items-center justify-between border-t border-slate-800 bg-slate-900/50 px-6 py-4">
+        <div className="flex items-center justify-between bg-surface-light px-6 py-4 dark:bg-surface-dark">
           <p className="text-xs text-slate-400">
             {data.rows.length} total rows • {data.summary.valid} ready to import
           </p>
@@ -114,7 +114,7 @@ export default function ImportPreview({ data, onConfirm, onCancel, isImporting }
             <button
               onClick={onCancel}
               disabled={isImporting}
-              className="text-sm font-bold text-slate-400 transition-colors hover:text-white disabled:opacity-50"
+              className="text-sm font-bold text-slate-400 transition-colors hover:text-slate-600 disabled:opacity-50 dark:hover:text-white"
             >
               Cancel
             </button>

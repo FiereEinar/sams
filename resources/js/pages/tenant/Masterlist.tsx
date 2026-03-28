@@ -14,12 +14,12 @@ import { useToast } from '@/hooks/use-toast';
 type Tab = 'import' | 'masterlist';
 
 export default function Masterlist() {
-  const { students, tenantPlan, nextImportAt } = usePage<{ 
-    students: PaginatedStudents; 
-    tenantPlan: 'basic' | 'premium'; 
-    nextImportAt: string | null; 
+  const { students, tenantPlan, nextImportAt } = usePage<{
+    students: PaginatedStudents;
+    tenantPlan: 'basic' | 'premium';
+    nextImportAt: string | null;
   }>().props;
-  
+
   const [activeTab, setActiveTab] = useState<Tab>('masterlist');
   const [previewData, setPreviewData] = useState<ImportPreviewData | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -136,11 +136,13 @@ export default function Masterlist() {
       <main className="mx-auto flex w-full flex-1 flex-col gap-8">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           {/* Tabs */}
-          <div className="flex w-fit items-center gap-1 rounded-xl bg-surface-dark p-1">
+          <div className="flex w-fit items-center gap-1 rounded-xl bg-surface-light p-1 dark:bg-surface-dark">
             <button
               onClick={() => setActiveTab('masterlist')}
               className={`flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold transition-all ${
-                activeTab === 'masterlist' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white'
+                activeTab === 'masterlist'
+                  ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                  : 'text-slate-400 hover:text-slate-600 dark:hover:text-white'
               }`}
             >
               <span className="material-symbols-outlined !text-[18px]">groups</span>
@@ -149,17 +151,17 @@ export default function Masterlist() {
             <button
               onClick={() => setActiveTab('import')}
               className={`flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold transition-all ${
-                activeTab === 'import' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white'
+                activeTab === 'import'
+                  ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                  : 'text-slate-400 hover:text-slate-600 dark:hover:text-white'
               }`}
             >
               <span className="material-symbols-outlined !text-[18px]">upload_file</span>
               Import Masterlist
             </button>
           </div>
-          
-          {activeTab === 'masterlist' && (
-            <AddStudentButton />
-          )}
+
+          {activeTab === 'masterlist' && <AddStudentButton />}
         </div>
 
         {activeTab === 'import' && (

@@ -36,7 +36,7 @@ export default function MasterlistTable({ students }: Props) {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div className="flex flex-col gap-1">
-          <h2 className="text-3xl font-black tracking-tight text-white">Student Masterlist</h2>
+          <h2 className="text-3xl font-black tracking-tight text-slate-800 dark:text-white">Student Masterlist</h2>
           <p className="text-base text-slate-400">
             {students.total} {students.total === 1 ? 'student' : 'students'} registered in the masterlist.
           </p>
@@ -50,7 +50,7 @@ export default function MasterlistTable({ students }: Props) {
             placeholder="Search students..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-surface-dark py-2.5 pr-4 pl-10 text-sm text-white placeholder-slate-500 transition-all focus:border-primary focus:ring-2 focus:ring-primary/40 md:w-72"
+            className="w-full rounded-xl border border-slate-200 bg-surface-light py-2.5 pr-4 pl-10 text-sm text-slate-800 placeholder-slate-500 transition-all focus:border-primary focus:ring-2 focus:ring-primary/40 md:w-72 dark:border-slate-700 dark:bg-surface-dark dark:text-white"
           />
         </div>
       </div>
@@ -66,29 +66,32 @@ export default function MasterlistTable({ students }: Props) {
           </div>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-slate-800 bg-surface-dark shadow-2xl">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-surface-light dark:border-white/5 dark:bg-surface-dark">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead className="bg-slate-50 text-[11px] font-bold tracking-widest text-slate-500 uppercase dark:bg-background-dark/50">
                 <tr>
-                  <th className="border-b border-slate-800 px-6 py-4">Student ID</th>
-                  <th className="border-b border-slate-800 px-6 py-4">Last Name</th>
-                  <th className="border-b border-slate-800 px-6 py-4">First Name</th>
-                  <th className="border-b border-slate-800 px-6 py-4">Middle Name</th>
-                  <th className="border-b border-slate-800 px-6 py-4 text-center">Sex</th>
-                  <th className="border-b border-slate-800 px-6 py-4">Course</th>
-                  <th className="border-b border-slate-800 px-6 py-4 text-center">Year</th>
-                  <th className="border-b border-slate-800 px-6 py-4 text-center">Units</th>
-                  <th className="border-b border-slate-800 px-6 py-4 text-center">Section</th>
-                  <th className="border-b border-slate-800 px-6 py-4 text-right">Actions</th>
+                  <th className="border-b border-slate-200 px-6 py-4 dark:border-slate-800">Student ID</th>
+                  <th className="border-b border-slate-200 px-6 py-4 dark:border-slate-800">Last Name</th>
+                  <th className="border-b border-slate-200 px-6 py-4 dark:border-slate-800">First Name</th>
+                  <th className="border-b border-slate-200 px-6 py-4 dark:border-slate-800">Middle Name</th>
+                  <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Sex</th>
+                  <th className="border-b border-slate-200 px-6 py-4 dark:border-slate-800">Course</th>
+                  <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Year</th>
+                  <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Units</th>
+                  <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Section</th>
+                  <th className="border-b border-slate-200 px-6 py-4 text-right dark:border-slate-800">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 text-sm">
+              <tbody className="divide-y divide-slate-200 text-sm dark:divide-white/5">
                 {data.map((s, idx) => (
-                  <tr key={s.id} className={`transition-colors hover:bg-primary/5 ${idx % 2 === 0 ? 'bg-card-dark/20' : 'bg-card-dark/40'}`}>
-                    <td className="text-primary-light px-4 py-3 font-mono font-medium">{s.student_id}</td>
-                    <td className="px-4 py-3 font-semibold text-white">{s.last_name}</td>
-                    <td className="px-4 py-3 text-white">{s.first_name}</td>
+                  <tr
+                    key={s.id}
+                    className={`transition-colors hover:bg-primary/5 dark:hover:bg-primary/5 ${idx % 2 === 0 ? 'dark:bg-card-dark/20' : 'dark:bg-card-dark/40'}`}
+                  >
+                    <td className="dark:text-primary-light px-4 py-3 font-mono font-medium">{s.student_id}</td>
+                    <td className="px-4 py-3 font-semibold text-slate-800 dark:text-white">{s.last_name}</td>
+                    <td className="px-4 py-3 text-slate-800 dark:text-white">{s.first_name}</td>
                     <td className="px-4 py-3 text-slate-400">{s.middle_name ?? '—'}</td>
                     <td className="px-4 py-3 text-center text-slate-400">{s.sex ?? '—'}</td>
                     <td className="px-4 py-3 text-slate-400">{s.course ?? '—'}</td>
@@ -150,7 +153,7 @@ export default function MasterlistTable({ students }: Props) {
             </table>
           </div>
 
-          <div className="flex items-center justify-between border-t border-slate-800 bg-slate-900/50 p-6">
+          <div className="flex items-center justify-between border-t border-slate-200 bg-surface-light p-6 dark:border-white/5 dark:bg-surface-dark">
             <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
               Showing {students.from || 0}-{students.to || 0} of {students.total} Students
             </span>
@@ -171,8 +174,8 @@ export default function MasterlistTable({ students }: Props) {
                       link.active
                         ? 'border border-primary bg-primary font-bold text-white'
                         : !link.url
-                          ? 'cursor-not-allowed border border-slate-800 text-slate-600'
-                          : 'border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white'
+                          ? 'cursor-not-allowed border border-slate-200 text-slate-400 dark:border-slate-800'
+                          : 'border border-slate-200 text-slate-400 hover:bg-slate-800 hover:text-white dark:border-slate-800'
                     }`}
                     dangerouslySetInnerHTML={{
                       __html: isPrevious
