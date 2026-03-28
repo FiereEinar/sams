@@ -1,5 +1,5 @@
 import Header from '@/components/ui/Header';
-import { ACCENT_PRESETS, useTheme } from '@/hooks/use-theme';
+import { ACCENT_PRESETS, useTheme, SidebarPosition, TopbarVisibility } from '@/hooks/use-theme';
 import { useRef, useState } from 'react';
 import Layout from './Layout';
 
@@ -53,7 +53,13 @@ function deriveHoverColor(hex: string): string {
 }
 
 export default function Settings() {
-  const { mode, setMode, accentColor, setAccentColor, resolvedDark } = useTheme();
+  const { 
+    mode, setMode, 
+    accentColor, setAccentColor, 
+    resolvedDark, 
+    sidebarPosition, setSidebarPosition, 
+    topbarVisibility, setTopbarVisibility 
+  } = useTheme();
   const colorInputRef = useRef<HTMLInputElement>(null);
   const [customColor, setCustomColor] = useState(accentColor.name === 'Custom' ? accentColor.primary : '#6366f1');
 
@@ -124,8 +130,73 @@ export default function Settings() {
         </div>
       </section>
 
+      {/* Layout Configuration */}
+      <section id="settings-layout" className="mt-10">
+        <h2 className="mb-1 text-lg font-semibold">Layout</h2>
+        <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
+          Customize the placement of your navigation menu and topbar.
+        </p>
+        
+        <div className="space-y-6">
+          {/* Sidebar Position */}
+          <div>
+            <h3 className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">Sidebar Position</h3>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {(['left', 'right', 'top', 'bottom'] as SidebarPosition[]).map((pos) => {
+                const isActive = sidebarPosition === pos;
+                return (
+                  <button
+                    key={pos}
+                    onClick={() => setSidebarPosition(pos)}
+                    className={`flex items-center justify-center gap-2 rounded-xl border-2 py-3 transition-all ${
+                      isActive
+                        ? 'border-primary bg-primary/5 font-semibold text-primary shadow-sm'
+                        : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:text-slate-400 dark:hover:border-white/20 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-lg">
+                      {pos === 'left' ? 'dock_to_left' : pos === 'right' ? 'dock_to_right' : pos === 'top' ? 'vertical_align_top' : 'vertical_align_bottom'}
+                    </span>
+                    <span className="capitalize">{pos}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Topbar Visibility */}
+          <div>
+            <h3 className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">Topbar Visibility</h3>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setTopbarVisibility('visible')}
+                className={`flex flex-1 items-center justify-center gap-2 rounded-xl border-2 py-3 transition-all ${
+                  topbarVisibility === 'visible'
+                    ? 'border-primary bg-primary/5 font-semibold text-primary shadow-sm'
+                    : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:text-slate-400 dark:hover:border-white/20 dark:hover:bg-white/5'
+                }`}
+              >
+                <span className="material-symbols-outlined text-lg">visibility</span>
+                <span>Visible</span>
+              </button>
+              <button
+                onClick={() => setTopbarVisibility('hidden')}
+                className={`flex flex-1 items-center justify-center gap-2 rounded-xl border-2 py-3 transition-all ${
+                  topbarVisibility === 'hidden'
+                    ? 'border-primary bg-primary/5 font-semibold text-primary shadow-sm'
+                    : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:text-slate-400 dark:hover:border-white/20 dark:hover:bg-white/5'
+                }`}
+              >
+                <span className="material-symbols-outlined text-lg">visibility_off</span>
+                <span>Hidden</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Accent Color */}
-      <section id="settings-accent-color">
+      <section id="settings-accent-color" className="mt-10">
         <h2 className="mb-1 text-lg font-semibold">Accent Color</h2>
         <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
           Pick a primary accent color that highlights buttons, links, and active elements.

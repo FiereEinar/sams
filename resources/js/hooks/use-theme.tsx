@@ -2,6 +2,8 @@ import { router } from '@inertiajs/react';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 type ThemeMode = 'light' | 'dark' | 'system';
+export type SidebarPosition = 'left' | 'right' | 'top' | 'bottom';
+export type TopbarVisibility = 'visible' | 'hidden';
 
 type AccentColor = {
   name: string;
@@ -26,6 +28,12 @@ type ThemeContextValue = {
   accentColor: AccentColor;
   setAccentColor: (accent: AccentColor) => void;
   resolvedDark: boolean;
+  sidebarPosition: SidebarPosition;
+  setSidebarPosition: (pos: SidebarPosition) => void;
+  topbarVisibility: TopbarVisibility;
+  setTopbarVisibility: (vis: TopbarVisibility) => void;
+  isSidebarCollapsed: boolean;
+  toggleSidebar: () => void;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -118,9 +126,15 @@ export function ThemeProvider({
 }) {
   const initialMode = (initialSettings?.theme_mode as ThemeMode) || 'dark';
   const initialAccent = resolveAccentFromValue(initialSettings?.accent_color);
+  const initialSidebar = (initialSettings?.layout_sidebar_position as SidebarPosition) || 'left';
+  const initialTopbar = (initialSettings?.layout_topbar_visibility as TopbarVisibility) || 'visible';
+  const initialCollapsed = initialSettings?.layout_sidebar_collapsed === 'true';
 
   const [mode, setModeState] = useState<ThemeMode>(initialMode);
   const [accentColor, setAccentColorState] = useState<AccentColor>(initialAccent);
+  const [sidebarPosition, setSidebarPosState] = useState<SidebarPosition>(initialSidebar);
+  const [topbarVisibility, setTopbarVisState] = useState<TopbarVisibility>(initialTopbar);
+  const [isSidebarCollapsed, setIsSidebarCollapsedState] = useState<boolean>(initialCollapsed);
   const [systemDark, setSystemDark] = useState(() =>
     typeof window !== 'undefined' ? resolveSystemDark() : true,
   );
@@ -158,9 +172,34 @@ export function ThemeProvider({
     persistSetting('accent_color', value);
   }, []);
 
+  const setSidebarPosition = useCallback((pos: SidebarPosition) => {
+    setSidebarPosState(pos);
+    persistSetting('layout_sidebar_position', pos);
+  }, []);
+
+  const setTopbarVisibility = useCallback((vis: TopbarVisibility) => {
+    setTopbarVisState(vis);
+    persistSetting('layout_topbar_visibility', vis);
+  }, []);
+
+  const toggleSidebar = useCallback(() => {
+    setIsSidebarCollapsedState(prev => {
+      const next = !prev;
+      persistSetting('layout_sidebar_collapsed', next ? 'true' : 'false');
+      return next;
+    });
+  }, []);
+
   const value = useMemo(
-    () => ({ mode, setMode, accentColor, setAccentColor, resolvedDark }),
-    [mode, setMode, accentColor, setAccentColor, resolvedDark],
+    () => ({ 
+      mode, setMode, 
+      accentColor, setAccentColor, 
+      resolvedDark,
+      sidebarPosition, setSidebarPosition,
+      topbarVisibility, setTopbarVisibility,
+      isSidebarCollapsed, toggleSidebar
+    }),
+    [mode, setMode, accentColor, setAccentColor, resolvedDark, sidebarPosition, setSidebarPosition, topbarVisibility, setTopbarVisibility, isSidebarCollapsed, toggleSidebar],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

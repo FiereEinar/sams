@@ -2,6 +2,7 @@ import { Link, usePage, router } from '@inertiajs/react';
 import SidebarFooter from './SidebarFooter';
 import SidebarHeader from '../SidebarHeader';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import { useTheme } from '@/hooks/use-theme';
 
 const sidebarLinks = [
   {
@@ -33,34 +34,74 @@ const sidebarLinks = [
 
 export default function Sidebar() {
   const { url } = usePage();
+  const { sidebarPosition, isSidebarCollapsed } = useTheme();
+
+  if (isSidebarCollapsed) return null;
+
+  const isVertical = sidebarPosition === 'left' || sidebarPosition === 'right';
+  const isHorizontal = !isVertical;
+
+  let asideClasses = "shrink-0 border-slate-200 bg-background-light dark:border-white/10 dark:bg-background-dark ";
+  
+  if (isVertical) {
+    asideClasses += "sticky top-0 flex h-screen w-72 flex-col ";
+    asideClasses += sidebarPosition === 'left' ? "border-r" : "border-l";
+  } else {
+    asideClasses += sidebarPosition === 'top' 
+      ? "sticky top-0 z-50 border-b flex flex-row items-center w-full px-4 overflow-x-auto custom-scrollbar" 
+      : "sticky bottom-0 z-50 border-t flex flex-row items-center w-full px-4 overflow-x-auto custom-scrollbar";
+  }
 
   return (
-    <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r border-slate-200 bg-background-light dark:border-white/10 dark:bg-background-dark">
-      <SidebarHeader icon="account_balance" title="SSG Admin" subtitle="Supreme Student Gov." />
+    <aside className={asideClasses}>
+      <SidebarHeader icon="account_balance" title="SSG Admin" subtitle="Supreme Student Gov." isHorizontal={isHorizontal} />
 
-      <nav className="flex-1 space-y-1 px-4">
+      <nav className={isVertical ? "flex-1 space-y-1 px-4" : "flex flex-row items-center gap-2 mx-auto"}>
         {sidebarLinks.map((link) => (
-          <SidebarLink key={link.title} {...link} isActive={url.startsWith(link.href)} />
+          <SidebarLink key={link.title} {...link} isActive={url.startsWith(link.href)} isHorizontal={isHorizontal} />
         ))}
       </nav>
-      <div className="px-4 pb-2">
-        <ConfirmDialog
-          title="Log Out"
-          description="Are you sure you want to log out of your account?"
-          confirmText="Log Out"
-          onConfirm={() => router.post('/logout')}
-          trigger={(open) => (
-            <button
-              onClick={open}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-red-100 dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
-            >
-              <span className="material-symbols-outlined">logout</span>
-              <span className="text-sm font-medium">Log Out</span>
-            </button>
-          )}
-        />
-      </div>
-      <SidebarFooter />
+
+      {isVertical ? (
+        <>
+          <div className="px-4 pb-2">
+            <ConfirmDialog
+              title="Log Out"
+              description="Are you sure you want to log out of your account?"
+              confirmText="Log Out"
+              onConfirm={() => router.post('/logout')}
+              trigger={(open) => (
+                <button
+                  onClick={open}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-red-100 dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+                >
+                  <span className="material-symbols-outlined">logout</span>
+                  <span className="text-sm font-medium">Log Out</span>
+                </button>
+              )}
+            />
+          </div>
+          <SidebarFooter />
+        </>
+      ) : (
+        <div className="pl-4 ml-auto">
+          <ConfirmDialog
+            title="Log Out"
+            description="Are you sure you want to log out of your account?"
+            confirmText="Log Out"
+            onConfirm={() => router.post('/logout')}
+            trigger={(open) => (
+              <button
+                onClick={open}
+                className="flex items-center justify-center rounded-xl p-2.5 text-slate-600 transition-colors hover:bg-red-100 dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+                title="Log Out"
+              >
+                <span className="material-symbols-outlined">logout</span>
+              </button>
+            )}
+          />
+        </div>
+      )}
     </aside>
   );
 }
@@ -70,15 +111,15 @@ type SidebarLinkProps = {
   icon: string;
   href: string;
   isActive: boolean;
+  isHorizontal?: boolean;
 };
 
-export function SidebarLink({ title, icon, href, isActive }: SidebarLinkProps) {
+export function SidebarLink({ title, icon, href, isActive, isHorizontal }: SidebarLinkProps) {
   return (
     <Link
-      className={`${isActive ? 'bg-primary/10 !text-primary' : ''} flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-primary/10`}
+      className={`${isActive ? 'bg-primary/10 !text-primary' : ''} flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-primary/10 ${isHorizontal ? 'whitespace-nowrap' : ''}`}
       href={href}
     >
-      {/* <a className={`${isActive ? 'active-nav' : ''} flex items-center gap-3 rounded-xl px-3 py-2.5`} href={href}> */}
       <span className="material-symbols-outlined">{icon}</span>
       <span className="text-sm font-medium">{title}</span>
     </Link>
