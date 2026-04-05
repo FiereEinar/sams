@@ -55,6 +55,20 @@ class HandleInertiaRequests extends Middleware
 
                 return [];
             },
+            'tenantOrganizationName' => function () {
+                if (function_exists('tenant') && tenant()) {
+                    return tenant('organization_name') ?: 'My Organization';
+                }
+
+                return null;
+            },
+            'tenantUniversity' => function () {
+                if (function_exists('tenant') && tenant()) {
+                    return tenant('university') ?: 'University';
+                }
+
+                return null;
+            },
         ];
     }
 }

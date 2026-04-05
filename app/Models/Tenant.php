@@ -22,6 +22,7 @@ class Tenant extends BaseTenant implements TenantWithDatabase
             'email',
             'address',
             'status',
+            'university',
         ];
     }
 }

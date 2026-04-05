@@ -33,8 +33,13 @@ const sidebarLinks = [
 ];
 
 export default function Sidebar() {
-  const { url } = usePage();
-  const { sidebarPosition, isSidebarCollapsed } = useTheme();
+  const { url, props } = usePage();
+  const { sidebarPosition, isSidebarCollapsed, sidebarLogoType, sidebarLogoIcon, sidebarLogoImage, sidebarName } = useTheme();
+
+  const organizationName = (props as any).tenantOrganizationName || 'My Organization';
+  const university = (props as any).tenantUniversity || 'University';
+
+  const displayName = sidebarName || organizationName;
 
   if (isSidebarCollapsed) return null;
 
@@ -54,7 +59,14 @@ export default function Sidebar() {
 
   return (
     <aside className={asideClasses}>
-      <SidebarHeader icon="account_balance" title="SSG Admin" subtitle="Supreme Student Gov." isHorizontal={isHorizontal} />
+      <SidebarHeader
+        icon={sidebarLogoIcon}
+        title={displayName}
+        subtitle={university}
+        logoType={sidebarLogoType}
+        logoImageUrl={sidebarLogoImage}
+        isHorizontal={isHorizontal}
+      />
 
       <nav className={isVertical ? "flex-1 space-y-1 px-4" : "flex flex-row items-center gap-2 mx-auto"}>
         {sidebarLinks.map((link) => (

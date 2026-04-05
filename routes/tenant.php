@@ -58,5 +58,7 @@ Route::middleware([
 
         Route::get('/settings', [TenantSettingController::class, 'index'])->name('tenant-settings');
         Route::put('/settings', [TenantSettingController::class, 'update'])->name('tenant-settings-update');
+        Route::post('/settings/branding', [TenantSettingController::class, 'updateBranding'])->name('tenant-settings-branding');
+        Route::put('/settings/university', [TenantSettingController::class, 'updateUniversity'])->name('tenant-settings-university');
     });
 });

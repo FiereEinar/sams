@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 type ThemeMode = 'light' | 'dark' | 'system';
 export type SidebarPosition = 'left' | 'right' | 'top' | 'bottom';
 export type TopbarVisibility = 'visible' | 'hidden';
+export type SidebarLogoType = 'icon' | 'image';
 
 type AccentColor = {
   name: string;
@@ -36,6 +37,13 @@ type ThemeContextValue = {
   setTopbarMenu: (vis: TopbarVisibility) => void;
   isSidebarCollapsed: boolean;
   toggleSidebar: () => void;
+  sidebarLogoType: SidebarLogoType;
+  setSidebarLogoType: (type: SidebarLogoType) => void;
+  sidebarLogoIcon: string;
+  setSidebarLogoIcon: (icon: string) => void;
+  sidebarLogoImage: string;
+  sidebarName: string;
+  setSidebarName: (name: string) => void;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -139,6 +147,16 @@ export function ThemeProvider({
   const [topbarVisibility, setTopbarVisState] = useState<TopbarVisibility>(initialTopbar);
   const [topbarMenu, setTopbarMenuState] = useState<TopbarVisibility>(initialTopbarMenu);
   const [isSidebarCollapsed, setIsSidebarCollapsedState] = useState<boolean>(initialCollapsed);
+  const [sidebarLogoType, setSidebarLogoTypeState] = useState<SidebarLogoType>(
+    (initialSettings?.sidebar_logo_type as SidebarLogoType) || 'icon'
+  );
+  const [sidebarLogoIcon, setSidebarLogoIconState] = useState(
+    initialSettings?.sidebar_logo_icon || 'account_balance'
+  );
+  const sidebarLogoImage = initialSettings?.sidebar_logo_image || '';
+  const [sidebarName, setSidebarNameState] = useState(
+    initialSettings?.sidebar_name || ''
+  );
   const [systemDark, setSystemDark] = useState(() =>
     typeof window !== 'undefined' ? resolveSystemDark() : true,
   );
@@ -199,6 +217,21 @@ export function ThemeProvider({
     });
   }, []);
 
+  const setSidebarLogoType = useCallback((type: SidebarLogoType) => {
+    setSidebarLogoTypeState(type);
+    persistSetting('sidebar_logo_type', type);
+  }, []);
+
+  const setSidebarLogoIcon = useCallback((icon: string) => {
+    setSidebarLogoIconState(icon);
+    persistSetting('sidebar_logo_icon', icon);
+  }, []);
+
+  const setSidebarName = useCallback((name: string) => {
+    setSidebarNameState(name);
+    persistSetting('sidebar_name', name);
+  }, []);
+
   const value = useMemo(
     () => ({ 
       mode, setMode, 
@@ -207,9 +240,13 @@ export function ThemeProvider({
       sidebarPosition, setSidebarPosition,
       topbarVisibility, setTopbarVisibility,
       topbarMenu, setTopbarMenu,
-      isSidebarCollapsed, toggleSidebar
+      isSidebarCollapsed, toggleSidebar,
+      sidebarLogoType, setSidebarLogoType,
+      sidebarLogoIcon, setSidebarLogoIcon,
+      sidebarLogoImage,
+      sidebarName, setSidebarName,
     }),
-    [mode, setMode, accentColor, setAccentColor, resolvedDark, sidebarPosition, setSidebarPosition, topbarVisibility, setTopbarVisibility, topbarMenu, setTopbarMenu, isSidebarCollapsed, toggleSidebar],
+    [mode, setMode, accentColor, setAccentColor, resolvedDark, sidebarPosition, setSidebarPosition, topbarVisibility, setTopbarVisibility, topbarMenu, setTopbarMenu, isSidebarCollapsed, toggleSidebar, sidebarLogoType, setSidebarLogoType, sidebarLogoIcon, setSidebarLogoIcon, sidebarLogoImage, sidebarName, setSidebarName],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
