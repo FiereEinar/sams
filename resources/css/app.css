@@ -60,10 +60,10 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: white;
 }
 
-:not(.dark) input:-webkit-autofill,
-:not(.dark) input:-webkit-autofill:hover,
-:not(.dark) input:-webkit-autofill:focus,
-:not(.dark) input:-webkit-autofill:active {
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
   -webkit-text-fill-color: #0f172a;
 }
 
