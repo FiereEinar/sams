@@ -60,7 +60,7 @@ class TenantSettingController extends Controller
 
         $path = $request->file('logo')->store('branding', 'public');
 
-        TenantSetting::setSetting('sidebar_logo_image', '/storage/'.$path);
+        TenantSetting::setSetting('sidebar_logo_image', '/tenancy/assets/'.$path);
 
         return back();
     }
