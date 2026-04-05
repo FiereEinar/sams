@@ -6,18 +6,23 @@ type TopbarProps = {
   role?: string;
 };
 
-const topbarLinks = [
-  { title: 'Dashboard', href: '/dashboard' },
-  { title: 'Events', href: '/events' },
-  { title: 'Attendance', href: '/attendance' },
-  { title: 'Masterlist', href: '/masterlist' },
-  { title: 'Settings', href: '/settings' },
+const allTopbarLinks = [
+  { title: 'Dashboard', href: '/dashboard', permission: 'DASHBOARD_VIEW' },
+  { title: 'Events', href: '/events', permission: 'EVENTS_VIEW' },
+  { title: 'Attendance', href: '/attendance', permission: 'ATTENDANCE_VIEW' },
+  { title: 'Masterlist', href: '/masterlist', permission: 'MASTERLIST_VIEW' },
+  { title: 'Users', href: '/users', permission: 'USERS_VIEW' },
+  { title: 'Roles', href: '/roles', permission: 'ROLES_VIEW' },
+  { title: 'Settings', href: '/settings', permission: 'SETTINGS_VIEW' },
 ];
 
 export default function Topbar({ placeholder = 'Search...', role = 'Admin' }: TopbarProps) {
   const { props, url } = usePage();
   const user = (props as any).auth?.user;
+  const userPermissions: string[] = (props as any).userPermissions || [];
   const { toggleSidebar, isSidebarCollapsed, topbarMenu } = useTheme();
+
+  const topbarLinks = allTopbarLinks.filter((link) => userPermissions.includes(link.permission));
 
   return (
     <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-background-light px-8 dark:border-white/10 dark:bg-background-dark">

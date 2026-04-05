@@ -69,6 +69,19 @@ class HandleInertiaRequests extends Middleware
 
                 return null;
             },
+            'userPermissions' => function () use ($request) {
+                $user = $request->user();
+
+                if (! $user || ! function_exists('tenant') || ! tenant()) {
+                    return [];
+                }
+
+                if (! $user->relationLoaded('roles')) {
+                    $user->load('roles');
+                }
+
+                return $user->getAllPermissions();
+            },
         ];
     }
 }

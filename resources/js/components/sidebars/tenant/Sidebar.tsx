@@ -4,31 +4,48 @@ import SidebarHeader from '../SidebarHeader';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { useTheme } from '@/hooks/use-theme';
 
-const sidebarLinks = [
+const allSidebarLinks = [
   {
     title: 'Dashboard',
     href: '/dashboard',
     icon: 'dashboard',
+    permission: 'DASHBOARD_VIEW',
   },
   {
     title: 'Events',
     href: '/events',
     icon: 'calendar_today',
+    permission: 'EVENTS_VIEW',
   },
   {
     title: 'Attendance',
     href: '/attendance',
     icon: 'how_to_reg',
+    permission: 'ATTENDANCE_VIEW',
   },
   {
     title: 'Masterlist',
     href: '/masterlist',
     icon: 'groups',
+    permission: 'MASTERLIST_VIEW',
+  },
+  {
+    title: 'Users',
+    href: '/users',
+    icon: 'person',
+    permission: 'USERS_VIEW',
+  },
+  {
+    title: 'Roles',
+    href: '/roles',
+    icon: 'admin_panel_settings',
+    permission: 'ROLES_VIEW',
   },
   {
     title: 'Settings',
     href: '/settings',
     icon: 'settings',
+    permission: 'SETTINGS_VIEW',
   },
 ];
 
@@ -38,8 +55,12 @@ export default function Sidebar() {
 
   const organizationName = (props as any).tenantOrganizationName || 'My Organization';
   const university = (props as any).tenantUniversity || 'University';
+  const userPermissions: string[] = (props as any).userPermissions || [];
 
   const displayName = sidebarName || organizationName;
+
+  // Filter links by user permissions
+  const sidebarLinks = allSidebarLinks.filter((link) => userPermissions.includes(link.permission));
 
   if (isSidebarCollapsed) return null;
 
