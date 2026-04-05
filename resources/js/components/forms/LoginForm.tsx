@@ -15,7 +15,7 @@ export default function LoginForm() {
   return (
     <form onSubmit={submit} className="space-y-6">
       <div className="space-y-2">
-        <label className="ml-1 text-sm font-semibold text-slate-300">Organization Email</label>
+        <label className="ml-1 text-sm font-semibold text-slate-700 dark:text-slate-300">Organization Email</label>
         <div className="group relative">
           <span className="material-symbols-outlined absolute top-1/2 left-4 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-primary">
             mail
@@ -23,7 +23,7 @@ export default function LoginForm() {
           <input
             value={data.email}
             onChange={(e) => setData('email', e.target.value)}
-            className="w-full rounded-2xl border-white/10 bg-background-dark/50 py-3.5 pr-4 pl-12 text-white transition-all placeholder:text-slate-600 focus:border-primary focus:ring-2 focus:ring-primary/50"
+            className="w-full rounded-2xl border-slate-200 bg-slate-50/50 py-3.5 pr-4 pl-12 text-slate-900 transition-all placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/50 dark:border-white/10 dark:bg-background-dark/50 dark:text-white dark:placeholder:text-slate-600"
             placeholder="orgname@buksu.edu.ph"
             type="email"
             name="email"
@@ -32,7 +32,7 @@ export default function LoginForm() {
         {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
       </div>
       <div className="space-y-2">
-        <label className="ml-1 text-sm font-semibold text-slate-300">Password</label>
+        <label className="ml-1 text-sm font-semibold text-slate-700 dark:text-slate-300">Password</label>
         <div className="group relative">
           <span className="material-symbols-outlined absolute top-1/2 left-4 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-primary">
             lock
@@ -40,7 +40,7 @@ export default function LoginForm() {
           <input
             value={data.password}
             onChange={(e) => setData('password', e.target.value)}
-            className="w-full rounded-2xl border-white/10 bg-background-dark/50 py-3.5 pr-4 pl-12 text-white transition-all placeholder:text-slate-600 focus:border-primary focus:ring-2 focus:ring-primary/50"
+            className="w-full rounded-2xl border-slate-200 bg-slate-50/50 py-3.5 pr-4 pl-12 text-slate-900 transition-all placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/50 dark:border-white/10 dark:bg-background-dark/50 dark:text-white dark:placeholder:text-slate-600"
             placeholder="••••••••"
             type="password"
           />
@@ -50,10 +50,10 @@ export default function LoginForm() {
       <div className="flex items-center justify-between text-sm">
         <label className="group flex cursor-pointer items-center gap-2">
           <input
-            className="size-4 rounded border-white/10 bg-background-dark/50 text-primary transition-all focus:ring-primary/50 focus:ring-offset-0"
+            className="size-4 rounded border-slate-300 bg-white text-primary transition-all focus:ring-primary/50 focus:ring-offset-0 dark:border-white/10 dark:bg-background-dark/50"
             type="checkbox"
           />
-          <span className="text-slate-400 transition-colors group-hover:text-slate-300">Remember me</span>
+          <span className="text-slate-600 transition-colors group-hover:text-slate-800 dark:text-slate-400 dark:group-hover:text-slate-300">Remember me</span>
         </label>
         <a className="font-semibold text-primary transition-colors hover:text-primary-hover" href="#">
           Forgot Password?
