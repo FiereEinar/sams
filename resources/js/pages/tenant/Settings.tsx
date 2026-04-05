@@ -58,6 +58,11 @@ export default function Settings() {
   const { props } = usePage();
   const organizationName = (props as any).tenantOrganizationName || 'My Organization';
   const university = (props as any).tenantUniversity || 'University';
+  const userPermissions: string[] = (props as any).userPermissions || [];
+
+  const canEditAppearance = userPermissions.includes('SETTINGS_APPEARANCE_UPDATE');
+  const canEditLayout = userPermissions.includes('SETTINGS_LAYOUT_UPDATE');
+  const canEditBranding = userPermissions.includes('SETTINGS_BRANDING_UPDATE');
 
   const { 
     mode, setMode, 
@@ -127,6 +132,13 @@ export default function Settings() {
 
       {activeTab === 'appearance' && (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          {!canEditAppearance && (
+            <div className="flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/20 dark:bg-amber-500/10">
+              <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">lock</span>
+              <p className="text-sm font-medium text-amber-800 dark:text-amber-300">You don't have permission to change appearance settings.</p>
+            </div>
+          )}
+          <div className={!canEditAppearance ? 'pointer-events-none opacity-60' : ''}>
           {/* Appearance Mode */}
           <section id="settings-appearance-mode">
             <h2 className="mb-1 text-lg font-semibold">Appearance</h2>
@@ -280,11 +292,19 @@ export default function Settings() {
               </span>
             </div>
           </section>
+          </div>
         </div>
       )}
 
       {activeTab === 'layout' && (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          {!canEditLayout && (
+            <div className="flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/20 dark:bg-amber-500/10">
+              <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">lock</span>
+              <p className="text-sm font-medium text-amber-800 dark:text-amber-300">You don't have permission to change layout settings.</p>
+            </div>
+          )}
+          <div className={!canEditLayout ? 'pointer-events-none opacity-60' : ''}>
           {/* Layout Configuration */}
           <section id="settings-layout">
             <h2 className="mb-1 text-lg font-semibold">Layout</h2>
@@ -376,10 +396,18 @@ export default function Settings() {
               </div>
             </div>
           </section>
+          </div>
         </div>
       )}
       {activeTab === 'branding' && (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          {!canEditBranding && (
+            <div className="flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/20 dark:bg-amber-500/10">
+              <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">lock</span>
+              <p className="text-sm font-medium text-amber-800 dark:text-amber-300">You don't have permission to change branding settings.</p>
+            </div>
+          )}
+          <div className={!canEditBranding ? 'pointer-events-none opacity-60' : ''}>
           <section id="settings-branding">
             <h2 className="mb-1 text-lg font-semibold">Sidebar Branding</h2>
             <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
@@ -536,6 +564,7 @@ export default function Settings() {
               )}
             </div>
           </section>
+          </div>
         </div>
       )}
     </Layout>

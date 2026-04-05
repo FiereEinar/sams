@@ -1,7 +1,13 @@
+import { usePage } from '@inertiajs/react';
 import CreateStudentForm from '@/components/forms/CreateStudentForm';
 import Dialog from '@/components/ui/Dialog';
 
 export default function AddStudentButton() {
+  const { props } = usePage();
+  const userPermissions: string[] = (props as any).userPermissions || [];
+
+  if (!userPermissions.includes('MASTERLIST_CREATE')) return null;
+
   return (
     <Dialog
       trigger={(open) => (

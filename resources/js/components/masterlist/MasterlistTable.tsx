@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import type { PaginatedStudents, Student } from '@/types/student';
 import Dialog from '@/components/ui/Dialog';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
@@ -11,6 +11,12 @@ type Props = {
 };
 
 export default function MasterlistTable({ students }: Props) {
+  const { props } = usePage();
+  const userPermissions: string[] = (props as any).userPermissions || [];
+  const canUpdate = userPermissions.includes('MASTERLIST_UPDATE');
+  const canDelete = userPermissions.includes('MASTERLIST_DELETE');
+  const showActions = canUpdate || canDelete;
+
   const [search, setSearch] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get('search') || '';
@@ -84,7 +90,9 @@ export default function MasterlistTable({ students }: Props) {
                   <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Year</th>
                   <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Units</th>
                   <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Section</th>
-                  <th className="border-b border-slate-200 px-6 py-4 text-right dark:border-slate-800">Actions</th>
+                  {showActions && (
+                    <th className="border-b border-slate-200 px-6 py-4 text-right dark:border-slate-800">Actions</th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 text-sm dark:divide-white/5">
@@ -110,47 +118,53 @@ export default function MasterlistTable({ students }: Props) {
                     </td>
                     <td className="px-4 py-3 text-center text-slate-400">{s.units ?? '—'}</td>
                     <td className="px-4 py-3 text-center text-slate-400">{s.section ?? '—'}</td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Dialog
-                          trigger={(open) => (
-                            <button
-                              onClick={open}
-                              className="rounded-lg p-2 text-slate-400 transition-all hover:bg-primary/10 hover:text-primary"
-                              title="Edit Student"
+                    {showActions && (
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {canUpdate && (
+                            <Dialog
+                              trigger={(open) => (
+                                <button
+                                  onClick={open}
+                                  className="rounded-lg p-2 text-slate-400 transition-all hover:bg-primary/10 hover:text-primary"
+                                  title="Edit Student"
+                                >
+                                  <span className="material-symbols-outlined text-lg">edit</span>
+                                </button>
+                              )}
                             >
-                              <span className="material-symbols-outlined text-lg">edit</span>
-                            </button>
+                              {(close) => (
+                                <div className="flex items-center justify-center">
+                                  <EditStudentForm student={s} close={close} />
+                                </div>
+                              )}
+                            </Dialog>
                           )}
-                        >
-                          {(close) => (
-                            <div className="flex items-center justify-center">
-                              <EditStudentForm student={s} close={close} />
-                            </div>
-                          )}
-                        </Dialog>
-                        <ConfirmDialog
-                          title="Delete Student"
-                          description={`Are you sure you want to delete ${s.first_name} ${s.last_name}?`}
-                          confirmText="Delete"
-                          onConfirm={(close) => {
-                            router.delete(`/masterlist/${s.id}`, {
-                              preserveScroll: true,
-                              onSuccess: () => close(),
-                            });
-                          }}
-                          trigger={(open) => (
-                            <button
-                              onClick={open}
-                              className="rounded-lg p-2 text-slate-400 transition-all hover:bg-red-500/10 hover:text-red-500"
+                          {canDelete && (
+                            <ConfirmDialog
                               title="Delete Student"
-                            >
-                              <span className="material-symbols-outlined text-lg">delete</span>
-                            </button>
+                              description={`Are you sure you want to delete ${s.first_name} ${s.last_name}?`}
+                              confirmText="Delete"
+                              onConfirm={(close) => {
+                                router.delete(`/masterlist/${s.id}`, {
+                                  preserveScroll: true,
+                                  onSuccess: () => close(),
+                                });
+                              }}
+                              trigger={(open) => (
+                                <button
+                                  onClick={open}
+                                  className="rounded-lg p-2 text-slate-400 transition-all hover:bg-red-500/10 hover:text-red-500"
+                                  title="Delete Student"
+                                >
+                                  <span className="material-symbols-outlined text-lg">delete</span>
+                                </button>
+                              )}
+                            />
                           )}
-                        />
-                      </div>
-                    </td>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

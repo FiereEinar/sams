@@ -84,22 +84,12 @@ export default function Users({ users, roles, tenantPlan, userCount, maxUsers }:
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/50 dark:border-white/5 dark:bg-white/5">
-                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  User
-                </th>
-                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Roles
-                </th>
-                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Plan
-                </th>
-                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Status
-                </th>
+                <th className="px-6 py-3.5 text-left text-xs font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">User</th>
+                <th className="px-6 py-3.5 text-left text-xs font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">Roles</th>
+                <th className="px-6 py-3.5 text-left text-xs font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">Plan</th>
+                <th className="px-6 py-3.5 text-left text-xs font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">Status</th>
                 {(canUpdate || canDelete) && (
-                  <th className="px-6 py-3.5 text-right text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    Actions
-                  </th>
+                  <th className="px-6 py-3.5 text-right text-xs font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">Actions</th>
                 )}
               </tr>
             </thead>
@@ -118,11 +108,7 @@ export default function Users({ users, roles, tenantPlan, userCount, maxUsers }:
                         <div>
                           <p className="font-semibold text-slate-900 dark:text-white">
                             {user.name}
-                            {isSelf && (
-                              <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">
-                                You
-                              </span>
-                            )}
+                            {isSelf && <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">You</span>}
                           </p>
                           <p className="text-sm text-slate-500 dark:text-slate-400">{user.email}</p>
                         </div>
@@ -134,9 +120,7 @@ export default function Users({ users, roles, tenantPlan, userCount, maxUsers }:
                           <span
                             key={role.id}
                             className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
-                              role.is_default
-                                ? 'bg-primary/10 text-primary'
-                                : 'bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300'
+                              role.is_default ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300'
                             }`}
                           >
                             {role.name}
@@ -238,7 +222,10 @@ function UserFormModal({ user, roles, onClose }: UserFormModalProps) {
   const toggleRole = (roleId: number) => {
     const current = form.data.role_ids;
     if (current.includes(roleId)) {
-      form.setData('role_ids', current.filter((id) => id !== roleId));
+      form.setData(
+        'role_ids',
+        current.filter((id) => id !== roleId),
+      );
     } else {
       form.setData('role_ids', [...current, roleId]);
     }
@@ -259,9 +246,7 @@ function UserFormModal({ user, roles, onClose }: UserFormModalProps) {
         className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl dark:border-white/10 dark:bg-surface-dark"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="mb-6 text-xl font-bold text-slate-900 dark:text-white">
-          {isEditing ? 'Edit User' : 'Add User'}
-        </h2>
+        <h2 className="mb-6 text-xl font-bold text-slate-900 dark:text-white">{isEditing ? 'Edit User' : 'Add User'}</h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
@@ -320,21 +305,16 @@ function UserFormModal({ user, roles, onClose }: UserFormModalProps) {
                   />
                   <div>
                     <p className="text-sm font-bold text-slate-900 dark:text-white">{role.name}</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      {role.permissions.length} permissions
-                    </p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{role.permissions.length} permissions</p>
                   </div>
-                  {role.is_default && (
-                    <span className="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">
-                      Default
-                    </span>
-                  )}
+                  {role.is_default && <span className="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">Default</span>}
                 </label>
               ))}
             </div>
             {form.errors.role_ids && <p className="mt-1 text-xs text-red-500">{form.errors.role_ids}</p>}
           </div>
 
+          {/* @ts-ignore */}
           {form.errors.limit && <p className="text-sm font-medium text-red-500">{(form.errors as any).limit}</p>}
 
           <div className="flex justify-end gap-3 pt-2">

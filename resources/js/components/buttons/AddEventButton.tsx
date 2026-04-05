@@ -1,7 +1,13 @@
+import { usePage } from '@inertiajs/react';
 import CreateEventForm from '../forms/CreateEventForm';
 import Dialog from '../ui/Dialog';
 
 export default function AddEventButton() {
+  const { props } = usePage();
+  const userPermissions: string[] = (props as any).userPermissions || [];
+
+  if (!userPermissions.includes('EVENTS_CREATE')) return null;
+
   return (
     <Dialog
       trigger={(open) => (

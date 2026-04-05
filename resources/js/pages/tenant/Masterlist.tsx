@@ -25,6 +25,9 @@ export default function Masterlist() {
   const [isImporting, setIsImporting] = useState(false);
   const { toast } = useToast();
 
+  const userPermissions: string[] = (usePage().props as any).userPermissions || [];
+  const canImport = userPermissions.includes('MASTERLIST_IMPORT');
+
   const isCooldownActive = Boolean(tenantPlan === 'basic' && nextImportAt && new Date(nextImportAt) > new Date());
 
   async function handleFileSelected(file: File) {
@@ -144,16 +147,18 @@ export default function Masterlist() {
           >
             Current Masterlist
           </button>
-          <button
-            onClick={() => setActiveTab('import')}
-            className={`pb-3 text-sm font-medium transition-colors ${
-              activeTab === 'import'
-                ? 'border-b-2 border-primary text-primary'
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
-            }`}
-          >
-            Import Masterlist
-          </button>
+          {canImport && (
+            <button
+              onClick={() => setActiveTab('import')}
+              className={`pb-3 text-sm font-medium transition-colors ${
+                activeTab === 'import'
+                  ? 'border-b-2 border-primary text-primary'
+                  : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+              }`}
+            >
+              Import Masterlist
+            </button>
+          )}
         </div>
 
         {activeTab === 'import' && (
