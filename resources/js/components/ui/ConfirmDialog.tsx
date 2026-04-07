@@ -7,8 +7,12 @@ export type ConfirmDialogProps = {
   description?: string;
   cancelText?: string;
   confirmText?: string;
-  onConfirm: (close: () => void) => void;
+  onConfirm?: (close: () => void) => void;
   onCancel?: (close: () => void) => void;
+  isAlert?: boolean;
+  icon?: string;
+  iconClass?: string;
+  confirmStyle?: string;
 };
 
 export default function ConfirmDialog({
@@ -19,6 +23,10 @@ export default function ConfirmDialog({
   confirmText = 'Confirm',
   onConfirm,
   onCancel,
+  isAlert = false,
+  icon = isAlert ? 'info' : 'warning',
+  iconClass = isAlert ? 'text-blue-500 bg-blue-500/10' : 'text-red-500 bg-red-500/10',
+  confirmStyle = isAlert ? 'bg-primary hover:bg-primary-hover shadow-primary/20' : 'bg-red-500 hover:bg-red-600 shadow-red-500/20',
 }: ConfirmDialogProps) {
   return (
     <Dialog trigger={trigger}>
@@ -29,15 +37,16 @@ export default function ConfirmDialog({
         };
 
         const handleConfirm = () => {
-          onConfirm(close);
+          if (onConfirm) onConfirm(close);
+          if (isAlert) close();
         };
 
         return (
           <div className="modal-glow flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-slate-200 bg-surface-light shadow-2xl dark:border-white/5 dark:bg-surface-dark">
             <header className="flex items-center justify-between px-6 py-5">
               <div className="flex items-center gap-3">
-                <div className="flex size-12 items-center justify-center rounded-lg bg-red-500/10">
-                  <span className="material-symbols-outlined text-red-500">warning</span>
+                <div className={`flex size-12 items-center justify-center rounded-lg ${iconClass.split(' ')[1]}`}>
+                  <span className={`material-symbols-outlined ${iconClass.split(' ')[0]}`}>{icon}</span>
                 </div>
                 <div>
                   <h2 className="text-lg font-bold leading-tight text-slate-800 dark:text-white">{title}</h2>
@@ -58,17 +67,19 @@ export default function ConfirmDialog({
             </div>
             
             <footer className="flex items-center justify-end gap-3 border-t border-slate-200 bg-slate-50 px-6 py-4 dark:border-white/5 dark:bg-background-dark">
-              <button
-                onClick={handleCancel}
-                className="rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-white/5"
-              >
-                {cancelText}
-              </button>
+              {!isAlert && (
+                <button
+                  onClick={handleCancel}
+                  className="rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-white/5"
+                >
+                  {cancelText}
+                </button>
+              )}
               <button
                 onClick={handleConfirm}
-                className="rounded-lg bg-red-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-red-500/20 transition-all hover:bg-red-600"
+                className={`rounded-lg px-5 py-2 text-sm font-bold text-white shadow-lg transition-all border border-transparent ${confirmStyle}`}
               >
-                {confirmText}
+                {isAlert ? 'OK' : confirmText}
               </button>
             </footer>
           </div>

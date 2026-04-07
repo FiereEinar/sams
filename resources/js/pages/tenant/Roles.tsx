@@ -1,6 +1,7 @@
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import Layout from './Layout';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 type Role = {
   id: number;
@@ -80,23 +81,43 @@ export default function Roles({ roles, permissionsGrouped }: RolesPageProps) {
                         <span className="material-symbols-outlined text-lg">edit</span>
                       </button>
                     )}
-                    {canDelete && (
-                      <button
-                        onClick={() => {
-                          if (role.users_count > 0) {
-                            alert('Cannot delete a role with assigned users. Reassign users first.');
-                            return;
-                          }
-                          if (confirm(`Delete role "${role.name}"?`)) {
-                            router.delete(`/roles/${role.id}`);
-                          }
+                    {canDelete && role.users_count > 0 ? (
+                      <ConfirmDialog
+                        isAlert={true}
+                        title="Cannot Delete Role"
+                        description="This role currently has assigned users. You must reassign those users to other roles before deleting this role."
+                        trigger={(open) => (
+                          <button
+                            onClick={open}
+                            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10"
+                            title="Delete role"
+                          >
+                            <span className="material-symbols-outlined text-lg">delete</span>
+                          </button>
+                        )}
+                      />
+                    ) : canDelete ? (
+                      <ConfirmDialog
+                        title="Delete Role"
+                        description={`Delete role "${role.name}"? This action cannot be undone.`}
+                        icon="delete"
+                        iconClass="text-red-500 bg-red-500/10"
+                        confirmStyle="bg-red-500 hover:bg-red-600 shadow-red-500/20"
+                        confirmText="Delete"
+                        onConfirm={(close) => {
+                          router.delete(`/roles/${role.id}`, { onSuccess: close });
                         }}
-                        className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10"
-                        title="Delete role"
-                      >
-                        <span className="material-symbols-outlined text-lg">delete</span>
-                      </button>
-                    )}
+                        trigger={(open) => (
+                          <button
+                            onClick={open}
+                            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10"
+                            title="Delete role"
+                          >
+                            <span className="material-symbols-outlined text-lg">delete</span>
+                          </button>
+                        )}
+                      />
+                    ) : null}
                   </div>
                 )}
               </div>
@@ -203,9 +224,9 @@ function RoleFormModal({ role, permissionsGrouped, onClose }: RoleFormModalProps
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
       <div
-        className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl dark:border-white/10 dark:bg-surface-dark"
+        className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl dark:border-white/10 dark:bg-surface-dark animate-in zoom-in-95 fade-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="mb-6 text-xl font-bold text-slate-900 dark:text-white">

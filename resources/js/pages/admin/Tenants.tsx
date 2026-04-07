@@ -1,6 +1,7 @@
 import { Head, router } from '@inertiajs/react';
 import Layout from './Layout';
 import TenantDetailsModal from '../../components/admin/TenantDetailsModal';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import _ from 'lodash';
 import { Tenant } from '@/types/tenant';
 
@@ -9,11 +10,8 @@ type TenantItem = Tenant & {
 };
 
 export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
-  const handleToggle = (e: React.MouseEvent, id: string, currentStatus: string) => {
-    e.stopPropagation();
-    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-    if (!confirm(`Are you sure you want to set this tenant to "${newStatus}"?`)) return;
-    router.post(`/admin/tenants/${id}/toggle-status`);
+  const handleToggle = (id: string, close: () => void) => {
+    router.post(`/admin/tenants/${id}/toggle-status`, {}, { onSuccess: close });
   };
 
   return (
@@ -90,17 +88,28 @@ export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex justify-end gap-2">
-                            <button
-                              onClick={(e) => handleToggle(e, tenant.id, tenant.status)}
-                              className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-all ${
-                                tenant.status === 'active'
-                                  ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20'
-                                  : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
-                              }`}
-                            >
-                              <span className="material-symbols-outlined text-lg">{tenant.status === 'active' ? 'block' : 'check_circle'}</span>
-                              {tenant.status === 'active' ? 'Deactivate' : 'Activate'}
-                            </button>
+                            <ConfirmDialog
+                              title={tenant.status === 'active' ? 'Deactivate Tenant' : 'Activate Tenant'}
+                              description={`Are you sure you want to set this tenant to "${tenant.status === 'active' ? 'inactive' : 'active'}"?`}
+                              icon={tenant.status === 'active' ? 'block' : 'check_circle'}
+                              iconClass={tenant.status === 'active' ? 'text-red-500 bg-red-500/10' : 'text-emerald-500 bg-emerald-500/10'}
+                              confirmStyle={tenant.status === 'active' ? 'bg-red-500 hover:bg-red-600 shadow-red-500/20' : 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20'}
+                              confirmText={tenant.status === 'active' ? 'Deactivate' : 'Activate'}
+                              onConfirm={(close) => handleToggle(tenant.id, close)}
+                              trigger={(open) => (
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); open(); }}
+                                  className={`flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-bold transition-all ${
+                                    tenant.status === 'active'
+                                      ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20'
+                                      : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
+                                  }`}
+                                >
+                                  <span className="material-symbols-outlined text-[16px]">{tenant.status === 'active' ? 'block' : 'check_circle'}</span>
+                                  {tenant.status === 'active' ? 'Deactivate' : 'Activate'}
+                                </button>
+                              )}
+                            />
                           </div>
                         </td>
                       </tr>

@@ -86,7 +86,11 @@ export default function Masterlist() {
     const validRows = previewData.rows.filter((r) => r.status === 'valid').map((r) => r.data);
 
     if (validRows.length === 0) {
-      alert('No valid rows to import.');
+      toast({
+        title: 'Error',
+        description: 'No valid rows to import.',
+        variant: 'destructive',
+      });
       return;
     }
 

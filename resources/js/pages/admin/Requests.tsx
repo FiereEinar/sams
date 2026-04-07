@@ -1,6 +1,7 @@
 import { Head, router } from '@inertiajs/react';
 import Layout from './Layout';
 import TenantDetailsModal from '../../components/admin/TenantDetailsModal';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 interface TenantRequest {
   id: string;
@@ -15,16 +16,12 @@ interface TenantRequest {
 export default function Requests({ requests }: { requests: TenantRequest[] }) {
   console.log(requests);
 
-  const handleApprove = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (!confirm('Are you sure you want to approve this organization?')) return;
-    router.post(`/admin/requests/${id}/approve`);
+  const handleApprove = (id: string, close: () => void) => {
+    router.post(`/admin/requests/${id}/approve`, {}, { onSuccess: close });
   };
 
-  const handleReject = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (!confirm('Are you sure you want to reject and delete this organization? This cannot be undone.')) return;
-    router.post(`/admin/requests/${id}/reject`);
+  const handleReject = (id: string, close: () => void) => {
+    router.post(`/admin/requests/${id}/reject`, {}, { onSuccess: close });
   };
 
   return (
@@ -92,20 +89,42 @@ export default function Requests({ requests }: { requests: TenantRequest[] }) {
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex justify-end gap-2">
-                            <button
-                              onClick={(e) => handleApprove(e, req.id)}
-                              className="flex items-center gap-2 rounded-xl bg-emerald-500/10 px-4 py-2 text-sm font-bold text-emerald-400 transition-all hover:bg-emerald-500/20"
-                            >
-                              <span className="material-symbols-outlined text-lg">check_circle</span>
-                              Approve
-                            </button>
-                            <button
-                              onClick={(e) => handleReject(e, req.id)}
-                              className="flex items-center gap-2 rounded-xl bg-red-500/10 px-4 py-2 text-sm font-bold text-red-400 transition-all hover:bg-red-500/20"
-                            >
-                              <span className="material-symbols-outlined text-lg">cancel</span>
-                              Reject
-                            </button>
+                            <ConfirmDialog
+                              title="Approve Organization"
+                              description="Are you sure you want to approve this organization's request to join?"
+                              icon="check_circle"
+                              iconClass="text-emerald-500 bg-emerald-500/10"
+                              confirmStyle="bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20"
+                              confirmText="Approve"
+                              onConfirm={(close) => handleApprove(req.id, close)}
+                              trigger={(open) => (
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); open(); }}
+                                  className="flex items-center gap-2 rounded-xl bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-400 transition-all hover:bg-emerald-500/20"
+                                >
+                                  <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                                  Approve
+                                </button>
+                              )}
+                            />
+                            <ConfirmDialog
+                              title="Reject Organization"
+                              description="Are you sure you want to reject and delete this organization? This cannot be undone."
+                              icon="cancel"
+                              iconClass="text-red-500 bg-red-500/10"
+                              confirmStyle="bg-red-500 hover:bg-red-600 shadow-red-500/20"
+                              confirmText="Reject"
+                              onConfirm={(close) => handleReject(req.id, close)}
+                              trigger={(open) => (
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); open(); }}
+                                  className="flex items-center gap-2 rounded-xl bg-red-500/10 px-3 py-1.5 text-xs font-bold text-red-400 transition-all hover:bg-red-500/20"
+                                >
+                                  <span className="material-symbols-outlined text-[16px]">cancel</span>
+                                  Reject
+                                </button>
+                              )}
+                            />
                           </div>
                         </td>
                       </tr>

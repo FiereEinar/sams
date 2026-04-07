@@ -1,6 +1,7 @@
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import Layout from './Layout';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 type Role = {
   id: number;
@@ -165,17 +166,26 @@ export default function Users({ users, roles, tenantPlan, userCount, maxUsers }:
                             </button>
                           )}
                           {canDelete && !isSelf && (
-                            <button
-                              onClick={() => {
-                                if (confirm(`Delete user "${user.name}"?`)) {
-                                  router.delete(`/users/${user.id}`);
-                                }
+                            <ConfirmDialog
+                              title="Delete User"
+                              description={`Delete user "${user.name}"? This action cannot be undone.`}
+                              icon="delete"
+                              iconClass="text-red-500 bg-red-500/10"
+                              confirmStyle="bg-red-500 hover:bg-red-600 shadow-red-500/20"
+                              confirmText="Delete"
+                              onConfirm={(close) => {
+                                router.delete(`/users/${user.id}`, { onSuccess: close });
                               }}
-                              className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10"
-                              title="Delete user"
-                            >
-                              <span className="material-symbols-outlined text-lg">delete</span>
-                            </button>
+                              trigger={(open) => (
+                                <button
+                                  onClick={open}
+                                  className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10"
+                                  title="Delete user"
+                                >
+                                  <span className="material-symbols-outlined text-lg">delete</span>
+                                </button>
+                              )}
+                            />
                           )}
                         </div>
                       </td>
@@ -241,9 +251,9 @@ function UserFormModal({ user, roles, onClose }: UserFormModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
       <div
-        className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl dark:border-white/10 dark:bg-surface-dark"
+        className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl dark:border-white/10 dark:bg-surface-dark animate-in zoom-in-95 fade-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="mb-6 text-xl font-bold text-slate-900 dark:text-white">{isEditing ? 'Edit User' : 'Add User'}</h2>
