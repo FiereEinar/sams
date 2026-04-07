@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class TenantMetric extends Model
 {
+    public function getConnectionName()
+    {
+        return config('tenancy.database.central_connection');
+    }
     protected $fillable = [
         'tenant_id',
         'month',

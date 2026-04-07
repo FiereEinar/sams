@@ -16,9 +16,11 @@ class AuthController extends Controller
         return Inertia::render('Login', compact('tenant'));
     }
 
-    public function signupPage()
+    public function signupPage(Request $request)
     {
-        return Inertia::render('Signup');
+        return Inertia::render('Signup', [
+            'plan_id' => $request->query('plan_id'),
+        ]);
     }
 
     public function login(Request $request)

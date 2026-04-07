@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\MonitoringController;
 
 foreach (config('tenancy.central_domains') as $domain) {
     Route::domain($domain)->group(function () {
-        Route::get('/', fn () => Inertia::render('LandingPage'))->name('landing-page');
+        Route::get('/', [\App\Http\Controllers\LandingPageController::class, 'index'])->name('landing-page');
 
         Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
         Route::post('/login', [AuthController::class, 'login'])->name('login-api');
@@ -45,6 +45,11 @@ foreach (config('tenancy.central_domains') as $domain) {
             Route::get('/admin/payments', [PaymentController::class, 'index'])->name('admin.payments');
 
             Route::get('/admin/monitoring', [MonitoringController::class, 'index'])->name('admin.monitoring');
+
+            Route::get('/admin/plans', [\App\Http\Controllers\Admin\PlanController::class, 'index'])->name('admin.plans');
+            Route::post('/admin/plans', [\App\Http\Controllers\Admin\PlanController::class, 'store'])->name('admin.plans.store');
+            Route::patch('/admin/plans/{plan}', [\App\Http\Controllers\Admin\PlanController::class, 'update'])->name('admin.plans.update');
+            Route::post('/admin/plans/{plan}/toggle-status', [\App\Http\Controllers\Admin\PlanController::class, 'toggleStatus'])->name('admin.plans.toggle-status');
         });
     });
 }

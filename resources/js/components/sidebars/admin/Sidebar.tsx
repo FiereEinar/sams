@@ -6,11 +6,12 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog';
 export default function Sidebar() {
   const { url } = usePage();
 
-  const navItems = [
+    const navItems = [
     { title: 'Dashboard', href: '/admin/dashboard', icon: 'dashboard' },
     { title: 'Requests', href: '/admin/requests', icon: 'pending_actions' },
     { title: 'Tenants', href: '/admin/tenants', icon: 'domain' },
     { title: 'Payments', href: '/admin/payments', icon: 'payments' },
+    { title: 'Plans', href: '/admin/plans', icon: 'sell' },
     { title: 'Monitoring', href: '/admin/monitoring', icon: 'monitoring' },
   ];
   return (
