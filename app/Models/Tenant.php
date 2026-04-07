@@ -23,6 +23,9 @@ class Tenant extends BaseTenant implements TenantWithDatabase
             'address',
             'status',
             'university',
+            'storage_occupied',
+            'bandwidth_used',
+            'api_requests_count',
         ];
     }
 }

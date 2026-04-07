@@ -27,6 +27,7 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
     EnsureTenantIsActive::class,
+    \App\Http\Middleware\TrackTenantApiRequests::class,
 ])->group(function () {
     Route::get('/login', [AuthController::class, 'loginPage'])->name('tenant-login');
     Route::post('/login', [AuthController::class, 'login'])->name('tenant-login-api');

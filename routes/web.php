@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TenantRequestController;
 use App\Http\Controllers\Admin\TenantController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\MonitoringController;
 
 foreach (config('tenancy.central_domains') as $domain) {
     Route::domain($domain)->group(function () {
@@ -42,6 +43,8 @@ foreach (config('tenancy.central_domains') as $domain) {
             Route::post('/admin/tenants/{tenant}/notify-subscription', [TenantController::class, 'notifySubscription'])->name('admin.tenants.notify');
 
             Route::get('/admin/payments', [PaymentController::class, 'index'])->name('admin.payments');
+
+            Route::get('/admin/monitoring', [MonitoringController::class, 'index'])->name('admin.monitoring');
         });
     });
 }
