@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import Layout from './Layout';
 import { Tenant } from '@/types/tenant';
 
@@ -15,6 +15,8 @@ interface Props {
   totalBandwidth: number;
   totalApiRequests: number;
   tenants: TenantItem[];
+  selectedMonth: string;
+  availableMonths: string[];
 }
 
 const formatBytes = (bytes: number, decimals = 2) => {
@@ -30,14 +32,42 @@ const formatNumber = (num: number) => {
     return new Intl.NumberFormat().format(num);
 };
 
-export default function Monitoring({ totalTenants, totalStorage, totalBandwidth, totalApiRequests, tenants }: Props) {
+export default function Monitoring({ totalTenants, totalStorage, totalBandwidth, totalApiRequests, tenants, selectedMonth, availableMonths }: Props) {
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    router.get('/admin/monitoring', { month: e.target.value }, { preserveState: true });
+  };
+
   return (
     <Layout>
       <Head title="Monitoring" />
       <div>
-        <div className="mb-8">
-          <h1 className="text-3xl font-extrabold tracking-tight">System Monitoring</h1>
-          <p className="mt-1 text-slate-400">Overview of tenant resource usage and system statistics.</p>
+        <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+          <div>
+            <h1 className="text-3xl font-extrabold tracking-tight">System Monitoring</h1>
+            <p className="mt-1 text-slate-400">Overview of tenant resource usage and system statistics.</p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <label htmlFor="month" className="text-sm font-medium text-slate-400">
+              Billing Period:
+            </label>
+            <select
+              id="month"
+              value={selectedMonth}
+              onChange={handleMonthChange}
+              className="rounded-xl border border-white/10 bg-surface-dark/50 px-4 py-2 text-sm font-medium text-white shadow-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+            >
+              {availableMonths.map(month => {
+                const date = new Date(month + '-01');
+                const label = date.toLocaleDateString(undefined, { year: 'numeric', month: 'long' });
+                return (
+                  <option key={month} value={month} className="bg-surface-dark">
+                    {label}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
         </div>
 
         {/* Dashbaord Cards */}

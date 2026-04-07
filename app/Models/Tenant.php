@@ -24,8 +24,11 @@ class Tenant extends BaseTenant implements TenantWithDatabase
             'status',
             'university',
             'storage_occupied',
-            'bandwidth_used',
-            'api_requests_count',
         ];
+    }
+
+    public function metrics()
+    {
+        return $this->hasMany(TenantMetric::class);
     }
 }
