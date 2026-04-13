@@ -47,6 +47,12 @@ const allSidebarLinks = [
     icon: 'settings',
     permission: 'SETTINGS_VIEW',
   },
+  {
+    title: 'System Updates',
+    href: '/system/updates',
+    icon: 'system_update_alt',
+    permission: 'SYSTEM_UPDATE_VIEW',
+  },
 ];
 
 export default function Sidebar() {

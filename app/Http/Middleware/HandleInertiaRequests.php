@@ -82,6 +82,13 @@ class HandleInertiaRequests extends Middleware
 
                 return $user->getAllPermissions();
             },
+            'systemVersion' => function () {
+                if (function_exists('tenant') && tenant()) {
+                    return trim((string) shell_exec('git describe --tags --abbrev=0 2>/dev/null')) ?: null;
+                }
+
+                return null;
+            },
         ];
     }
 }

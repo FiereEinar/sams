@@ -1,0 +1,101 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Tenant;
+
+use App\Http\Controllers\Controller;
+use App\Services\SystemUpdateService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class SystemUpdateController extends Controller
+{
+    public function __construct(public SystemUpdateService $updateService) {}
+
+    public function index(): Response
+    {
+        $currentVersion = $this->updateService->getCurrentVersion();
+        $commitHash = $this->updateService->getCurrentCommitHash();
+        $installedVersions = $this->updateService->getInstalledVersions();
+
+        return Inertia::render('tenant/SystemUpdates', [
+            'currentVersion' => $currentVersion,
+            'commitHash' => $commitHash,
+            'installedVersions' => $installedVersions,
+        ]);
+    }
+
+    public function check(): JsonResponse
+    {
+        $currentVersion = $this->updateService->getCurrentVersion();
+        $result = $this->updateService->getAvailableReleases();
+
+        if ($result['error']) {
+            return response()->json([
+                'success' => false,
+                'error' => $result['error'],
+                'currentVersion' => $currentVersion,
+                'releases' => [],
+            ]);
+        }
+
+        // Filter releases newer than the current version
+        $availableReleases = collect($result['releases'])
+            ->filter(function (array $release) use ($currentVersion): bool {
+                if ($currentVersion === 'unknown') {
+                    return true;
+                }
+
+                return version_compare(
+                    ltrim($release['tag_name'], 'v'),
+                    ltrim($currentVersion, 'v'),
+                    '>'
+                );
+            })
+            ->values()
+            ->all();
+
+        return response()->json([
+            'success' => true,
+            'currentVersion' => $currentVersion,
+            'releases' => $availableReleases,
+        ]);
+    }
+
+    public function apply(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'version' => ['required', 'string', 'regex:/^v?\d+\.\d+\.\d+$/'],
+        ]);
+
+        $targetVersion = $validated['version'];
+
+        $result = $this->updateService->applyUpdate($targetVersion);
+
+        return response()->json([
+            'success' => $result['success'],
+            'steps' => $result['steps'],
+            'newVersion' => $result['success'] ? $targetVersion : $this->updateService->getCurrentVersion(),
+        ]);
+    }
+
+    public function rollback(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'version' => ['required', 'string', 'regex:/^v?\d+\.\d+\.\d+$/'],
+        ]);
+
+        $targetVersion = $validated['version'];
+
+        $result = $this->updateService->rollback($targetVersion);
+
+        return response()->json([
+            'success' => $result['success'],
+            'steps' => $result['steps'],
+            'newVersion' => $result['success'] ? $targetVersion : $this->updateService->getCurrentVersion(),
+        ]);
+    }
+}

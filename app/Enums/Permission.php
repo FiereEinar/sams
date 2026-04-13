@@ -59,6 +59,11 @@ class Permission
 
     public const RolesDelete = 'ROLES_DELETE';
 
+    // System Updates
+    public const SystemUpdateView = 'SYSTEM_UPDATE_VIEW';
+
+    public const SystemUpdateApply = 'SYSTEM_UPDATE_APPLY';
+
     /**
      * Get all permissions as a flat array.
      *
@@ -114,6 +119,10 @@ class Permission
                 self::RolesCreate,
                 self::RolesUpdate,
                 self::RolesDelete,
+            ],
+            'System' => [
+                self::SystemUpdateView,
+                self::SystemUpdateApply,
             ],
         ];
     }

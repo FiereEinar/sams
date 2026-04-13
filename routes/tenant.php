@@ -11,6 +11,7 @@ use App\Http\Controllers\Tenant\EventSessionController;
 use App\Http\Controllers\tenant\MasterlistController;
 use App\Http\Controllers\Tenant\MasterlistImportController;
 use App\Http\Controllers\Tenant\RoleController;
+use App\Http\Controllers\Tenant\SystemUpdateController;
 use App\Http\Controllers\Tenant\TenantSettingController;
 use App\Http\Controllers\Tenant\UserController;
 use App\Http\Middleware\CheckPermission;
@@ -133,6 +134,18 @@ Route::middleware([
             Route::delete('/roles/{role}', [RoleController::class, 'destroy'])
                 ->middleware(CheckPermission::class.':'.Permission::RolesDelete)
                 ->name('tenant-roles-destroy');
+
+            // System Updates
+            Route::middleware(CheckPermission::class.':'.Permission::SystemUpdateView)->group(function () {
+                Route::get('/system/updates', [SystemUpdateController::class, 'index'])->name('tenant-system-updates');
+                Route::post('/system/updates/check', [SystemUpdateController::class, 'check'])->name('tenant-system-updates-check');
+            });
+            Route::post('/system/updates/apply', [SystemUpdateController::class, 'apply'])
+                ->middleware(CheckPermission::class.':'.Permission::SystemUpdateApply)
+                ->name('tenant-system-updates-apply');
+            Route::post('/system/updates/rollback', [SystemUpdateController::class, 'rollback'])
+                ->middleware(CheckPermission::class.':'.Permission::SystemUpdateApply)
+                ->name('tenant-system-updates-rollback');
         });
     });
 });
