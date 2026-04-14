@@ -42,16 +42,16 @@ const allSidebarLinks = [
     permission: 'ROLES_VIEW',
   },
   {
-    title: 'Settings',
-    href: '/settings',
-    icon: 'settings',
-    permission: 'SETTINGS_VIEW',
-  },
-  {
     title: 'System Updates',
     href: '/system/updates',
     icon: 'system_update_alt',
     permission: 'SYSTEM_UPDATE_VIEW',
+  },
+  {
+    title: 'Settings',
+    href: '/settings',
+    icon: 'settings',
+    permission: 'SETTINGS_VIEW',
   },
 ];
 
