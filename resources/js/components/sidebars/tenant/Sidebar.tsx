@@ -6,7 +6,7 @@ import { useTheme } from '@/hooks/use-theme';
 
 const allSidebarLinks = [
   {
-    title: 'Dashboard',
+    title: 'Home',
     href: '/dashboard',
     icon: 'dashboard',
     permission: 'DASHBOARD_VIEW',
@@ -73,15 +73,16 @@ export default function Sidebar() {
   const isVertical = sidebarPosition === 'left' || sidebarPosition === 'right';
   const isHorizontal = !isVertical;
 
-  let asideClasses = "shrink-0 border-slate-200 bg-background-light dark:border-white/10 dark:bg-background-dark ";
-  
+  let asideClasses = 'shrink-0 border-slate-200 bg-background-light dark:border-white/10 dark:bg-background-dark ';
+
   if (isVertical) {
-    asideClasses += "sticky top-0 flex h-screen w-72 flex-col ";
-    asideClasses += sidebarPosition === 'left' ? "border-r" : "border-l";
+    asideClasses += 'sticky top-0 flex h-screen w-72 flex-col ';
+    asideClasses += sidebarPosition === 'left' ? 'border-r' : 'border-l';
   } else {
-    asideClasses += sidebarPosition === 'top' 
-      ? "sticky top-0 z-50 border-b flex flex-row items-center w-full px-4 overflow-x-auto custom-scrollbar" 
-      : "sticky bottom-0 z-50 border-t flex flex-row items-center w-full px-4 overflow-x-auto custom-scrollbar";
+    asideClasses +=
+      sidebarPosition === 'top'
+        ? 'sticky top-0 z-50 border-b flex flex-row items-center w-full px-4 overflow-x-auto custom-scrollbar'
+        : 'sticky bottom-0 z-50 border-t flex flex-row items-center w-full px-4 overflow-x-auto custom-scrollbar';
   }
 
   return (
@@ -95,7 +96,7 @@ export default function Sidebar() {
         isHorizontal={isHorizontal}
       />
 
-      <nav className={isVertical ? "flex-1 space-y-1 px-4" : "flex flex-row items-center gap-2 mx-auto"}>
+      <nav className={isVertical ? 'flex-1 space-y-1 px-4' : 'mx-auto flex flex-row items-center gap-2'}>
         {sidebarLinks.map((link) => (
           <SidebarLink key={link.title} {...link} isActive={url.startsWith(link.href)} isHorizontal={isHorizontal} />
         ))}
@@ -123,7 +124,7 @@ export default function Sidebar() {
           <SidebarFooter />
         </>
       ) : (
-        <div className="pl-4 ml-auto">
+        <div className="ml-auto pl-4">
           <ConfirmDialog
             title="Log Out"
             description="Are you sure you want to log out of your account?"
