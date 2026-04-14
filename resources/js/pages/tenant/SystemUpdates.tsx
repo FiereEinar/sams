@@ -1,5 +1,6 @@
 import Header from '@/components/ui/Header';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import { setUpdating as setGlobalUpdating } from '@/components/ui/UpdateOverlay';
 import Layout from './Layout';
 import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
@@ -62,6 +63,7 @@ export default function SystemUpdates() {
 
   const applyUpdate = async (version: string) => {
     setUpdating(true);
+    setGlobalUpdating(true);
     setUpdateSteps([]);
     setUpdateResult(null);
 
@@ -81,11 +83,13 @@ export default function SystemUpdates() {
       ]);
     } finally {
       setUpdating(false);
+      setGlobalUpdating(false);
     }
   };
 
   const rollbackToVersion = async (version: string) => {
     setUpdating(true);
+    setGlobalUpdating(true);
     setUpdateSteps([]);
     setUpdateResult(null);
 
@@ -104,6 +108,7 @@ export default function SystemUpdates() {
       ]);
     } finally {
       setUpdating(false);
+      setGlobalUpdating(false);
     }
   };
 

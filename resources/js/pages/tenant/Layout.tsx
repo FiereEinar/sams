@@ -1,5 +1,6 @@
 import Sidebar from '@/components/sidebars/tenant/Sidebar';
 import Topbar from '@/components/topbar/tenant/Topbar';
+import UpdateOverlay from '@/components/ui/UpdateOverlay';
 import { PropsWithChildren } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 
@@ -14,6 +15,7 @@ export default function Layout({ children }: PropsWithChildren) {
 
   return (
     <div className={containerClass}>
+      <UpdateOverlay />
       {sidebarPosition !== 'bottom' && <Sidebar />}
       
       <main className="flex min-w-0 flex-1 flex-col bg-background-light dark:bg-background-dark">
