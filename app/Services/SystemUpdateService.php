@@ -103,8 +103,19 @@ class SystemUpdateService
      */
     public function applyUpdate(string $targetVersion): array
     {
+        set_time_limit(0);
+
         $steps = [];
         $basePath = base_path();
+        $updateCompleted = false;
+
+        // Register a shutdown handler to bring the app back up if PHP crashes
+        register_shutdown_function(function () use ($basePath, &$updateCompleted): void {
+            if (! $updateCompleted) {
+                $this->executeCommand('php artisan up', $basePath);
+                Log::error('Update process crashed — emergency recovery brought app back online.');
+            }
+        });
 
         $commands = [
             ['step' => 'Enabling maintenance mode', 'cmd' => 'php artisan down --retry=60'],
@@ -151,6 +162,8 @@ class SystemUpdateService
                 break;
             }
         }
+
+        $updateCompleted = true;
 
         return ['success' => $success, 'steps' => $steps];
     }
