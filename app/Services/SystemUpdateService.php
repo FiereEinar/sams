@@ -111,13 +111,14 @@ class SystemUpdateService
             ['step' => 'Fetching latest tags', 'cmd' => 'git fetch --all --tags'],
             ['step' => 'Stashing local changes', 'cmd' => 'git stash'],
             ['step' => "Checking out version {$targetVersion}", 'cmd' => "git checkout tags/{$targetVersion} -f"],
-            ['step' => 'Installing PHP dependencies', 'cmd' => 'composer install'],
-            // ['step' => 'Installing PHP dependencies', 'cmd' => 'composer install --no-dev --optimize-autoloader --no-interaction'],
+            ['step' => 'Installing PHP dependencies', 'cmd' => 'composer install --no-interaction'],
             ['step' => 'Installing Node dependencies', 'cmd' => 'npm install'],
             ['step' => 'Building frontend assets', 'cmd' => 'npm run build'],
             ['step' => 'Running central database migrations', 'cmd' => 'php artisan migrate --force'],
             ['step' => 'Running tenant database migrations', 'cmd' => 'php artisan tenants:migrate'],
-            ['step' => 'Clearing caches', 'cmd' => 'php artisan config:cache && php artisan route:cache && php artisan view:cache'],
+            ['step' => 'Caching config', 'cmd' => 'php artisan config:cache'],
+            ['step' => 'Caching routes', 'cmd' => 'php artisan route:cache'],
+            ['step' => 'Caching views', 'cmd' => 'php artisan view:cache'],
             ['step' => 'Disabling maintenance mode', 'cmd' => 'php artisan up'],
         ];
 
