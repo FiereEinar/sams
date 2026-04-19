@@ -4,6 +4,7 @@ import Layout from './Layout';
 import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import axios from 'axios';
+import { useUpdate } from '@/hooks/use-update';
 
 type Release = {
   tag_name: string;
@@ -28,6 +29,7 @@ type PageProps = {
 export default function SystemUpdates() {
   const { props } = usePage();
   const { currentVersion, commitHash, installedVersions } = props as unknown as PageProps;
+  const { setIsUpdating } = useUpdate();
 
   const [checking, setChecking] = useState(false);
   const [releases, setReleases] = useState<Release[] | null>(null);
@@ -62,6 +64,7 @@ export default function SystemUpdates() {
 
   const applyUpdate = async (version: string) => {
     setUpdating(true);
+    setIsUpdating(true);
     setUpdateSteps([]);
     setUpdateResult(null);
 
@@ -81,11 +84,13 @@ export default function SystemUpdates() {
       ]);
     } finally {
       setUpdating(false);
+      setIsUpdating(false);
     }
   };
 
   const rollbackToVersion = async (version: string) => {
     setUpdating(true);
+    setIsUpdating(true);
     setUpdateSteps([]);
     setUpdateResult(null);
 
@@ -104,6 +109,7 @@ export default function SystemUpdates() {
       ]);
     } finally {
       setUpdating(false);
+      setIsUpdating(false);
     }
   };
 

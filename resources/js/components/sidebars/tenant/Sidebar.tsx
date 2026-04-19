@@ -42,6 +42,12 @@ const allSidebarLinks = [
     permission: 'ROLES_VIEW',
   },
   {
+    title: 'Support',
+    href: '/support',
+    icon: 'support_agent',
+    permission: 'SUPPORT_VIEW',
+  },
+  {
     title: 'System Updates',
     href: '/system/updates',
     icon: 'system_update_alt',

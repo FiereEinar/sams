@@ -12,6 +12,7 @@ export default function Sidebar() {
     { title: 'Tenants', href: '/admin/tenants', icon: 'domain' },
     { title: 'Payments', href: '/admin/payments', icon: 'payments' },
     { title: 'Plans', href: '/admin/plans', icon: 'sell' },
+    { title: 'Support', href: '/admin/support', icon: 'support_agent' },
     { title: 'Monitoring', href: '/admin/monitoring', icon: 'monitoring' },
   ];
   return (

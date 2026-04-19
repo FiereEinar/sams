@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\TenantController;
 use App\Http\Controllers\Admin\TenantRequestController;
 use App\Http\Controllers\AuthController;
@@ -49,6 +50,11 @@ foreach (config('tenancy.central_domains') as $domain) {
             Route::post('/admin/plans', [\App\Http\Controllers\Admin\PlanController::class, 'store'])->name('admin.plans.store');
             Route::patch('/admin/plans/{plan}', [\App\Http\Controllers\Admin\PlanController::class, 'update'])->name('admin.plans.update');
             Route::post('/admin/plans/{plan}/toggle-status', [\App\Http\Controllers\Admin\PlanController::class, 'toggleStatus'])->name('admin.plans.toggle-status');
+
+            Route::get('/admin/support', [SupportController::class, 'index'])->name('admin.support');
+            Route::get('/admin/support/{tenant}/{ticketId}', [SupportController::class, 'show'])->name('admin.support.show');
+            Route::post('/admin/support/{tenant}/{ticketId}/reply', [SupportController::class, 'reply'])->name('admin.support.reply');
+            Route::post('/admin/support/{tenant}/{ticketId}/status', [SupportController::class, 'updateStatus'])->name('admin.support.status');
         });
     });
 }

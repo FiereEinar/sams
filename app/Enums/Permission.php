@@ -59,6 +59,11 @@ class Permission
 
     public const RolesDelete = 'ROLES_DELETE';
 
+    // Support
+    public const SupportView = 'SUPPORT_VIEW';
+
+    public const SupportCreate = 'SUPPORT_CREATE';
+
     // System Updates
     public const SystemUpdateView = 'SYSTEM_UPDATE_VIEW';
 
@@ -119,6 +124,10 @@ class Permission
                 self::RolesCreate,
                 self::RolesUpdate,
                 self::RolesDelete,
+            ],
+            'Support' => [
+                self::SupportView,
+                self::SupportCreate,
             ],
             'System' => [
                 self::SystemUpdateView,

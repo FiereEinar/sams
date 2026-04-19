@@ -51,13 +51,19 @@ class AuthController extends Controller
                     'is_default' => false,
                 ]
             );
+            
+            // Self-heal: update Admin role with all permissions to ensure new permissions are captured.
+            $adminRole->update(['permissions' => \App\Enums\Permission::all()]);
 
             $user->roles()->syncWithoutDetaching([$adminRole->id]);
         }
 
-        $port = env('APP_PORT');
+        if (tenant()) {
+            return redirect()->intended('/dashboard');
+        }
 
-        return redirect()->away("http://{$tenant->domains->first()->domain}:{$port}/dashboard");
+        $port = env('APP_PORT') ? ':' . env('APP_PORT') : '';
+        return redirect()->away("http://{$tenant->domains->first()->domain}{$port}/dashboard");
     }
 
     public function signup() {}

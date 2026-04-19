@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 use App\Enums\Permission;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\tenant\AttendanceController;
+use App\Http\Controllers\Tenant\AttendanceController;
 use App\Http\Controllers\Tenant\AttendanceRecordController;
 use App\Http\Controllers\Tenant\EventController;
 use App\Http\Controllers\Tenant\EventSessionController;
-use App\Http\Controllers\tenant\MasterlistController;
+use App\Http\Controllers\Tenant\MasterlistController;
 use App\Http\Controllers\Tenant\MasterlistImportController;
 use App\Http\Controllers\Tenant\RoleController;
+use App\Http\Controllers\Tenant\SupportController;
 use App\Http\Controllers\Tenant\SystemUpdateController;
 use App\Http\Controllers\Tenant\TenantSettingController;
 use App\Http\Controllers\Tenant\UserController;
@@ -146,6 +147,17 @@ Route::middleware([
             Route::post('/system/updates/rollback', [SystemUpdateController::class, 'rollback'])
                 ->middleware(CheckPermission::class.':'.Permission::SystemUpdateApply)
                 ->name('tenant-system-updates-rollback');
+
+            // Support
+            Route::middleware(CheckPermission::class.':'.Permission::SupportView)->group(function () {
+                Route::get('/support', [SupportController::class, 'index'])->name('tenant-support');
+                Route::get('/support/{ticket}', [SupportController::class, 'show'])->name('tenant-support-thread');
+            });
+            Route::middleware(CheckPermission::class.':'.Permission::SupportCreate)->group(function () {
+                Route::post('/support', [SupportController::class, 'store'])->name('tenant-support-store');
+                Route::post('/support/{ticket}/reply', [SupportController::class, 'reply'])->name('tenant-support-reply');
+                Route::post('/support/{ticket}/close', [SupportController::class, 'close'])->name('tenant-support-close');
+            });
         });
     });
 });
