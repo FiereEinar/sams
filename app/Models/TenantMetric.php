@@ -10,6 +10,7 @@ class TenantMetric extends Model
     {
         return config('tenancy.database.central_connection');
     }
+
     protected $fillable = [
         'tenant_id',
         'month',

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class MonitoringController extends Controller
 {
@@ -13,7 +12,7 @@ class MonitoringController extends Controller
 
         $totalTenants = \App\Models\Tenant::count();
         $totalStorage = \App\Models\Tenant::sum('storage_occupied') ?? 0;
-        
+
         $totalApiRequests = \App\Models\TenantMetric::where('month', $selectedMonth)->sum('api_requests_count') ?? 0;
         $totalBandwidth = \App\Models\TenantMetric::where('month', $selectedMonth)->sum('bandwidth_used') ?? 0;
 
@@ -24,6 +23,7 @@ class MonitoringController extends Controller
         // Map tenants to format them easily
         $tenantsData = $tenants->map(function ($tenant) {
             $metrics = $tenant->metrics->first();
+
             return [
                 'id' => $tenant->id,
                 'name' => $tenant->name,
@@ -42,8 +42,8 @@ class MonitoringController extends Controller
             ->orderBy('month', 'desc')
             ->pluck('month')
             ->toArray();
-            
-        if (!in_array(date('Y-m'), $availableMonths)) {
+
+        if (! in_array(date('Y-m'), $availableMonths)) {
             array_unshift($availableMonths, date('Y-m'));
             $availableMonths = array_unique($availableMonths);
         }

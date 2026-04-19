@@ -12,6 +12,7 @@ class PlanController extends Controller
     public function index()
     {
         $plans = Plan::orderBy('price', 'asc')->get();
+
         return Inertia::render('admin/Plans', ['plans' => $plans]);
     }
 

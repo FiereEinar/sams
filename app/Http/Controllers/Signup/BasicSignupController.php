@@ -54,12 +54,22 @@ class BasicSignupController extends Controller
 
             // Create user in their tenant DB
             $tenant->run(function () use ($request, $email, $tenant) {
-                User::create([
+                $user = User::create([
                     'name' => $request->input('admin.fullname'),
                     'email' => $email,
                     'password' => Hash::make($request->input('admin.password')),
                     'tenant_id' => $tenant->id,
                 ]);
+
+                $role = \App\Models\Role::firstOrCreate(
+                    ['name' => 'Admin'],
+                    [
+                        'permissions' => \App\Enums\Permission::all(),
+                        'is_default' => false,
+                    ]
+                );
+
+                $user->roles()->attach($role);
             });
 
             return response()->json([

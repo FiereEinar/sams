@@ -23,11 +23,11 @@ return new class extends Migration
             $table->dateTime('end_at');
 
             $table->foreignId('created_by')
-                  ->constrained('users')
-                  ->cascadeOnDelete();
+                ->constrained('users')
+                ->cascadeOnDelete();
 
             $table->boolean('archived')->default(false);
-            
+
             $table->timestamps();
         });
     }

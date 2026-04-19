@@ -1,17 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MonitoringController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\TenantController;
+use App\Http\Controllers\Admin\TenantRequestController;
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Http\Controllers\Signup\SendCodeController;
 use App\Http\Controllers\Signup\BasicSignupController;
 use App\Http\Controllers\Signup\PremiumSignupController;
+use App\Http\Controllers\Signup\SendCodeController;
 use App\Http\Controllers\Signup\SignupSuccessController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\TenantRequestController;
-use App\Http\Controllers\Admin\TenantController;
-use App\Http\Controllers\Admin\PaymentController;
-use App\Http\Controllers\Admin\MonitoringController;
+use Illuminate\Support\Facades\Route;
 
 foreach (config('tenancy.central_domains') as $domain) {
     Route::domain($domain)->group(function () {

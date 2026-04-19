@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Tenant;
-use App\Models\Payment;
 use App\Mail\SubscriptionNotificationMail;
+use App\Models\Payment;
+use App\Models\Tenant;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 

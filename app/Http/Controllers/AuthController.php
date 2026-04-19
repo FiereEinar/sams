@@ -42,6 +42,19 @@ class AuthController extends Controller
         }
 
         $tenant = Tenant::find($user->tenant_id);
+
+        if ($tenant && $tenant->email === $user->email) {
+            $adminRole = \App\Models\Role::firstOrCreate(
+                ['name' => 'Admin'],
+                [
+                    'permissions' => \App\Enums\Permission::all(),
+                    'is_default' => false,
+                ]
+            );
+
+            $user->roles()->syncWithoutDetaching([$adminRole->id]);
+        }
+
         $port = env('APP_PORT');
 
         return redirect()->away("http://{$tenant->domains->first()->domain}:{$port}/dashboard");

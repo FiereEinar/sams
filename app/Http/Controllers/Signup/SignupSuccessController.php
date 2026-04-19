@@ -51,12 +51,22 @@ class SignupSuccessController extends Controller
 
             // Create user in their tenant DB
             $tenant->run(function () use ($formData, $tenant) {
-                User::create([
+                $user = User::create([
                     'name' => $formData['admin']['fullname'],
                     'email' => $formData['admin']['email'],
                     'password' => Hash::make($formData['admin']['password']),
                     'tenant_id' => $tenant->id,
                 ]);
+
+                $role = \App\Models\Role::firstOrCreate(
+                    ['name' => 'Admin'],
+                    [
+                        'permissions' => \App\Enums\Permission::all(),
+                        'is_default' => false,
+                    ]
+                );
+
+                $user->roles()->attach($role);
             });
 
             // Record the payment
