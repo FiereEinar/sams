@@ -96,6 +96,9 @@ Route::middleware([
             Route::post('/masterlist', [MasterlistController::class, 'store'])
                 ->middleware(CheckPermission::class.':'.Permission::MasterlistCreate)
                 ->name('tenant-masterlist-store');
+            Route::delete('/masterlist/clear', [MasterlistController::class, 'clearAll'])
+                ->middleware(CheckPermission::class.':'.Permission::MasterlistDelete)
+                ->name('tenant-masterlist-clear');
             Route::put('/masterlist/{student}', [MasterlistController::class, 'update'])
                 ->middleware(CheckPermission::class.':'.Permission::MasterlistUpdate)
                 ->name('tenant-masterlist-update');

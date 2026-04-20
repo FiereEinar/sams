@@ -4,11 +4,11 @@ import { Plan } from '@/types/index';
 import Dialog from '@/components/ui/Dialog';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
-type FeatureKey = 'max_imports_per_day' | 'max_users' | 'max_exports_per_day';
+type FeatureKey = 'max_students_per_import' | 'max_users' | 'max_exports_per_day';
 type FeaturesData = Record<FeatureKey, string>;
 
 const featureLabels: Record<FeatureKey, { label: string; icon: string; description: string }> = {
-    max_imports_per_day: { label: 'Max Imports / Day', icon: 'upload_file', description: 'Student masterlist imports allowed per day' },
+    max_students_per_import: { label: 'Max Students / Import', icon: 'upload_file', description: 'Maximum students per import (24h cooldown)' },
     max_users: { label: 'Max Users', icon: 'group', description: 'Total user accounts allowed' },
     max_exports_per_day: { label: 'Max Exports / Day', icon: 'download', description: 'Attendance exports allowed per day' },
 };
@@ -75,7 +75,7 @@ function CreatePlanForm({ close }: { close: () => void }) {
         description: '',
         price: '0',
         is_featured: false,
-        features: { max_imports_per_day: '', max_users: '', max_exports_per_day: '' } as FeaturesData,
+        features: { max_students_per_import: '', max_users: '', max_exports_per_day: '' } as FeaturesData,
     });
 
     const setFeature = (key: FeatureKey, value: string) => {
@@ -207,7 +207,7 @@ function EditPlanForm({ plan, close }: { plan: Plan; close: () => void }) {
         price: plan.price.toString(),
         is_featured: plan.is_featured,
         features: {
-            max_imports_per_day: plan.features?.max_imports_per_day?.toString() ?? '',
+            max_students_per_import: plan.features?.max_students_per_import?.toString() ?? '',
             max_users: plan.features?.max_users?.toString() ?? '',
             max_exports_per_day: plan.features?.max_exports_per_day?.toString() ?? '',
         } as FeaturesData,
@@ -426,7 +426,7 @@ export default function Plans({ plans }: { plans: Plan[] }) {
                                                 </span>
                                                 <span className="flex items-center gap-1.5">
                                                     <span className="material-symbols-outlined text-[14px] text-slate-500">upload_file</span>
-                                                    <span className="text-slate-300">{formatLimit(plan.features?.max_imports_per_day)} imports/day</span>
+                                                    <span className="text-slate-300">{formatLimit(plan.features?.max_students_per_import)} students/import</span>
                                                 </span>
                                                 <span className="flex items-center gap-1.5">
                                                     <span className="material-symbols-outlined text-[14px] text-slate-500">download</span>

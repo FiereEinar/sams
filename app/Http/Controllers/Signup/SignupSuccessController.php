@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Signup;
 use App\Http\Controllers\Controller;
 use App\Mail\WelcomeMail;
 use App\Models\Payment;
+use App\Models\Plan;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,9 +36,13 @@ class SignupSuccessController extends Controller
         try {
             $tenantId = $formData['organization']['subdomain'];
 
+            // Resolve actual plan
+            $plan = Plan::find($formData['resolved_plan_id'] ?? null);
+            $planType = $plan?->type ?? 'premium';
+
             $tenant = Tenant::create([
                 'id' => $tenantId,
-                'plan' => 'premium',
+                'plan' => $planType,
                 'organization_name' => $formData['organization']['name'],
                 'organization_type' => $formData['organization']['type'],
                 'name' => $formData['admin']['fullname'],
@@ -74,9 +79,9 @@ class SignupSuccessController extends Controller
                 'tenant_id' => $tenant->id,
                 'payer_name' => $formData['admin']['fullname'],
                 'payer_email' => $formData['admin']['email'],
-                'amount' => 50000, // matches the checkout line_items amount
+                'amount' => $plan ? (int) ($plan->price * 100) : 0,
                 'currency' => 'PHP',
-                'description' => 'Premium Plan Subscription',
+                'description' => ($plan?->name ?? 'Premium Plan').' Subscription',
                 'checkout_ref' => $ref,
                 'status' => 'paid',
             ]);
@@ -88,7 +93,7 @@ class SignupSuccessController extends Controller
             Mail::to($tenant->email)->send(new WelcomeMail(
                 organizationName: $tenant->organization_name,
                 loginUrl: $loginUrl,
-                plan: 'premium',
+                plan: $planType,
             ));
 
             Cache::forget($cacheKey);

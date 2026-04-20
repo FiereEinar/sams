@@ -18,7 +18,12 @@ class AuthController extends Controller
 
     public function signupPage(Request $request)
     {
+        $plans = \App\Models\Plan::where('status', 'active')
+            ->orderBy('price', 'asc')
+            ->get();
+
         return Inertia::render('Signup', [
+            'plans' => $plans,
             'plan_id' => $request->query('plan_id'),
         ]);
     }
@@ -51,7 +56,7 @@ class AuthController extends Controller
                     'is_default' => false,
                 ]
             );
-            
+
             // Self-heal: update Admin role with all permissions to ensure new permissions are captured.
             $adminRole->update(['permissions' => \App\Enums\Permission::all()]);
 
@@ -62,7 +67,8 @@ class AuthController extends Controller
             return redirect()->intended('/dashboard');
         }
 
-        $port = env('APP_PORT') ? ':' . env('APP_PORT') : '';
+        $port = env('APP_PORT') ? ':'.env('APP_PORT') : '';
+
         return redirect()->away("http://{$tenant->domains->first()->domain}{$port}/dashboard");
     }
 

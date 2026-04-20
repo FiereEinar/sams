@@ -30,10 +30,10 @@ class MasterlistController extends Controller
 
         $tenant = tenant();
         $tenantPlan = $tenant->plan ?? 'basic';
-        $maxImports = $tenant->getPlanFeature('max_imports_per_day');
+        $maxStudents = $tenant->getPlanFeature('max_students_per_import');
         $nextImportAt = null;
 
-        if ($maxImports !== null && $tenant->last_masterlist_import_at) {
+        if ($maxStudents !== null && $tenant->last_masterlist_import_at) {
             $lastImportDate = \Carbon\Carbon::parse($tenant->last_masterlist_import_at);
             $nextImportAt = $lastImportDate->addDay()->toIso8601String();
         }
@@ -65,5 +65,12 @@ class MasterlistController extends Controller
         $student->delete();
 
         return redirect()->back()->with('success', 'Student removed successfully.');
+    }
+
+    public function clearAll()
+    {
+        Student::query()->delete();
+
+        return redirect()->back()->with('success', 'All students have been removed from the masterlist.');
     }
 }

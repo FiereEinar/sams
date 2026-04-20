@@ -37,7 +37,8 @@ class Tenant extends BaseTenant implements TenantWithDatabase
      */
     public function getPlanFeature(string $key, mixed $default = null): mixed
     {
-        $plan = Plan::where('type', $this->plan ?? 'basic')
+        $plan = Plan::on('mysql')
+            ->where('type', $this->plan ?? 'basic')
             ->where('status', 'active')
             ->first();
 

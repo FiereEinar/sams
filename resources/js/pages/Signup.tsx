@@ -1,9 +1,10 @@
 import Step1Card, { Step1Header } from '@/components/forms/signup/Step1Card';
 import Step2Card, { Step2Header } from '@/components/forms/signup/Step2Card';
 import Step3Card, { Step3Header } from '@/components/forms/signup/Step3Card';
-import { useForm } from '@inertiajs/react';
+import { Plan } from '@/types/index';
+import { useForm, usePage } from '@inertiajs/react';
 import _ from 'lodash';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import z from 'zod';
 
 const organizationSchema = z.object({
@@ -31,6 +32,7 @@ const adminSchema = z
 
 export const signupSchema = z.object({
   plan: z.enum(['basic', 'premium']),
+  plan_id: z.number().optional(),
   organization: organizationSchema,
   admin: adminSchema,
   verification_code: z.string().optional(),
@@ -38,11 +40,22 @@ export const signupSchema = z.object({
 
 export type SignupFormValues = z.infer<typeof signupSchema>;
 
-export default function Signup() {
+interface Props {
+  plans: Plan[];
+  plan_id?: string;
+}
+
+export default function Signup({ plans, plan_id }: Props) {
   const [activeTab, setActiveTab] = useState(1);
 
+  // Find the pre-selected plan from the URL
+  const preSelectedPlan = plan_id ? plans.find((p) => p.id === parseInt(plan_id)) : null;
+  const initialPlanType = preSelectedPlan?.type ?? 'premium';
+  const initialPlanId = preSelectedPlan?.id ?? plans.find((p) => p.type === 'premium')?.id;
+
   const form = useForm<SignupFormValues>({
-    plan: 'premium',
+    plan: initialPlanType,
+    plan_id: initialPlanId,
     organization: {
       name: '',
       type: 'college-club',
@@ -61,7 +74,7 @@ export default function Signup() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background-dark p-6 text-white">
       <div className="grid w-full max-w-6xl items-start gap-8 lg:grid-cols-12">
-        <LeftAside form={form} />
+        <LeftAside form={form} plans={plans} />
         <div className="overflow-hidden rounded-4xl border border-white/5 bg-surface-dark shadow-2xl lg:col-span-8">
           {activeTab === 1 ? <Step1Header /> : activeTab === 2 ? <Step2Header /> : <Step3Header />}
 
@@ -87,18 +100,17 @@ export default function Signup() {
   );
 }
 
-function LeftAside({ form }: { form: ReturnType<typeof useForm<SignupFormValues>> }) {
-  const selectedPlan = form.data.plan;
-  const setSelectedPlan = (plan: 'basic' | 'premium') => form.setData('plan', plan);
-  const planCardStyles = {
-    notSelected:
-      'group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-white/5 bg-surface-dark p-5 transition-all hover:border-primary/40',
-    selected: 'group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-primary bg-primary/5 p-5 transition-all',
+function LeftAside({ form, plans }: { form: ReturnType<typeof useForm<SignupFormValues>>; plans: Plan[] }) {
+  const selectedPlanId = form.data.plan_id;
+
+  const selectPlan = (plan: Plan) => {
+    form.setData('plan', plan.type);
+    form.setData('plan_id', plan.id);
   };
 
   return (
-    <div className="space-y-6 lg:col-span-4">
-      <div className="mb-8 flex items-center gap-3">
+    <div className="flex flex-col gap-6 lg:col-span-4 lg:max-h-[calc(100vh-3rem)] lg:sticky lg:top-6">
+      <div className="flex items-center gap-3">
         <div className="flex size-12 items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-primary/20">
           <span className="material-symbols-outlined text-2xl font-bold">account_balance</span>
         </div>
@@ -107,60 +119,69 @@ function LeftAside({ form }: { form: ReturnType<typeof useForm<SignupFormValues>
           <p className="text-xs font-semibold text-primary/70">Organization Registration</p>
         </div>
       </div>
-      <div className="space-y-4">
+      <div>
         <h2 className="text-2xl font-bold">Choose your journey.</h2>
-        <p className="text-sm leading-relaxed text-slate-400">
+        <p className="mt-1 text-sm leading-relaxed text-slate-400">
           Join Bukidnon State University's premier attendance management ecosystem. Select your plan to begin the setup.
         </p>
       </div>
-      <div className="mt-8 space-y-4">
-        <div onClick={() => setSelectedPlan('basic')} className={selectedPlan === 'basic' ? planCardStyles.selected : planCardStyles.notSelected}>
-          <div className="mb-3 flex items-start justify-between">
-            <div className="rounded-lg bg-slate-800 p-2">
-              <span className="material-symbols-outlined text-slate-400">inventory_2</span>
+      <div className="flex-1 space-y-3 overflow-y-auto pr-1 pb-2" style={{ maxHeight: 'calc(100vh - 20rem)' }}>
+        {plans.map((plan) => {
+          const isSelected = selectedPlanId === plan.id;
+          return (
+            <div
+              key={plan.id}
+              onClick={() => selectPlan(plan)}
+              className={`group relative cursor-pointer overflow-hidden rounded-2xl border-2 p-5 transition-all ${
+                isSelected
+                  ? 'border-primary bg-primary/5'
+                  : 'border-white/5 bg-surface-dark hover:border-primary/40'
+              }`}
+            >
+              {plan.is_featured && (
+                <div className="absolute top-0 right-0 p-2">
+                  <span className="material-symbols-outlined text-primary">verified</span>
+                </div>
+              )}
+              <div className="mb-3 flex items-start justify-between">
+                <div className={`rounded-lg p-2 ${plan.type === 'premium' ? 'bg-primary/20' : 'bg-slate-800'}`}>
+                  <span className={`material-symbols-outlined ${plan.type === 'premium' ? 'text-primary' : 'text-slate-400'}`}>
+                    {plan.type === 'premium' ? 'workspace_premium' : 'inventory_2'}
+                  </span>
+                </div>
+                {Number(plan.price) === 0 ? (
+                  <span className="rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-slate-400">FREE</span>
+                ) : (
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">₱{plan.price}/sem</span>
+                )}
+              </div>
+              <h3 className="mb-1 text-base font-bold">{plan.name}</h3>
+              <p className={`mb-3 text-xs ${plan.type === 'premium' ? 'text-primary/70' : 'text-slate-400'}`}>
+                {plan.description}
+              </p>
+              <ul className="space-y-1.5 text-xs text-slate-300">
+                <li className="flex items-center gap-2">
+                  <span className={`material-symbols-outlined text-sm ${plan.type === 'premium' ? 'text-primary' : 'text-green-500/50'}`}>check_circle</span>
+                  {plan.features?.max_users ? `Up to ${plan.features.max_users} users` : 'Unlimited users'}
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className={`material-symbols-outlined text-sm ${plan.type === 'premium' ? 'text-primary' : 'text-green-500/50'}`}>check_circle</span>
+                  {plan.features?.max_students_per_import ? `Up to ${plan.features.max_students_per_import} students/import` : 'Unlimited imports'}
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className={`material-symbols-outlined text-sm ${plan.type === 'premium' ? 'text-primary' : 'text-green-500/50'}`}>check_circle</span>
+                  {plan.features?.max_exports_per_day ? `${plan.features.max_exports_per_day} exports/day` : 'Unlimited exports'}
+                </li>
+              </ul>
+              {isSelected && (
+                <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-primary">
+                  <span className="material-symbols-outlined text-sm">check_circle</span>
+                  Selected
+                </div>
+              )}
             </div>
-            <span className="rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-slate-400">FREE</span>
-          </div>
-          <h3 className="mb-1 text-lg font-bold">Basic Plan</h3>
-          <p className="mb-4 text-xs text-slate-400">Perfect for smaller organizations and clubs.</p>
-          <ul className="space-y-2 text-xs text-slate-300">
-            <li className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-green-500/50">check_circle</span>
-              Up to 3 active events
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-green-500/50">check_circle</span>
-              CSV export only
-            </li>
-          </ul>
-        </div>
-        <div onClick={() => setSelectedPlan('premium')} className={selectedPlan === 'premium' ? planCardStyles.selected : planCardStyles.notSelected}>
-          <div className="absolute top-0 right-0 p-3">
-            <span className="material-symbols-outlined text-primary">verified</span>
-          </div>
-          <div className="mb-3 flex items-start justify-between">
-            <div className="rounded-lg bg-primary/20 p-2">
-              <span className="material-symbols-outlined text-primary">workspace_premium</span>
-            </div>
-            <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-white uppercase">Selected</span>
-          </div>
-          <h3 className="mb-1 text-lg font-bold">Premium Plan</h3>
-          <p className="mb-4 text-xs text-primary/70">Full suite for departments and supreme councils.</p>
-          <ul className="space-y-2 text-xs text-slate-200">
-            <li className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-primary">check_circle</span>
-              Unlimited events &amp; students
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-primary">check_circle</span>
-              Advanced Analytics Dashboard
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-primary">check_circle</span>
-              Multi-tenant sub-admin roles
-            </li>
-          </ul>
-        </div>
+          );
+        })}
       </div>
     </div>
   );

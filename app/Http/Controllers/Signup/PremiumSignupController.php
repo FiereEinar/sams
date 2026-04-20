@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Signup;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plan;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -33,9 +34,19 @@ class PremiumSignupController extends Controller
         // Keep the code in cache for now, or just consume it since checkout is pending.
         Cache::forget('signup_code_'.$email);
 
+        // Look up the actual plan
+        $planId = $request->input('plan_id');
+        $plan = Plan::find($planId);
+
+        if (! $plan) {
+            return response()->json(['message' => 'Selected plan not found.'], 400);
+        }
+
         // Put the form data into cache to be processed after successful payment
         $checkoutRef = uniqid('chk_');
-        Cache::put('premium_signup_'.$checkoutRef, $request->all(), now()->addHours(24));
+        $cacheData = $request->all();
+        $cacheData['resolved_plan_id'] = $plan->id;
+        Cache::put('premium_signup_'.$checkoutRef, $cacheData, now()->addHours(24));
 
         $client = new Client;
         $PAYMONGO_SECRET = env('PAYMONGO_SECRET');
@@ -50,12 +61,12 @@ class PremiumSignupController extends Controller
                             'send_email_receipt' => true,
                             'show_description' => true,
                             'show_line_items' => true,
-                            'description' => 'Premium Plan Subscription',
+                            'description' => $plan->name.' Subscription',
                             'success_url' => config('app.url').'/signup/success?ref='.$checkoutRef,
                             'line_items' => [[
                                 'currency' => 'PHP',
-                                'amount' => 50000, // example amount in centavos
-                                'name' => 'Premium Plan',
+                                'amount' => (int) ($plan->price * 100),
+                                'name' => $plan->name,
                                 'quantity' => 1,
                             ]],
                             'payment_method_types' => ['gcash', 'paymaya', 'card'],

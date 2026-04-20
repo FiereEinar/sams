@@ -46,7 +46,7 @@ class PlanController extends Controller
             'price' => 'required|numeric|min:0',
             'is_featured' => 'boolean',
             'features' => 'nullable|array',
-            'features.max_imports_per_day' => 'nullable|integer|min:1',
+            'features.max_students_per_import' => 'nullable|integer|min:1',
             'features.max_users' => 'nullable|integer|min:1',
             'features.max_exports_per_day' => 'nullable|integer|min:1',
         ]);

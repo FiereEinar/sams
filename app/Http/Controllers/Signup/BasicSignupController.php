@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Signup;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plan;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,10 +39,14 @@ class BasicSignupController extends Controller
 
         $tenantId = $request->input('organization.subdomain');
 
+        // Resolve actual plan
+        $plan = Plan::find($request->input('plan_id'));
+        $planType = $plan?->type ?? 'basic';
+
         try {
             $tenant = Tenant::create([
                 'id' => $tenantId,
-                'plan' => 'basic',
+                'plan' => $planType,
                 'organization_name' => $request->input('organization.name'),
                 'organization_type' => $request->input('organization.type'),
                 'name' => $request->input('admin.fullname'),

@@ -172,9 +172,33 @@ export default function MasterlistTable({ students }: Props) {
           </div>
 
           <div className="flex items-center justify-between border-t border-slate-200 bg-surface-light p-6 dark:border-white/5 dark:bg-surface-dark">
-            <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
-              Showing {students.from || 0}-{students.to || 0} of {students.total} Students
-            </span>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
+                Showing {students.from || 0}-{students.to || 0} of {students.total} Students
+              </span>
+              {canDelete && students.total > 0 && (
+                <ConfirmDialog
+                  title="Clear Entire Masterlist"
+                  description={`This will permanently delete all ${students.total} students from the masterlist. This action cannot be undone.`}
+                  confirmText="Clear All"
+                  icon="delete_forever"
+                  iconClass="text-red-500 bg-red-500/10"
+                  confirmStyle="bg-red-500 hover:bg-red-600 shadow-red-500/20"
+                  onConfirm={(close) => {
+                    router.delete('/masterlist/clear', {
+                      preserveScroll: true,
+                      onSuccess: () => close(),
+                    });
+                  }}
+                  trigger={(open) => (
+                    <button onClick={open} className="flex items-center gap-1 text-xs font-semibold text-red-500 transition-colors hover:text-red-400">
+                      <span className="material-symbols-outlined text-sm">delete_sweep</span>
+                      Clear all students
+                    </button>
+                  )}
+                />
+              )}
+            </div>
             <div className="flex flex-wrap gap-2">
               {students.links.map((link, index) => {
                 const label = link.label.replace('&laquo;', '«').replace('&raquo;', '»');
