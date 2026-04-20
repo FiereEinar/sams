@@ -30,9 +30,10 @@ class MasterlistController extends Controller
 
         $tenant = tenant();
         $tenantPlan = $tenant->plan ?? 'basic';
+        $maxImports = $tenant->getPlanFeature('max_imports_per_day');
         $nextImportAt = null;
 
-        if ($tenantPlan === 'basic' && $tenant->last_masterlist_import_at) {
+        if ($maxImports !== null && $tenant->last_masterlist_import_at) {
             $lastImportDate = \Carbon\Carbon::parse($tenant->last_masterlist_import_at);
             $nextImportAt = $lastImportDate->addDay()->toIso8601String();
         }

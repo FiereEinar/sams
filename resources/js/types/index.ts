@@ -12,6 +12,11 @@ export interface Plan {
     price: number;
     status: 'active' | 'archived';
     is_featured: boolean;
+    features: {
+        max_imports_per_day: number | null;
+        max_users: number | null;
+        max_exports_per_day: number | null;
+    } | null;
 }
 
 export type SharedData = {

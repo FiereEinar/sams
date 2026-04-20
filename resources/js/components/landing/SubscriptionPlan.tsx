@@ -19,11 +19,11 @@ export default function SubscriptionPlan({ plans }: Props) {
             </button>
           </div>
         </div>
-        <div className="mx-auto grid max-w-240 gap-8 md:grid-cols-2">
+        <div className="mx-auto grid max-w-200 gap-6 md:grid-cols-2">
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`relative flex flex-col gap-8 overflow-hidden rounded-[2.5rem] bg-white p-10 transition-all dark:bg-white/5 ${
+              className={`relative flex flex-col gap-6 overflow-hidden rounded-2xl bg-white p-7 transition-all dark:bg-white/5 ${
                 plan.is_featured
                   ? 'border-2 border-primary bg-primary/3 shadow-2xl shadow-primary/10'
                   : 'border border-slate-200 hover:border-primary/30 dark:border-white/5'
@@ -31,20 +31,20 @@ export default function SubscriptionPlan({ plans }: Props) {
             >
               {plan.is_featured && (
                 <div className="absolute top-0 right-0">
-                  <div className="rounded-bl-3xl bg-primary px-6 py-2 text-xs font-black tracking-widest text-white uppercase">Most Selected</div>
+                  <div className="rounded-bl-2xl bg-primary px-5 py-1.5 text-xs font-black tracking-widest text-white uppercase">Most Selected</div>
                 </div>
               )}
-              <div className="flex flex-col gap-2">
-                <h4 className={`text-xl font-bold ${plan.is_featured ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>{plan.name}</h4>
-                <p className="text-slate-500 dark:text-slate-400">{plan.description}</p>
-                <div className="mt-4 flex items-baseline gap-1">
-                  <span className="text-5xl font-black tracking-tight text-slate-900 dark:text-white">₱{plan.price}</span>
-                  <span className="font-bold text-slate-500">/ sem</span>
+              <div className="flex flex-col gap-1.5">
+                <h4 className={`text-lg font-bold ${plan.is_featured ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>{plan.name}</h4>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{plan.description}</p>
+                <div className="mt-3 flex items-baseline gap-1">
+                  <span className="text-4xl font-black tracking-tight text-slate-900 dark:text-white">₱{plan.price}</span>
+                  <span className="text-sm font-bold text-slate-500">/ sem</span>
                 </div>
               </div>
               <Link
                 href={`/signup?plan_id=${plan.id}`}
-                className={`flex h-12 w-full items-center justify-center rounded-xl font-bold text-white transition-all ${
+                className={`flex h-11 w-full items-center justify-center rounded-xl text-sm font-bold text-white transition-all ${
                   plan.is_featured
                     ? 'bg-primary shadow-lg shadow-primary/30 hover:scale-[1.02] hover:bg-primary-hover'
                     : 'bg-slate-900 hover:bg-slate-800 dark:bg-white/10 dark:hover:bg-white/20'

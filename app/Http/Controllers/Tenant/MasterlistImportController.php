@@ -50,13 +50,13 @@ class MasterlistImportController extends Controller
     public function preview(ImportMasterlistRequest $request): JsonResponse
     {
         $tenant = tenant();
-        $isBasic = ($tenant->plan ?? 'basic') === 'basic';
+        $maxImports = $tenant->getPlanFeature('max_imports_per_day');
 
-        if ($isBasic && $tenant->last_masterlist_import_at) {
+        if ($maxImports !== null && $tenant->last_masterlist_import_at) {
             $lastImport = \Carbon\Carbon::parse($tenant->last_masterlist_import_at);
             if (now()->diffInHours($lastImport) < 24) {
                 return response()->json([
-                    'error' => 'Your basic plan allows one import per day. Please try again tomorrow.',
+                    'error' => "Your plan allows {$maxImports} import(s) per day. Please try again tomorrow.",
                 ], 422);
             }
         }
@@ -119,7 +119,7 @@ class MasterlistImportController extends Controller
             $summary[$status]++;
         }
 
-        if ($isBasic && $summary['valid'] > 500) {
+        if ($maxImports !== null && $summary['valid'] > 500) {
             return response()->json([
                 'error' => 'Your basic plan allows a maximum of 500 students per import. This file contains '.$summary['valid'].' valid rows. Please upgrade to Premium or reduce your file size.',
             ], 422);
@@ -152,12 +152,12 @@ class MasterlistImportController extends Controller
         ]);
 
         $tenant = tenant();
-        $isBasic = ($tenant->plan ?? 'basic') === 'basic';
+        $maxImports = $tenant->getPlanFeature('max_imports_per_day');
         $rows = $request->input('rows');
 
-        if ($isBasic) {
+        if ($maxImports !== null) {
             if ($tenant->last_masterlist_import_at && now()->diffInHours(\Carbon\Carbon::parse($tenant->last_masterlist_import_at)) < 24) {
-                return response()->json(['message' => 'Your basic plan allows one import per day.'], 422);
+                return response()->json(['message' => "Your plan allows {$maxImports} import(s) per day."], 422);
             }
             if (count($rows) > 500) {
                 return response()->json(['message' => 'Maximum 500 students per import.'], 422);
@@ -191,7 +191,7 @@ class MasterlistImportController extends Controller
             $imported++;
         }
 
-        if ($isBasic) {
+        if ($maxImports !== null) {
             $tenant->update(['last_masterlist_import_at' => now()->toDateTimeString()]);
         }
 

@@ -4,6 +4,70 @@ import { Plan } from '@/types/index';
 import Dialog from '@/components/ui/Dialog';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
+type FeatureKey = 'max_imports_per_day' | 'max_users' | 'max_exports_per_day';
+type FeaturesData = Record<FeatureKey, string>;
+
+const featureLabels: Record<FeatureKey, { label: string; icon: string; description: string }> = {
+    max_imports_per_day: { label: 'Max Imports / Day', icon: 'upload_file', description: 'Student masterlist imports allowed per day' },
+    max_users: { label: 'Max Users', icon: 'group', description: 'Total user accounts allowed' },
+    max_exports_per_day: { label: 'Max Exports / Day', icon: 'download', description: 'Attendance exports allowed per day' },
+};
+
+function FeatureLimitsSection({
+    features,
+    setFeature,
+}: {
+    features: FeaturesData;
+    setFeature: (key: FeatureKey, value: string) => void;
+}) {
+    return (
+        <div className="col-span-full space-y-4 rounded-xl border border-slate-200 bg-slate-50/50 p-6 dark:border-white/5 dark:bg-white/[0.02]">
+            <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-lg text-primary">tune</span>
+                <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">Feature Limits</h3>
+                <span className="ml-auto text-xs text-slate-400">Leave empty for unlimited</span>
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                {(Object.keys(featureLabels) as FeatureKey[]).map((key) => {
+                    const { label, icon, description } = featureLabels[key];
+                    const isUnlimited = features[key] === '';
+
+                    return (
+                        <div key={key} className="space-y-2">
+                            <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                                <span className="material-symbols-outlined text-sm text-slate-400">{icon}</span>
+                                {label}
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type="number"
+                                    value={features[key]}
+                                    onChange={(e) => setFeature(key, e.target.value)}
+                                    min="1"
+                                    placeholder="Unlimited"
+                                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/10 dark:bg-background-dark dark:text-white dark:placeholder:text-slate-500"
+                                />
+                                {isUnlimited && (
+                                    <span className="absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold text-emerald-500">∞</span>
+                                )}
+                            </div>
+                            <p className="text-[11px] text-slate-400">{description}</p>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+function parseFeaturesForSubmit(features: FeaturesData) {
+    const result: Record<string, number | null> = {};
+    for (const [key, value] of Object.entries(features)) {
+        result[key] = value === '' ? null : parseInt(value, 10);
+    }
+    return result;
+}
+
 function CreatePlanForm({ close }: { close: () => void }) {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
@@ -11,12 +75,20 @@ function CreatePlanForm({ close }: { close: () => void }) {
         description: '',
         price: '0',
         is_featured: false,
+        features: { max_imports_per_day: '', max_users: '', max_exports_per_day: '' } as FeaturesData,
     });
+
+    const setFeature = (key: FeatureKey, value: string) => {
+        setData('features', { ...data.features, [key]: value });
+    };
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        post('/admin/plans', {
-            onSuccess: close,
+        router.post('/admin/plans', {
+            ...data,
+            features: parseFeaturesForSubmit(data.features),
+        }, {
+            onSuccess: () => close(),
         });
     };
 
@@ -103,6 +175,7 @@ function CreatePlanForm({ close }: { close: () => void }) {
                             </label>
                         </div>
                     </div>
+                    <FeatureLimitsSection features={data.features} setFeature={setFeature} />
                 </form>
             </div>
             <footer className="flex items-center justify-end gap-4 border-t border-slate-200 bg-slate-50 px-8 py-6 dark:border-white/5 dark:bg-background-dark">
@@ -133,12 +206,24 @@ function EditPlanForm({ plan, close }: { plan: Plan; close: () => void }) {
         description: plan.description || '',
         price: plan.price.toString(),
         is_featured: plan.is_featured,
+        features: {
+            max_imports_per_day: plan.features?.max_imports_per_day?.toString() ?? '',
+            max_users: plan.features?.max_users?.toString() ?? '',
+            max_exports_per_day: plan.features?.max_exports_per_day?.toString() ?? '',
+        } as FeaturesData,
     });
+
+    const setFeature = (key: FeatureKey, value: string) => {
+        setData('features', { ...data.features, [key]: value });
+    };
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        patch(`/admin/plans/${plan.id}`, {
-            onSuccess: close,
+        router.patch(`/admin/plans/${plan.id}`, {
+            ...data,
+            features: parseFeaturesForSubmit(data.features),
+        }, {
+            onSuccess: () => close(),
         });
     };
 
@@ -225,6 +310,7 @@ function EditPlanForm({ plan, close }: { plan: Plan; close: () => void }) {
                             </label>
                         </div>
                     </div>
+                    <FeatureLimitsSection features={data.features} setFeature={setFeature} />
                 </form>
             </div>
             <footer className="flex items-center justify-end gap-4 border-t border-slate-200 bg-slate-50 px-8 py-6 dark:border-white/5 dark:bg-background-dark">
@@ -246,6 +332,11 @@ function EditPlanForm({ plan, close }: { plan: Plan; close: () => void }) {
             </footer>
         </div>
     );
+}
+
+function formatLimit(value: number | null | undefined) {
+    if (value === null || value === undefined) return 'Unlimited';
+    return value.toString();
 }
 
 export default function Plans({ plans }: { plans: Plan[] }) {
@@ -296,6 +387,7 @@ export default function Plans({ plans }: { plans: Plan[] }) {
                                     <th className="px-6 py-4 font-bold text-nowrap">Plan Details</th>
                                     <th className="px-6 py-4 font-bold">Tier / Type</th>
                                     <th className="px-6 py-4 font-bold">Price / Sem</th>
+                                    <th className="px-6 py-4 font-bold text-nowrap">Feature Limits</th>
                                     <th className="px-6 py-4 font-bold text-center">Status</th>
                                     <th className="px-6 py-4 font-bold text-right">Actions</th>
                                 </tr>
@@ -325,6 +417,22 @@ export default function Plans({ plans }: { plans: Plan[] }) {
                                         </td>
                                         <td className="px-6 py-4 font-medium text-white">
                                             ₱{plan.price}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex flex-col gap-1 text-xs">
+                                                <span className="flex items-center gap-1.5">
+                                                    <span className="material-symbols-outlined text-[14px] text-slate-500">group</span>
+                                                    <span className="text-slate-300">{formatLimit(plan.features?.max_users)} users</span>
+                                                </span>
+                                                <span className="flex items-center gap-1.5">
+                                                    <span className="material-symbols-outlined text-[14px] text-slate-500">upload_file</span>
+                                                    <span className="text-slate-300">{formatLimit(plan.features?.max_imports_per_day)} imports/day</span>
+                                                </span>
+                                                <span className="flex items-center gap-1.5">
+                                                    <span className="material-symbols-outlined text-[14px] text-slate-500">download</span>
+                                                    <span className="text-slate-300">{formatLimit(plan.features?.max_exports_per_day)} exports/day</span>
+                                                </span>
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <span

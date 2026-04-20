@@ -13,10 +13,26 @@ class Plan extends Model
         'price',
         'status',
         'is_featured',
+        'features',
     ];
 
-    protected $casts = [
-        'price' => 'decimal:2',
-        'is_featured' => 'boolean',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+            'is_featured' => 'boolean',
+            'features' => 'array',
+        ];
+    }
+
+    /**
+     * Get a specific feature value from the plan.
+     */
+    public function getFeature(string $key, mixed $default = null): mixed
+    {
+        return data_get($this->features, $key, $default);
+    }
 }

@@ -69,6 +69,26 @@ class AttendanceRecordController extends Controller
 
     public function export(Request $request, EventSession $session): \Symfony\Component\HttpFoundation\StreamedResponse
     {
+        $tenant = tenant();
+        $maxExports = $tenant->getPlanFeature('max_exports_per_day');
+
+        if ($maxExports !== null) {
+            $lastExportDate = $tenant->last_export_date ?? null;
+            $exportCount = (int) ($tenant->export_count_today ?? 0);
+
+            if ($lastExportDate === now()->toDateString()) {
+                if ($exportCount >= $maxExports) {
+                    abort(422, "Export limit reached ({$maxExports}/day). Please try again tomorrow.");
+                }
+                $tenant->update(['export_count_today' => $exportCount + 1]);
+            } else {
+                $tenant->update([
+                    'last_export_date' => now()->toDateString(),
+                    'export_count_today' => 1,
+                ]);
+            }
+        }
+
         $query = $session->attendanceRecords()->with('student')->orderByDesc('recorded_at');
 
         $course = $request->query('course');

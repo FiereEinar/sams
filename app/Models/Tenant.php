@@ -31,4 +31,20 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     {
         return $this->hasMany(TenantMetric::class);
     }
+
+    /**
+     * Get a feature limit from the tenant's assigned plan.
+     */
+    public function getPlanFeature(string $key, mixed $default = null): mixed
+    {
+        $plan = Plan::where('type', $this->plan ?? 'basic')
+            ->where('status', 'active')
+            ->first();
+
+        if (! $plan) {
+            return $default;
+        }
+
+        return $plan->getFeature($key, $default);
+    }
 }

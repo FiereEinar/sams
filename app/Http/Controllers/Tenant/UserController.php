@@ -16,27 +16,26 @@ class UserController extends Controller
     {
         $users = User::with('roles')->get();
         $roles = Role::all();
-        $tenantPlan = tenant('plan') ?? 'basic';
-        $userCount = User::count();
-        $maxUsers = $tenantPlan === 'premium' ? null : 3;
+        $tenant = tenant();
+        $maxUsers = $tenant->getPlanFeature('max_users');
 
         return Inertia::render('tenant/Users', [
             'users' => $users,
             'roles' => $roles,
-            'tenantPlan' => $tenantPlan,
-            'userCount' => $userCount,
+            'tenantPlan' => $tenant->plan ?? 'basic',
+            'userCount' => User::count(),
             'maxUsers' => $maxUsers,
         ]);
     }
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
-        $tenantPlan = tenant('plan') ?? 'basic';
+        $tenant = tenant();
+        $maxUsers = $tenant->getPlanFeature('max_users');
         $userCount = User::count();
-        $maxUsers = $tenantPlan === 'premium' ? PHP_INT_MAX : 3;
 
-        if ($userCount >= $maxUsers) {
-            return back()->withErrors(['limit' => "User limit reached for {$tenantPlan} plan. Upgrade to add more users."]);
+        if ($maxUsers !== null && $userCount >= $maxUsers) {
+            return back()->withErrors(['limit' => "User limit reached ({$maxUsers}). Upgrade your plan to add more users."]);
         }
 
         $validated = $request->validate([
