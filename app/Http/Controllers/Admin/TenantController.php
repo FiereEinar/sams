@@ -28,6 +28,7 @@ class TenantController extends Controller
                     'organization_name' => $tenant->organization_name,
                     'organization_type' => $tenant->organization_type,
                     'plan' => $tenant->plan,
+                    'plan_id' => $tenant->plan_id,
                     'status' => $tenant->status,
                     'address' => $tenant->address,
                     'name' => $tenant->name,
@@ -38,8 +39,11 @@ class TenantController extends Controller
                 ];
             });
 
+        $plans = \App\Models\Plan::where('status', 'active')->get();
+
         return Inertia::render('admin/Tenants', [
             'tenants' => $tenants,
+            'plans' => $plans,
         ]);
     }
 
@@ -64,5 +68,21 @@ class TenantController extends Controller
         ));
 
         return redirect()->back()->with('success', "Subscription notification dispatched to {$tenant->organization_name}.");
+    }
+
+    public function updatePlan(\Illuminate\Http\Request $request, Tenant $tenant): \Illuminate\Http\RedirectResponse
+    {
+        $validated = $request->validate([
+            'plan_id' => ['required', 'exists:plans,id'],
+        ]);
+
+        $plan = \App\Models\Plan::findOrFail($validated['plan_id']);
+
+        $tenant->update([
+            'plan_id' => $plan->id,
+            'plan' => $plan->type,
+        ]);
+
+        return redirect()->back()->with('success', "Tenant plan successfully updated to {$plan->name}.");
     }
 }

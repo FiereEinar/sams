@@ -8,6 +8,7 @@ export interface TenantDetails {
   organization_name: string;
   organization_type: string;
   plan?: string;
+  plan_id?: number | null;
   status?: string;
   domain: string | null;
   address?: string | null;
@@ -20,12 +21,23 @@ export interface TenantDetails {
 
 interface TenantDetailsModalProps {
   tenant: TenantDetails;
+  plans?: any[];
   trigger: (open: () => void) => ReactNode;
   isRequest?: boolean;
 }
 
-export default function TenantDetailsModal({ tenant, trigger, isRequest = false }: TenantDetailsModalProps) {
+export default function TenantDetailsModal({ tenant, plans = [], trigger, isRequest = false }: TenantDetailsModalProps) {
   const [isSending, setIsSending] = useState(false);
+  const [updatingPlan, setUpdatingPlan] = useState(false);
+
+  const handlePlanChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setUpdatingPlan(true);
+    router.put(
+      `/admin/tenants/${tenant.id}/plan`,
+      { plan_id: e.target.value },
+      { onFinish: () => setUpdatingPlan(false) }
+    );
+  };
 
   const handleNotifySubscription = () => {
     if (isSending) return;
@@ -109,11 +121,20 @@ export default function TenantDetailsModal({ tenant, trigger, isRequest = false 
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold tracking-widest text-slate-400 uppercase">Subscription Details</h3>
               {!isRequest && tenant.plan && (
-                <span
-                  className={`rounded-lg px-2.5 py-0.5 text-xs font-bold tracking-wider uppercase ${tenant.plan === 'premium' ? 'bg-primary/20 text-primary' : 'bg-slate-700 text-slate-300'}`}
-                >
-                  {tenant.plan}
-                </span>
+                <div className="flex items-center gap-2">
+                  {updatingPlan && <span className="material-symbols-outlined animate-spin text-sm text-slate-400">progress_activity</span>}
+                  <select
+                    value={tenant.plan_id || ''}
+                    onChange={handlePlanChange}
+                    disabled={updatingPlan}
+                    className="rounded-lg border border-white/10 bg-slate-800 px-3 py-1 text-xs font-bold text-white focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50"
+                  >
+                    {!tenant.plan_id && <option value="" disabled>Select Plan</option>}
+                    {plans.map(p => (
+                      <option key={p.id} value={p.id}>{p.name} ({_.startCase(p.type)})</option>
+                    ))}
+                  </select>
+                </div>
               )}
             </div>
 

@@ -43,6 +43,7 @@ class MasterlistController extends Controller
             'filters' => $request->only('search'),
             'tenantPlan' => $tenantPlan,
             'nextImportAt' => $nextImportAt,
+            'maxStudents' => $maxStudents,
         ]);
     }
 

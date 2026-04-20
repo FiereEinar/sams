@@ -13,10 +13,11 @@ import { useToast } from '@/hooks/use-toast';
 type Tab = 'import' | 'masterlist';
 
 export default function Masterlist() {
-  const { students, tenantPlan, nextImportAt } = usePage<{
+  const { students, tenantPlan, nextImportAt, maxStudents } = usePage<{
     students: PaginatedStudents;
     tenantPlan: 'basic' | 'premium';
     nextImportAt: string | null;
+    maxStudents: number | null;
   }>().props;
 
   const [activeTab, setActiveTab] = useState<Tab>('masterlist');
@@ -168,7 +169,7 @@ export default function Masterlist() {
         {activeTab === 'import' && (
           <>
             {isCooldownActive && <ImportCooldown nextImportAt={nextImportAt!} />}
-            <ImportMasterlist onFileSelected={handleFileSelected} isUploading={isUploading} isCooldownActive={isCooldownActive} />
+            <ImportMasterlist onFileSelected={handleFileSelected} isUploading={isUploading} isCooldownActive={isCooldownActive} maxStudents={maxStudents} />
             {previewData && (
               <ImportPreview data={previewData} onConfirm={handleConfirmImport} onCancel={handleCancelPreview} isImporting={isImporting} />
             )}

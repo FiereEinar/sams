@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AttendanceRecord;
 use App\Models\EventSession;
 use App\Models\Student;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -67,7 +68,7 @@ class AttendanceRecordController extends Controller
         ]);
     }
 
-    public function export(Request $request, EventSession $session): \Symfony\Component\HttpFoundation\StreamedResponse
+    public function export(Request $request, EventSession $session)
     {
         $tenant = tenant();
         $maxExports = $tenant->getPlanFeature('max_exports_per_day');
@@ -104,6 +105,20 @@ class AttendanceRecordController extends Controller
 
         $records = $query->get();
         $sessionName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $session->name);
+
+        $format = $request->query('format', 'csv');
+
+        if ($format === 'pdf') {
+            $pdf = Pdf::loadView('exports.attendance', [
+                'records' => $records,
+                'session' => $session,
+                'tenant' => $tenant,
+            ]);
+            $filename = "attendance_{$sessionName}_".now()->format('Y-m-d').'.pdf';
+
+            return $pdf->download($filename);
+        }
+
         $filename = "attendance_{$sessionName}_".now()->format('Y-m-d').'.csv';
 
         return response()->streamDownload(function () use ($records) {

@@ -4,9 +4,10 @@ type Props = {
   onFileSelected: (file: File) => void;
   isUploading: boolean;
   isCooldownActive?: boolean;
+  maxStudents?: number | null;
 };
 
-export default function ImportMasterlist({ onFileSelected, isUploading, isCooldownActive = false }: Props) {
+export default function ImportMasterlist({ onFileSelected, isUploading, isCooldownActive = false, maxStudents }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -90,7 +91,10 @@ export default function ImportMasterlist({ onFileSelected, isUploading, isCooldo
           <span className="material-symbols-outlined !text-[18px]">download</span>
           Download Template
         </a>
-        <p className="text-[11px] font-bold tracking-widest text-slate-500 uppercase">Supports .csv and .xlsx • Max file size: 5MB</p>
+        <p className="text-[11px] font-bold tracking-widest text-slate-500 uppercase">
+          Supports .csv and .xlsx • Max file size: 5MB
+          {maxStudents !== null && maxStudents !== undefined && ` • Max students: ${maxStudents}/import`}
+        </p>
         <input ref={fileInputRef} type="file" accept=".csv,.xlsx,.xls" onChange={handleFileChange} className="hidden" />
       </div>
     </div>

@@ -227,7 +227,17 @@ function UserFormModal({ user, roles, onClose }: UserFormModalProps) {
     email: user?.email || '',
     password: '',
     role_ids: user?.roles.map((r) => r.id) || [],
+    send_email: true,
   });
+
+  const generatePassword = () => {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+    let password = '';
+    for (let i = 0; i < 12; i++) {
+      password += chars[Math.floor(Math.random() * chars.length)];
+    }
+    form.setData('password', password);
+  };
 
   const toggleRole = (roleId: number) => {
     const current = form.data.role_ids;
@@ -282,11 +292,20 @@ function UserFormModal({ user, roles, onClose }: UserFormModalProps) {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-slate-700 dark:text-slate-300">
-              Password{isEditing && ' (leave blank to keep current)'}
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                Password{isEditing && ' (leave blank to keep current)'}
+              </label>
+              <button
+                type="button"
+                onClick={generatePassword}
+                className="text-xs font-bold text-primary hover:text-primary/80"
+              >
+                Randomize
+              </button>
+            </div>
             <input
-              type="password"
+              type="text"
               value={form.data.password}
               onChange={(e) => form.setData('password', e.target.value)}
               className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-slate-900 focus:border-primary focus:ring-2 focus:ring-primary/40 dark:border-white/10 dark:bg-background-dark dark:text-white"
@@ -323,6 +342,22 @@ function UserFormModal({ user, roles, onClose }: UserFormModalProps) {
             </div>
             {form.errors.role_ids && <p className="mt-1 text-xs text-red-500">{form.errors.role_ids}</p>}
           </div>
+
+          {!isEditing && (
+            <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 transition-all hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10">
+              <input
+                type="checkbox"
+                checked={form.data.send_email}
+                onChange={(e) => form.setData('send_email', e.target.checked)}
+                className="size-5 rounded border-slate-300 text-primary focus:ring-primary/50 dark:border-white/20 dark:bg-background-dark"
+              />
+              <div className="flex-1">
+                <p className="text-sm font-bold text-slate-900 dark:text-white">Send Credentials via Email</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Email the user their auto-generated credentials and login link</p>
+              </div>
+              <span className="material-symbols-outlined text-muted-foreground ml-auto">mail</span>
+            </label>
+          )}
 
           {/* @ts-ignore */}
           {form.errors.limit && <p className="text-sm font-medium text-red-500">{(form.errors as any).limit}</p>}

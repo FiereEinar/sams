@@ -9,7 +9,7 @@ type TenantItem = Tenant & {
   subscription_expires_at: string;
 };
 
-export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
+export default function Tenants({ tenants, plans }: { tenants: TenantItem[], plans: any[] }) {
   const handleToggle = (id: string, close: () => void) => {
     router.post(`/admin/tenants/${id}/toggle-status`, {}, { onSuccess: close });
   };
@@ -43,6 +43,7 @@ export default function Tenants({ tenants }: { tenants: TenantItem[] }) {
                   <TenantDetailsModal
                     key={tenant.id}
                     tenant={tenant}
+                    plans={plans}
                     trigger={(open: () => void) => (
                       <tr onClick={open} className="cursor-pointer transition-colors hover:bg-white/5">
                         <td className="px-6 py-4">

@@ -47,6 +47,7 @@ class BasicSignupController extends Controller
             $tenant = Tenant::create([
                 'id' => $tenantId,
                 'plan' => $planType,
+                'plan_id' => $plan?->id,
                 'organization_name' => $request->input('organization.name'),
                 'organization_type' => $request->input('organization.type'),
                 'name' => $request->input('admin.fullname'),

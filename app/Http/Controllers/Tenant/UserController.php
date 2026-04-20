@@ -46,6 +46,8 @@ class UserController extends Controller
             'role_ids.*' => ['exists:roles,id'],
         ]);
 
+        $tenantPlan = $tenant->plan ?? 'basic';
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -55,6 +57,20 @@ class UserController extends Controller
         ]);
 
         $user->roles()->sync($validated['role_ids']);
+
+        if ($request->boolean('send_email')) {
+            $domain = $tenant->domains->first()?->domain ?? env('APP_DOMAIN');
+            $loginUrl = tenant_route($domain, 'tenant-login');
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(
+                new \App\Mail\UserCredentialsMail(
+                    name: $user->name,
+                    email: $user->email,
+                    password: $validated['password'],
+                    loginUrl: $loginUrl,
+                    tenantName: $tenant->organization_name ?? $tenant->id
+                )
+            );
+        }
 
         return back();
     }

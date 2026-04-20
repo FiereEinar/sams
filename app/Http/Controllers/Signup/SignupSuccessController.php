@@ -43,6 +43,7 @@ class SignupSuccessController extends Controller
             $tenant = Tenant::create([
                 'id' => $tenantId,
                 'plan' => $planType,
+                'plan_id' => $plan?->id,
                 'organization_name' => $formData['organization']['name'],
                 'organization_type' => $formData['organization']['type'],
                 'name' => $formData['admin']['fullname'],

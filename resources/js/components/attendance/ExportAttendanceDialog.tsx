@@ -23,6 +23,7 @@ function ExportForm({ sessionId, close }: { sessionId: number; close: () => void
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
   const [loading, setLoading] = useState(true);
+  const [format, setFormat] = useState<'csv'|'pdf'>('csv');
 
   // Fetch unique courses and sections from this session's records
   useEffect(() => {
@@ -46,6 +47,7 @@ function ExportForm({ sessionId, close }: { sessionId: number; close: () => void
     const params = new URLSearchParams();
     if (filter === 'course' && selectedCourse) params.set('course', selectedCourse);
     if (filter === 'section' && selectedSection) params.set('section', selectedSection);
+    params.set('format', format);
 
     const url = `/sessions/${sessionId}/attendance/export?${params.toString()}`;
     window.open(url, '_blank');
@@ -61,7 +63,7 @@ function ExportForm({ sessionId, close }: { sessionId: number; close: () => void
           </div>
           <div>
             <h2 className="text-lg font-bold text-gray-900 dark:text-white">Export Attendance</h2>
-            <p className="text-xs text-slate-400">Download records as CSV</p>
+            <p className="text-xs text-slate-400">Download records as {format.toUpperCase()}</p>
           </div>
         </div>
         <button onClick={close} className="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-white">
@@ -81,10 +83,30 @@ function ExportForm({ sessionId, close }: { sessionId: number; close: () => void
                 className={`rounded-xl py-2.5 text-xs font-bold capitalize transition-all ${
                   filter === opt
                     ? 'bg-primary text-white shadow-sm'
-                    : 'bg-background-dark text-slate-400 hover:text-white'
+                    : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-background-dark dark:text-slate-400 dark:hover:text-white'
                 }`}
               >
                 {opt === 'all' ? 'All Records' : `By ${opt}`}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Format options */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-slate-400">Export Format</label>
+          <div className="grid grid-cols-2 gap-2">
+            {(['csv', 'pdf'] as const).map((opt) => (
+              <button
+                key={opt}
+                onClick={() => setFormat(opt)}
+                className={`rounded-xl py-2.5 text-xs font-bold uppercase transition-all ${
+                  format === opt
+                    ? 'bg-primary text-white shadow-sm'
+                    : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-background-dark dark:text-slate-400 dark:hover:text-white'
+                }`}
+              >
+                {opt}
               </button>
             ))}
           </div>
@@ -144,7 +166,7 @@ function ExportForm({ sessionId, close }: { sessionId: number; close: () => void
           className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary-hover"
         >
           <span className="material-symbols-outlined text-sm">download</span>
-          Export CSV
+          Export {format.toUpperCase()}
         </button>
       </footer>
     </div>

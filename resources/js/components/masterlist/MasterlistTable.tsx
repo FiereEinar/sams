@@ -66,8 +66,8 @@ export default function MasterlistTable({ students }: Props) {
       </div>
 
       {data.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-slate-800 bg-surface-dark p-16 text-center">
-          <div className="flex size-16 items-center justify-center rounded-full bg-slate-800 text-slate-500">
+        <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-slate-200 p-16 text-center dark:border-slate-800 dark:bg-surface-dark">
+          <div className="flex size-16 items-center justify-center rounded-full bg-slate-200 text-slate-500 dark:bg-slate-800">
             <span className="material-symbols-outlined !text-[32px]">school</span>
           </div>
           <div>
@@ -90,9 +90,7 @@ export default function MasterlistTable({ students }: Props) {
                   <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Year</th>
                   <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Units</th>
                   <th className="border-b border-slate-200 px-6 py-4 text-center dark:border-slate-800">Section</th>
-                  {showActions && (
-                    <th className="border-b border-slate-200 px-6 py-4 text-right dark:border-slate-800">Actions</th>
-                  )}
+                  {showActions && <th className="border-b border-slate-200 px-6 py-4 text-right dark:border-slate-800">Actions</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 text-sm dark:divide-white/5">
@@ -191,7 +189,10 @@ export default function MasterlistTable({ students }: Props) {
                     });
                   }}
                   trigger={(open) => (
-                    <button onClick={open} className="flex items-center gap-1 text-xs font-semibold text-red-500 transition-colors hover:text-red-400">
+                    <button
+                      onClick={open}
+                      className="flex items-center gap-1 text-xs font-semibold text-red-500 transition-colors hover:text-red-400"
+                    >
                       <span className="material-symbols-outlined text-sm">delete_sweep</span>
                       Clear all students
                     </button>
