@@ -125,7 +125,7 @@ function LeftAside({ form, plans }: { form: ReturnType<typeof useForm<SignupForm
           Join Bukidnon State University's premier attendance management ecosystem. Select your plan to begin the setup.
         </p>
       </div>
-      <div className="flex-1 space-y-3 overflow-y-auto pr-1 pb-2" style={{ maxHeight: 'calc(100vh - 20rem)' }}>
+      <div className="flex-1 space-y-3 overflow-y-auto custom-scrollbar pr-1 pb-2" style={{ maxHeight: 'calc(100vh - 20rem)' }}>
         {plans.map((plan) => {
           const isSelected = selectedPlanId === plan.id;
           return (

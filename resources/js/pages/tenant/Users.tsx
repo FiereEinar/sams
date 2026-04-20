@@ -263,7 +263,7 @@ function UserFormModal({ user, roles, onClose }: UserFormModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
       <div
-        className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl dark:border-white/10 dark:bg-surface-dark animate-in zoom-in-95 fade-in duration-200"
+        className="w-full max-w-lg max-h-[90vh] overflow-y-auto custom-scrollbar rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl dark:border-white/10 dark:bg-surface-dark animate-in zoom-in-95 fade-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="mb-6 text-xl font-bold text-slate-900 dark:text-white">{isEditing ? 'Edit User' : 'Add User'}</h2>
