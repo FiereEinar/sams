@@ -179,38 +179,15 @@ class SystemUpdateService
         return $this->applyUpdate($targetVersion);
     }
 
-    /**
-     * Execute a shell command and capture its output.
-     *
-     * @return array{output: string, exit_code: int}
-     */
     private function executeCommand(string $command, string $cwd): array
     {
-        $descriptors = [
-            0 => ['pipe', 'r'],
-            1 => ['pipe', 'w'],
-            2 => ['pipe', 'w'],
-        ];
+        $result = \Illuminate\Support\Facades\Process::timeout(600) // 10 minutes
+            ->path($cwd)
+            ->run($command);
 
-        $process = proc_open($command, $descriptors, $pipes, $cwd, null);
+        $output = trim($result->output() . "\n" . $result->errorOutput());
 
-        if (! is_resource($process)) {
-            return ['output' => 'Failed to start process', 'exit_code' => 1];
-        }
-
-        fclose($pipes[0]);
-
-        $stdout = stream_get_contents($pipes[1]);
-        $stderr = stream_get_contents($pipes[2]);
-
-        fclose($pipes[1]);
-        fclose($pipes[2]);
-
-        $exitCode = proc_close($process);
-
-        $output = trim($stdout.($stderr ? "\n{$stderr}" : ''));
-
-        return ['output' => $output, 'exit_code' => $exitCode];
+        return ['output' => $output, 'exit_code' => $result->exitCode()];
     }
 
     /**

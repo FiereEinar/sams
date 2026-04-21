@@ -125,6 +125,19 @@ export default function SystemUpdates() {
 
   return (
     <Layout>
+      {/* Full Screen Overlay during update */}
+      {updating && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <span className="material-symbols-outlined animate-spin text-6xl text-primary">progress_activity</span>
+            <h2 className="text-2xl font-black text-white">System is Updating</h2>
+            <p className="max-w-md text-sm text-slate-300">
+              Please do not refresh or close this page. The application is running updates and will be briefly unavailable.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="mb-8">
         <Header>System Updates</Header>
         <p className="mt-1 text-slate-500 dark:text-slate-400">
