@@ -11,7 +11,7 @@ export default function Dashboard() {
     <Layout>
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <Header>Dashboard</Header>
+          <Header>Dashboard Overview</Header>
           <p className="mt-1 text-slate-500 dark:text-slate-400">BukSU Student Attendance Management System</p>
         </div>
         <ShortcutButtons />
