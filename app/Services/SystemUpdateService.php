@@ -181,13 +181,50 @@ class SystemUpdateService
 
     private function executeCommand(string $command, string $cwd): array
     {
-        $result = \Illuminate\Support\Facades\Process::timeout(600) // 10 minutes
-            ->path($cwd)
-            ->run($command);
+        $descriptors = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'], // stdout
+            2 => ['pipe', 'w'], // stderr
+        ];
 
-        $output = trim($result->output() . "\n" . $result->errorOutput());
+        $process = proc_open($command, $descriptors, $pipes, $cwd, null);
 
-        return ['output' => $output, 'exit_code' => $result->exitCode()];
+        if (! is_resource($process)) {
+            return ['output' => 'Failed to start process', 'exit_code' => 1];
+        }
+
+        fclose($pipes[0]);
+
+        stream_set_blocking($pipes[1], false);
+        stream_set_blocking($pipes[2], false);
+
+        $stdout = '';
+        $stderr = '';
+
+        while (!feof($pipes[1]) || !feof($pipes[2])) {
+            $read = [$pipes[1], $pipes[2]];
+            $write = null;
+            $except = null;
+
+            if (stream_select($read, $write, $except, 1) > 0) {
+                foreach ($read as $pipe) {
+                    if ($pipe === $pipes[1]) {
+                        $stdout .= fread($pipe, 8192);
+                    } elseif ($pipe === $pipes[2]) {
+                        $stderr .= fread($pipe, 8192);
+                    }
+                }
+            }
+        }
+
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+
+        $exitCode = proc_close($process);
+
+        $output = trim($stdout.($stderr ? "\n{$stderr}" : ''));
+
+        return ['output' => $output, 'exit_code' => $exitCode];
     }
 
     /**
