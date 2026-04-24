@@ -93,7 +93,23 @@ class SystemUpdateService
             return [];
         }
 
-        return array_filter(explode("\n", $output));
+        $tags = array_filter(explode("\n", $output));
+        $tenantId = function_exists('tenant') ? tenant('id') : null;
+
+        return array_values(array_filter($tags, function (string $tag) use ($tenantId): bool {
+            if (str_contains($tag, '-tenant-')) {
+                if (! $tenantId) {
+                    return true;
+                }
+
+                $parts = explode('-tenant-', $tag);
+                $targetTenant = end($parts);
+
+                return $targetTenant === $tenantId;
+            }
+
+            return true;
+        }));
     }
 
     /**
@@ -201,7 +217,7 @@ class SystemUpdateService
         $stdout = '';
         $stderr = '';
 
-        while (!feof($pipes[1]) || !feof($pipes[2])) {
+        while (! feof($pipes[1]) || ! feof($pipes[2])) {
             $read = [$pipes[1], $pipes[2]];
             $write = null;
             $except = null;

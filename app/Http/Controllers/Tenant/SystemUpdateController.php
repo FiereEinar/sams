@@ -42,8 +42,22 @@ class SystemUpdateController extends Controller
             ]);
         }
 
+        $tenantId = tenant('id');
+
         // Filter releases newer than the current version
         $availableReleases = collect($result['releases'])
+            ->filter(function (array $release) use ($tenantId): bool {
+                $tagName = $release['tag_name'];
+
+                if (str_contains($tagName, '-tenant-')) {
+                    $parts = explode('-tenant-', $tagName);
+                    $targetTenant = end($parts);
+
+                    return $targetTenant === $tenantId;
+                }
+
+                return true;
+            })
             ->filter(function (array $release) use ($currentVersion): bool {
                 if ($currentVersion === 'unknown') {
                     return true;
