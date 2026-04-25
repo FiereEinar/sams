@@ -82,7 +82,7 @@ class SystemUpdateController extends Controller
     public function apply(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'version' => ['required', 'string', 'regex:/^v?\d+\.\d+\.\d+$/'],
+            'version' => ['required', 'string', 'regex:/^v?\d+\.\d+\.\d+(?:-[a-zA-Z0-9\-\.]+)?$/'],
         ]);
 
         $targetVersion = $validated['version'];
@@ -99,7 +99,7 @@ class SystemUpdateController extends Controller
     public function rollback(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'version' => ['required', 'string', 'regex:/^v?\d+\.\d+\.\d+$/'],
+            'version' => ['required', 'string', 'regex:/^v?\d+\.\d+\.\d+(?:-[a-zA-Z0-9\-\.]+)?$/'],
         ]);
 
         $targetVersion = $validated['version'];
