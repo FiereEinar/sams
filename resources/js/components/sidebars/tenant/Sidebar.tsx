@@ -6,7 +6,7 @@ import { useTheme } from '@/hooks/use-theme';
 
 const allSidebarLinks = [
   {
-    title: 'Home',
+    title: 'Dashboard',
     href: '/dashboard',
     icon: 'dashboard',
     permission: 'DASHBOARD_VIEW',
