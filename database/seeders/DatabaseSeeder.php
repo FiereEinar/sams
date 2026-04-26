@@ -14,35 +14,45 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // central app user
-        User::factory()->create([
-            'name' => 'Nick Mours',
-            'email' => 'nickxylanmelloria@gmail.com',
-            'password' => '123123',
-        ]);
+        // Central user
+        User::updateOrCreate(
+            ['email' => 'nickxylanmelloria@gmail.com'],
+            [
+                'name' => 'Nick Mours',
+                'password' => bcrypt('123123'),
+            ]
+        );
 
         $this->call(PlanSeeder::class);
 
-        $tenant = Tenant::create([
-            'id' => 'sbo',
-            'plan' => 'premium',
-            'organization_name' => 'SBO',
-            'organization_type' => 'School',
-            'status' => 'active',
+        // Tenant
+        $tenant = Tenant::firstOrCreate(
+            ['id' => 'sbo'],
+            [
+                'plan' => 'premium',
+                'organization_name' => 'SBO',
+                'organization_type' => 'School',
+                'status' => 'active',
+            ]
+        );
+
+        // Domain (avoid duplicates)
+        $tenant->domains()->firstOrCreate([
+            'domain' => 'sbo.' . env('APP_DOMAIN'),
         ]);
 
-        $tenant->domains()->create([
-            'domain' => 'sbo.'.env('APP_DOMAIN'),
-        ]);
-
-        // tenant
+        // Tenant user
         tenancy()->initialize($tenant);
-        User::factory()->create([
-            'name' => 'Lester Ybanez',
-            'email' => 'lester@gmail.com',
-            'password' => '123123',
-            'tenant_id' => $tenant->id,
-        ]);
+
+        User::updateOrCreate(
+            ['email' => 'lester@gmail.com'],
+            [
+                'name' => 'Lester Ybanez',
+                'password' => bcrypt('123123'),
+                'tenant_id' => $tenant->id,
+            ]
+        );
+
         tenancy()->end();
     }
 }
