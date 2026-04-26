@@ -143,6 +143,7 @@ class SystemUpdateService
             // ['step' => 'Building frontend assets', 'cmd' => 'npm run build'],
             ['step' => 'Running central database migrations', 'cmd' => 'php artisan migrate --force'],
             ['step' => 'Running tenant database migrations', 'cmd' => 'php artisan tenants:migrate'],
+            ['step' => 'Running database seeders', 'cmd' => 'php artisan db:seed --force'],
             ['step' => 'Caching config', 'cmd' => 'php artisan config:cache'],
             ['step' => 'Caching routes', 'cmd' => 'php artisan route:cache'],
             ['step' => 'Caching views', 'cmd' => 'php artisan view:cache'],
