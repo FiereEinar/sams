@@ -72,7 +72,10 @@ export default function Topbar({ placeholder = 'Search...', role = 'Admin' }: To
           <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500"></span>
         </button>
         <div className="mx-2 h-8 w-px bg-slate-200 dark:bg-white/10"></div>
-        <div className="flex items-center gap-3">
+        <Link
+          href={url.startsWith('/admin') ? '/admin/profile' : '/profile'}
+          className="flex items-center gap-3 rounded-xl px-2 py-1.5 transition-colors hover:bg-slate-100 dark:hover:bg-white/5"
+        >
           <div className="hidden text-right sm:block">
             <p className="text-sm leading-none font-bold text-slate-800 dark:text-white">{user?.name ?? 'User'}</p>
             <p className="text-xs text-slate-500">{role}</p>
@@ -80,7 +83,7 @@ export default function Topbar({ placeholder = 'Search...', role = 'Admin' }: To
           <div className="flex size-10 items-center justify-center rounded-full border-2 border-primary bg-primary/10">
             <span className="material-symbols-outlined text-lg text-primary">person</span>
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );

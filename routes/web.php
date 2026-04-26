@@ -59,6 +59,10 @@ foreach (config('tenancy.central_domains') as $domain) {
             Route::get('/admin/support/{tenant}/{ticketId}', [SupportController::class, 'show'])->name('admin.support.show');
             Route::post('/admin/support/{tenant}/{ticketId}/reply', [SupportController::class, 'reply'])->name('admin.support.reply');
             Route::post('/admin/support/{tenant}/{ticketId}/status', [SupportController::class, 'updateStatus'])->name('admin.support.status');
+
+            Route::get('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('admin.profile');
+            Route::put('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'updateInfo'])->name('admin.profile.update');
+            Route::put('/admin/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('admin.profile.password');
         });
     });
 }

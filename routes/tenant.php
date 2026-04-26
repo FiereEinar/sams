@@ -54,6 +54,11 @@ Route::middleware([
         Route::post('/settings/branding', [TenantSettingController::class, 'updateBranding'])->name('tenant-settings-branding');
         Route::put('/settings/university', [TenantSettingController::class, 'updateUniversity'])->name('tenant-settings-university');
 
+        // Profile
+        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('tenant-profile');
+        Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'updateInfo'])->name('tenant-profile-update');
+        Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('tenant-profile-password');
+
         // Core functional routes (protected by EnsureOnboardingCompleted)
         Route::middleware([EnsureOnboardingCompleted::class])->group(function () {
             // Dashboard
