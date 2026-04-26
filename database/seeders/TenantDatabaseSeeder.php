@@ -14,7 +14,6 @@ class TenantDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Add tenant-specific seeders here as needed.
-        // Example: $this->call(DefaultRoleSeeder::class);
+        $this->call(StudentSeeder::class);
     }
 }
