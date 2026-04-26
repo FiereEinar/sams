@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             'password' => '123123',
         ]);
 
+        $this->call(PlanSeeder::class);
+
         $tenant = Tenant::create([
             'id' => 'sbo',
             'plan' => 'premium',

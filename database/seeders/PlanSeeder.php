@@ -11,6 +11,10 @@ class PlanSeeder extends Seeder
      */
     public function run(): void
     {
+        if (\App\Models\Plan::count() > 0) {
+            return;
+        }
+
         \App\Models\Plan::create([
             'name' => 'Org Basic',
             'type' => 'basic',
@@ -18,6 +22,11 @@ class PlanSeeder extends Seeder
             'price' => 0,
             'status' => 'active',
             'is_featured' => false,
+            'features' => [
+                'max_students_per_import' => 400,
+                'max_users' => 3,
+                'max_exports_per_day' => 3,
+            ],
         ]);
 
         \App\Models\Plan::create([
@@ -27,6 +36,11 @@ class PlanSeeder extends Seeder
             'price' => 499,
             'status' => 'active',
             'is_featured' => true,
+            'features' => [
+                'max_students_per_import' => null,
+                'max_users' => null,
+                'max_exports_per_day' => null,
+            ],
         ]);
     }
 }
