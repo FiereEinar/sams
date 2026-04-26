@@ -24,11 +24,12 @@ type PageProps = {
   currentVersion: string;
   commitHash: string;
   installedVersions: string[];
+  allowRollback: boolean;
 };
 
 export default function SystemUpdates() {
   const { props } = usePage();
-  const { currentVersion, commitHash, installedVersions } = props as unknown as PageProps;
+  const { currentVersion, commitHash, installedVersions, allowRollback } = props as unknown as PageProps;
   const { setIsUpdating } = useUpdate();
 
   const [checking, setChecking] = useState(false);
@@ -354,7 +355,7 @@ export default function SystemUpdates() {
       )}
 
       {/* Rollback Section */}
-      {!updating && (
+      {!updating && allowRollback && (
         <section className="mt-8">
           <button
             onClick={() => setShowRollback(!showRollback)}

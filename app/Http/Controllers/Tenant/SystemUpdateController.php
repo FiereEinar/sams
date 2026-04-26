@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Models\GlobalSetting;
 use App\Services\SystemUpdateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,11 +21,13 @@ class SystemUpdateController extends Controller
         $currentVersion = $this->updateService->getCurrentVersion();
         $commitHash = $this->updateService->getCurrentCommitHash();
         $installedVersions = $this->updateService->getInstalledVersions();
+        $allowRollback = GlobalSetting::on('mysql')->where('key', 'allow_tenant_rollbacks')->value('value') !== 'false';
 
         return Inertia::render('tenant/SystemUpdates', [
             'currentVersion' => $currentVersion,
             'commitHash' => $commitHash,
             'installedVersions' => $installedVersions,
+            'allowRollback' => $allowRollback,
         ]);
     }
 
@@ -98,6 +101,12 @@ class SystemUpdateController extends Controller
 
     public function rollback(Request $request): JsonResponse
     {
+        $allowRollback = GlobalSetting::on('mysql')->where('key', 'allow_tenant_rollbacks')->value('value') !== 'false';
+
+        if (! $allowRollback) {
+            abort(403, 'Rollbacks are currently disabled by the central administrator.');
+        }
+
         $validated = $request->validate([
             'version' => ['required', 'string', 'regex:/^v?\d+\.\d+\.\d+(?:-[a-zA-Z0-9\-\.]+)?$/'],
         ]);

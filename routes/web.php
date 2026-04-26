@@ -47,6 +47,9 @@ foreach (config('tenancy.central_domains') as $domain) {
 
             Route::get('/admin/monitoring', [MonitoringController::class, 'index'])->name('admin.monitoring');
 
+            Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings');
+            Route::post('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
+
             Route::get('/admin/plans', [\App\Http\Controllers\Admin\PlanController::class, 'index'])->name('admin.plans');
             Route::post('/admin/plans', [\App\Http\Controllers\Admin\PlanController::class, 'store'])->name('admin.plans.store');
             Route::patch('/admin/plans/{plan}', [\App\Http\Controllers\Admin\PlanController::class, 'update'])->name('admin.plans.update');
