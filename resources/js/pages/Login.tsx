@@ -19,7 +19,7 @@ export default function LoginPage({ tenant }: LoginPageProps) {
               <div className="flex size-10 items-center justify-center rounded-lg bg-primary text-white">
                 <span className="material-symbols-outlined font-bold">account_balance</span>
               </div>
-              <h1 className="text-xl font-bold">BukSU Attendance</h1>
+              <h1 className="text-xl font-bold">SAMS</h1>
             </div>
             <div className="mb-10">
               <h3 className="mb-2 text-3xl font-bold">Welcome Back</h3>
@@ -39,7 +39,7 @@ export default function LoginPage({ tenant }: LoginPageProps) {
           </div>
           <div className="mt-auto pt-8 text-center lg:text-left">
             <p className="text-center text-[10px] font-bold tracking-widest text-slate-600 uppercase">
-              © 2024 Bukidnon State University • Student Affairs Office
+              © 2024 SAMS • Student Attendance Management System
             </p>
           </div>
         </div>
@@ -64,17 +64,17 @@ function LeftCard({ tenant }: { tenant?: Tenant }) {
           <span className="material-symbols-outlined text-2xl font-bold">account_balance</span>
         </div>
         <div>
-          <h1 className="text-xl leading-none font-bold tracking-tight">{tenant?.organization_name || 'BukSU'}</h1>
+          <h1 className="text-xl leading-none font-bold tracking-tight">{tenant?.organization_name || 'SAMS'}</h1>
           <p className="text-xs font-semibold tracking-wider text-primary/80 uppercase">Attendance System</p>
         </div>
       </div>
       <div className="relative z-10">
         <h2 className="mb-4 text-4xl leading-tight font-black">
-          Empowering {tenant?.organization_name || 'BukSU'} <br />
-          <span className="text-primary">Student Leaders</span>
+          {tenant?.organization_name ? `Welcome to ${tenant.organization_name}` : 'Smart Attendance'} <br />
+          <span className="text-primary">Management System</span>
         </h2>
         <p className="max-w-md text-lg leading-relaxed text-slate-600 dark:text-slate-400">
-          Streamline your organization's attendance management with our multi-tenant platform designed for Bukidnon State University.
+          Streamline your organization's attendance tracking with our powerful multi-tenant platform built for student organizations.
         </p>
         <TrustedBy />
       </div>
