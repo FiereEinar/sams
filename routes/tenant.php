@@ -61,6 +61,11 @@ Route::middleware([
 
         // Core functional routes (protected by EnsureOnboardingCompleted)
         Route::middleware([EnsureOnboardingCompleted::class])->group(function () {
+            // Plan Management
+            Route::get('/plans', [\App\Http\Controllers\Tenant\PlanManagementController::class, 'index'])->name('tenant-plans');
+            Route::post('/plans/checkout', [\App\Http\Controllers\Tenant\PlanManagementController::class, 'checkout'])->name('tenant-plans-checkout');
+            Route::get('/plans/success', [\App\Http\Controllers\Tenant\PlanManagementController::class, 'success'])->name('tenant-plans-success');
+
             // Dashboard
             Route::middleware(CheckPermission::class.':'.Permission::DashboardView)->group(function () {
                 Route::get('/dashboard', fn () => Inertia::render('tenant/Dashboard'))->name('tenant-dashboard');

@@ -67,11 +67,11 @@ export default function Topbar({ placeholder = 'Search...', role = 'Admin' }: To
       )}
 
       <div className="flex items-center gap-4">
-        <button className="relative size-10 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5">
+        {/* <button className="relative size-10 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5">
           <span className="material-symbols-outlined">notifications</span>
           <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500"></span>
         </button>
-        <div className="mx-2 h-8 w-px bg-slate-200 dark:bg-white/10"></div>
+        <div className="mx-2 h-8 w-px bg-slate-200 dark:bg-white/10"></div> */}
         <Link
           href={url.startsWith('/admin') ? '/admin/profile' : '/profile'}
           className="flex items-center gap-3 rounded-xl px-2 py-1.5 transition-colors hover:bg-slate-100 dark:hover:bg-white/5"
