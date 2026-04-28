@@ -115,7 +115,7 @@ export default function ManagePlan() {
                   isCurrent
                     ? 'border-primary/40 bg-primary/5 ring-2 ring-primary/20 dark:border-primary/50 dark:bg-primary/10'
                     : isPremium
-                      ? 'border-violet-200 bg-white hover:border-violet-300 hover:shadow-lg dark:border-violet-500/20 dark:bg-surface-dark dark:hover:border-violet-500/40'
+                      ? 'border-primary/20 bg-white hover:border-primary/40 hover:shadow-lg dark:border-primary/20 dark:bg-surface-dark dark:hover:border-primary/40'
                       : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-lg dark:border-white/10 dark:bg-surface-dark dark:hover:border-white/20'
                 }`}
               >
@@ -127,17 +127,17 @@ export default function ManagePlan() {
 
                 {plan.is_featured && !isCurrent && (
                   <div className="absolute top-4 right-4">
-                    <span className="rounded-lg bg-violet-500 px-2.5 py-1 text-xs font-bold text-white">Recommended</span>
+                    <span className="rounded-lg bg-primary px-2.5 py-1 text-xs font-bold text-white">Recommended</span>
                   </div>
                 )}
 
                 <div className="mb-4 flex items-center gap-3">
                   <div
                     className={`flex size-12 items-center justify-center rounded-xl ${
-                      isPremium ? 'bg-violet-500/10' : 'bg-slate-100 dark:bg-white/5'
+                      isPremium ? 'bg-primary/10' : 'bg-slate-100 dark:bg-white/5'
                     }`}
                   >
-                    <span className={`material-symbols-outlined text-xl ${isPremium ? 'text-violet-500' : 'text-slate-500 dark:text-slate-400'}`}>
+                    <span className={`material-symbols-outlined text-xl ${isPremium ? 'text-primary' : 'text-slate-500 dark:text-slate-400'}`}>
                       {isPremium ? 'workspace_premium' : 'business'}
                     </span>
                   </div>
@@ -177,7 +177,7 @@ export default function ManagePlan() {
                     isCurrent
                       ? 'bg-primary/10 text-primary'
                       : isPremium
-                        ? 'bg-violet-500 text-white shadow-lg shadow-violet-500/20 hover:bg-violet-600 disabled:opacity-50'
+                        ? 'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary-hover disabled:opacity-50'
                         : 'bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-50 dark:bg-white/10 dark:text-white dark:hover:bg-white/20'
                   }`}
                 >
