@@ -79,7 +79,7 @@ class PlanManagementController extends Controller
 
             return response()->json([
                 'message' => 'Plan updated successfully.',
-                'redirect' => '/plans?upgraded=1',
+                'redirect' => '/settings?tab=plan&upgraded=1',
             ]);
         }
 
@@ -94,7 +94,7 @@ class PlanManagementController extends Controller
 
             return response()->json([
                 'message' => 'Plan restored (previously paid).',
-                'redirect' => '/plans?upgraded=1',
+                'redirect' => '/settings?tab=plan&upgraded=1',
             ]);
         }
 

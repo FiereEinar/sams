@@ -22,7 +22,7 @@ export default function PlanUpgradeSuccess({ status, planName }: PageProps) {
               All new features are now active.
             </p>
             <Link
-              href="/plans"
+              href="/settings?tab=plan"
               className="rounded-xl bg-primary px-8 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-hover"
             >
               View Plan Details
@@ -40,7 +40,7 @@ export default function PlanUpgradeSuccess({ status, planName }: PageProps) {
               This payment has already been processed. Your plan should be up to date.
             </p>
             <Link
-              href="/plans"
+              href="/settings?tab=plan"
               className="rounded-xl bg-primary px-8 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-hover"
             >
               Go to Plans
@@ -58,7 +58,7 @@ export default function PlanUpgradeSuccess({ status, planName }: PageProps) {
               We couldn't process your plan upgrade. Please try again or contact support.
             </p>
             <Link
-              href="/plans"
+              href="/settings?tab=plan"
               className="rounded-xl bg-primary px-8 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-hover"
             >
               Try Again

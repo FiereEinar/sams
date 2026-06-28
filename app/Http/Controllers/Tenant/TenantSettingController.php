@@ -7,6 +7,8 @@ use App\Models\TenantSetting;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Plan;
+use App\Models\Payment;
 
 class TenantSettingController extends Controller
 {
@@ -24,7 +26,45 @@ class TenantSettingController extends Controller
 
     public function index(): Response
     {
-        return Inertia::render('tenant/Settings');
+        $tenant = tenant();
+        $plans = Plan::on('mysql')
+            ->where('status', 'active')
+            ->orderBy('price', 'asc')
+            ->get();
+
+        $currentPlan = null;
+        if (isset($tenant->plan_id)) {
+            $currentPlan = Plan::on('mysql')->find($tenant->plan_id);
+        }
+        if (! $currentPlan) {
+            $currentPlan = Plan::on('mysql')
+                ->where('type', $tenant->plan ?? 'basic')
+                ->where('status', 'active')
+                ->first();
+        }
+
+        $paidPlanNames = Payment::on('mysql')
+            ->where('tenant_id', $tenant->id)
+            ->where('status', 'paid')
+            ->pluck('description')
+            ->toArray();
+
+        $paidPlanIds = $plans->filter(function (Plan $plan) use ($paidPlanNames): bool {
+            foreach ($paidPlanNames as $desc) {
+                if (str_contains((string) $desc, $plan->name)) {
+                    return true;
+                }
+            }
+
+            return false;
+        })->pluck('id')->values()->all();
+
+        return Inertia::render('tenant/Settings', [
+            'plans' => $plans,
+            'currentPlan' => $currentPlan,
+            'tenantPlan' => $tenant->plan ?? 'basic',
+            'paidPlanIds' => $paidPlanIds,
+        ]);
     }
 
     public function update(Request $request): \Illuminate\Http\RedirectResponse

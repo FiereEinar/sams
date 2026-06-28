@@ -1,6 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
-import Layout from './Layout';
-import Header from '@/components/ui/Header';
+import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -27,12 +25,12 @@ const featureLabels: Record<string, string> = {
   max_exports_per_day: 'Exports per Day',
 };
 
-export default function ManagePlan() {
+export default function PlanSettings() {
   const { plans, currentPlan, tenantPlan, paidPlanIds } = usePage<{ props: PageProps }>().props as unknown as PageProps;
   const [loading, setLoading] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const upgraded = new URLSearchParams(window.location.search).get('upgraded');
-  console.log(paidPlanIds);
+
   const handleSelectPlan = async (plan: Plan) => {
     if (currentPlan?.id === plan.id) return;
 
@@ -54,31 +52,30 @@ export default function ManagePlan() {
   };
 
   return (
-    <Layout>
-      <Head title="Manage Plan" />
-      <div className="mb-8">
-        <Header>Manage Plan</Header>
-        <p className="mt-1 text-slate-500 dark:text-slate-400">View your current subscription and upgrade or change your plan.</p>
-      </div>
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      <section>
+        <h2 className="mb-1 text-lg font-semibold">Plan Configuration</h2>
+        <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
+          View your current subscription and upgrade or change your plan.
+        </p>
 
-      {upgraded && (
-        <div className="mb-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-500/20 dark:bg-emerald-500/10">
-          <span className="material-symbols-outlined text-emerald-500">check_circle</span>
-          <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">Your plan has been updated successfully!</p>
-        </div>
-      )}
+        {upgraded && (
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-500/20 dark:bg-emerald-500/10">
+            <span className="material-symbols-outlined text-emerald-500">check_circle</span>
+            <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">Your plan has been updated successfully!</p>
+          </div>
+        )}
 
-      {error && (
-        <div className="mb-6 flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 dark:border-red-500/20 dark:bg-red-500/10">
-          <span className="material-symbols-outlined text-red-500">error</span>
-          <p className="text-sm font-medium text-red-700 dark:text-red-300">{error}</p>
-        </div>
-      )}
+        {error && (
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 dark:border-red-500/20 dark:bg-red-500/10">
+            <span className="material-symbols-outlined text-red-500">error</span>
+            <p className="text-sm font-medium text-red-700 dark:text-red-300">{error}</p>
+          </div>
+        )}
 
-      {/* Current Plan */}
-      {currentPlan && (
-        <section className="mb-8">
-          <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-linear-to-br from-primary/5 via-transparent to-primary/5 p-6 dark:border-primary/30">
+        {/* Current Plan */}
+        {currentPlan && (
+          <div className="mb-8 relative overflow-hidden rounded-2xl border border-primary/20 bg-linear-to-br from-primary/5 via-transparent to-primary/5 p-6 dark:border-primary/30">
             <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-primary/10 blur-2xl" />
             <div className="relative flex items-center gap-4">
               <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-primary/10">
@@ -97,11 +94,9 @@ export default function ManagePlan() {
               </div>
             </div>
           </div>
-        </section>
-      )}
+        )}
 
-      {/* Available Plans */}
-      <section>
+        {/* Available Plans */}
         <h3 className="mb-4 text-lg font-bold text-slate-800 dark:text-white">Available Plans</h3>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan) => {
@@ -197,6 +192,6 @@ export default function ManagePlan() {
           })}
         </div>
       </section>
-    </Layout>
+    </div>
   );
 }

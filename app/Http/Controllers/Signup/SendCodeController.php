@@ -17,6 +17,7 @@ class SendCodeController extends Controller
         ]);
 
         $email = $request->email;
+        // $code = "123456";
         $code = str_pad((string) rand(0, 999999), 6, '0', STR_PAD_LEFT);
 
         Cache::put('signup_code_'.$email, $code, now()->addMinutes(15));

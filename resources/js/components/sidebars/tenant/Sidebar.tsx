@@ -12,6 +12,12 @@ const allSidebarLinks = [
     permission: 'DASHBOARD_VIEW',
   },
   {
+    title: 'Masterlist',
+    href: '/masterlist',
+    icon: 'groups',
+    permission: 'MASTERLIST_VIEW',
+  },
+  {
     title: 'Events',
     href: '/events',
     icon: 'calendar_today',
@@ -22,12 +28,6 @@ const allSidebarLinks = [
     href: '/attendance',
     icon: 'how_to_reg',
     permission: 'ATTENDANCE_VIEW',
-  },
-  {
-    title: 'Masterlist',
-    href: '/masterlist',
-    icon: 'groups',
-    permission: 'MASTERLIST_VIEW',
   },
   {
     title: 'Users',
@@ -127,7 +127,7 @@ export default function Sidebar() {
               )}
             />
           </div>
-          <SidebarFooter />
+          {/* <SidebarFooter /> */}
         </>
       ) : (
         <div className="ml-auto pl-4">
