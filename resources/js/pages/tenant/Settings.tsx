@@ -6,11 +6,12 @@ import PlanSettings from '../../components/settings/PlanSettings';
 import AppearanceSettings from '@/components/settings/AppearanceSettings';
 import LayoutSettings from '@/components/settings/LayoutSettings';
 import BrandingSettings from '@/components/settings/BrandingSettings';
+import OfficersSettings from '@/components/settings/OfficersSettings';
 
 export default function Settings() {
   const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
-  const defaultTab = (urlParams.get('tab') as 'appearance' | 'layout' | 'branding' | 'plan') || 'appearance';
-  const [activeTab, setActiveTab] = useState<'appearance' | 'layout' | 'branding' | 'plan'>(defaultTab);
+  const defaultTab = (urlParams.get('tab') as 'appearance' | 'layout' | 'branding' | 'plan' | 'officers') || 'appearance';
+  const [activeTab, setActiveTab] = useState<'appearance' | 'layout' | 'branding' | 'plan' | 'officers'>(defaultTab);
 
   return (
     <Layout>
@@ -72,6 +73,19 @@ export default function Settings() {
           >
             Plan
           </button>
+          <button
+            onClick={() => {
+              setActiveTab('officers');
+              router.get(window.location.pathname, { tab: 'officers' }, { preserveState: true, replace: true });
+            }}
+            className={`pb-3 text-sm font-medium transition-colors ${
+              activeTab === 'officers'
+                ? 'border-b-2 border-primary text-primary'
+                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+            }`}
+          >
+            Officers
+          </button>
         </div>
       </div>
 
@@ -79,6 +93,7 @@ export default function Settings() {
       {activeTab === 'layout' && <LayoutSettings />}
       {activeTab === 'branding' && <BrandingSettings />}
       {activeTab === 'plan' && <PlanSettings />}
+      {activeTab === 'officers' && <OfficersSettings />}
     </Layout>
   );
 }

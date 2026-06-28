@@ -1,5 +1,4 @@
 import { Link, usePage, router } from '@inertiajs/react';
-import SidebarFooter from './SidebarFooter';
 import SidebarHeader from '../SidebarHeader';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { useTheme } from '@/hooks/use-theme';
@@ -28,6 +27,18 @@ const allSidebarLinks = [
     href: '/attendance',
     icon: 'how_to_reg',
     permission: 'ATTENDANCE_VIEW',
+  },
+  {
+    title: 'Collections',
+    href: '/collections',
+    icon: 'account_balance_wallet',
+    permission: 'COLLECTIONS_VIEW',
+  },
+  {
+    title: 'Transactions',
+    href: '/transactions',
+    icon: 'receipt_long',
+    permission: 'TRANSACTIONS_VIEW',
   },
   {
     title: 'Users',
@@ -163,7 +174,7 @@ type SidebarLinkProps = {
 export function SidebarLink({ title, icon, href, isActive, isHorizontal }: SidebarLinkProps) {
   return (
     <Link
-      className={`${isActive ? 'bg-primary/10 !text-primary' : ''} flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-primary/10 ${isHorizontal ? 'whitespace-nowrap' : ''}`}
+      className={`${isActive ? 'bg-primary/10 text-primary!' : ''} flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-primary/10 ${isHorizontal ? 'whitespace-nowrap' : ''}`}
       href={href}
     >
       <span className="material-symbols-outlined">{icon}</span>

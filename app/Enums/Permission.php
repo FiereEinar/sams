@@ -59,6 +59,24 @@ class Permission
 
     public const RolesDelete = 'ROLES_DELETE';
 
+    // Collections
+    public const CollectionsView = 'COLLECTIONS_VIEW';
+
+    public const CollectionsCreate = 'COLLECTIONS_CREATE';
+
+    public const CollectionsUpdate = 'COLLECTIONS_UPDATE';
+
+    public const CollectionsDelete = 'COLLECTIONS_DELETE';
+
+    // Transactions
+    public const TransactionsView = 'TRANSACTIONS_VIEW';
+
+    public const TransactionsCreate = 'TRANSACTIONS_CREATE';
+
+    public const TransactionsUpdate = 'TRANSACTIONS_UPDATE';
+
+    public const TransactionsDelete = 'TRANSACTIONS_DELETE';
+
     // Support
     public const SupportView = 'SUPPORT_VIEW';
 
@@ -124,6 +142,18 @@ class Permission
                 self::RolesCreate,
                 self::RolesUpdate,
                 self::RolesDelete,
+            ],
+            'Collections' => [
+                self::CollectionsView,
+                self::CollectionsCreate,
+                self::CollectionsUpdate,
+                self::CollectionsDelete,
+            ],
+            'Transactions' => [
+                self::TransactionsView,
+                self::TransactionsCreate,
+                self::TransactionsUpdate,
+                self::TransactionsDelete,
             ],
             'Support' => [
                 self::SupportView,

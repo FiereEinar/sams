@@ -24,6 +24,15 @@ class TenantSetting extends Model
     }
 
     /**
+     * Get a single setting by key.
+     */
+    public static function getSetting(string $key, ?string $default = null): ?string
+    {
+        $setting = static::where('key', $key)->first();
+        return $setting ? $setting->value : $default;
+    }
+
+    /**
      * Set a single setting by key (upsert).
      */
     public static function setSetting(string $key, ?string $value): static

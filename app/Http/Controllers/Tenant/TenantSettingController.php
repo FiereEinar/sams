@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Payment;
+use App\Models\Plan;
 use App\Models\TenantSetting;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Plan;
-use App\Models\Payment;
 
 class TenantSettingController extends Controller
 {
@@ -22,6 +22,10 @@ class TenantSettingController extends Controller
         'sidebar_logo_type',
         'sidebar_logo_icon',
         'sidebar_name',
+        'officers_governor',
+        'officers_vice_governor',
+        'officers_treasurer',
+        'officers_auditor',
     ];
 
     public function index(): Response

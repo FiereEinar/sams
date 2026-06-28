@@ -6,6 +6,7 @@ use App\Enums\Permission;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Tenant\AttendanceController;
 use App\Http\Controllers\Tenant\AttendanceRecordController;
+use App\Http\Controllers\Tenant\CollectionController;
 use App\Http\Controllers\Tenant\EventController;
 use App\Http\Controllers\Tenant\EventSessionController;
 use App\Http\Controllers\Tenant\MasterlistController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\Tenant\RoleController;
 use App\Http\Controllers\Tenant\SupportController;
 use App\Http\Controllers\Tenant\SystemUpdateController;
 use App\Http\Controllers\Tenant\TenantSettingController;
+use App\Http\Controllers\Tenant\TransactionController;
+use App\Http\Controllers\Tenant\TransactionPaymentController;
 use App\Http\Controllers\Tenant\UserController;
 use App\Http\Middleware\CheckPermission;
 use App\Http\Middleware\CheckUserActive;
@@ -174,6 +177,39 @@ Route::middleware([
                 Route::post('/support/{ticket}/reply', [SupportController::class, 'reply'])->name('tenant-support-reply');
                 Route::post('/support/{ticket}/close', [SupportController::class, 'close'])->name('tenant-support-close');
             });
+
+            // Collections
+            Route::middleware(CheckPermission::class.':'.Permission::CollectionsView)->group(function () {
+                Route::get('/collections', [CollectionController::class, 'index'])->name('tenant-collections');
+            });
+            Route::post('/collections', [CollectionController::class, 'store'])
+                ->middleware(CheckPermission::class.':'.Permission::CollectionsCreate)
+                ->name('tenant-collections-store');
+            Route::put('/collections/{collection}', [CollectionController::class, 'update'])
+                ->middleware(CheckPermission::class.':'.Permission::CollectionsUpdate)
+                ->name('tenant-collections-update');
+            Route::delete('/collections/{collection}', [CollectionController::class, 'destroy'])
+                ->middleware(CheckPermission::class.':'.Permission::CollectionsDelete)
+                ->name('tenant-collections-destroy');
+
+            // Transactions
+            Route::middleware(CheckPermission::class.':'.Permission::TransactionsView)->group(function () {
+                Route::get('/transactions', [TransactionController::class, 'index'])->name('tenant-transactions');
+                Route::get('/transactions/students/search', [TransactionController::class, 'searchStudents'])->name('tenant-transactions-students-search');
+                Route::get('/transactions/students/{student}/balances', [TransactionController::class, 'studentBalances'])->name('tenant-transactions-students-balances');
+            });
+            Route::post('/transactions', [TransactionController::class, 'store'])
+                ->middleware(CheckPermission::class.':'.Permission::TransactionsCreate)
+                ->name('tenant-transactions-store');
+            Route::put('/transactions/{transaction}', [TransactionController::class, 'update'])
+                ->middleware(CheckPermission::class.':'.Permission::TransactionsUpdate)
+                ->name('tenant-transactions-update');
+            Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy'])
+                ->middleware(CheckPermission::class.':'.Permission::TransactionsDelete)
+                ->name('tenant-transactions-destroy');
+            Route::post('/transactions/{transaction}/payments', [TransactionPaymentController::class, 'store'])
+                ->middleware(CheckPermission::class.':'.Permission::TransactionsUpdate)
+                ->name('tenant-transaction-payments-store');
         });
     });
 });
