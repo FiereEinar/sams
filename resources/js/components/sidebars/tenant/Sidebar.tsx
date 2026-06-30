@@ -3,73 +3,38 @@ import SidebarHeader from '../SidebarHeader';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { useTheme } from '@/hooks/use-theme';
 
-const allSidebarLinks = [
+const sidebarGroups = [
   {
-    title: 'Dashboard',
-    href: '/dashboard',
-    icon: 'dashboard',
-    permission: 'DASHBOARD_VIEW',
+    group: 'Global',
+    links: [
+      { title: 'Dashboard', href: '/dashboard', icon: 'dashboard', permission: 'DASHBOARD_VIEW' },
+      { title: 'Masterlist', href: '/masterlist', icon: 'groups', permission: 'MASTERLIST_VIEW' },
+    ]
   },
   {
-    title: 'Masterlist',
-    href: '/masterlist',
-    icon: 'groups',
-    permission: 'MASTERLIST_VIEW',
+    group: 'Attendance',
+    links: [
+      { title: 'Events', href: '/events', icon: 'calendar_today', permission: 'EVENTS_VIEW' },
+      { title: 'Attendance', href: '/attendance', icon: 'how_to_reg', permission: 'ATTENDANCE_VIEW' },
+    ]
   },
   {
-    title: 'Events',
-    href: '/events',
-    icon: 'calendar_today',
-    permission: 'EVENTS_VIEW',
+    group: 'Collections',
+    links: [
+      { title: 'Collections', href: '/collections', icon: 'account_balance_wallet', permission: 'COLLECTIONS_VIEW' },
+      { title: 'Transactions', href: '/transactions', icon: 'receipt_long', permission: 'TRANSACTIONS_VIEW' },
+    ]
   },
   {
-    title: 'Attendance',
-    href: '/attendance',
-    icon: 'how_to_reg',
-    permission: 'ATTENDANCE_VIEW',
-  },
-  {
-    title: 'Collections',
-    href: '/collections',
-    icon: 'account_balance_wallet',
-    permission: 'COLLECTIONS_VIEW',
-  },
-  {
-    title: 'Transactions',
-    href: '/transactions',
-    icon: 'receipt_long',
-    permission: 'TRANSACTIONS_VIEW',
-  },
-  {
-    title: 'Users',
-    href: '/users',
-    icon: 'person',
-    permission: 'USERS_VIEW',
-  },
-  {
-    title: 'Roles',
-    href: '/roles',
-    icon: 'admin_panel_settings',
-    permission: 'ROLES_VIEW',
-  },
-  {
-    title: 'Support',
-    href: '/support',
-    icon: 'support_agent',
-    permission: 'SUPPORT_VIEW',
-  },
-  {
-    title: 'System Updates',
-    href: '/system/updates',
-    icon: 'system_update_alt',
-    permission: 'SYSTEM_UPDATE_VIEW',
-  },
-  {
-    title: 'Settings',
-    href: '/settings',
-    icon: 'settings',
-    permission: 'SETTINGS_VIEW',
-  },
+    group: 'System',
+    links: [
+      { title: 'Users', href: '/users', icon: 'person', permission: 'USERS_VIEW' },
+      { title: 'Roles', href: '/roles', icon: 'admin_panel_settings', permission: 'ROLES_VIEW' },
+      { title: 'Support', href: '/support', icon: 'support_agent', permission: 'SUPPORT_VIEW' },
+      { title: 'System Updates', href: '/system/updates', icon: 'system_update_alt', permission: 'SYSTEM_UPDATE_VIEW' },
+      { title: 'Settings', href: '/settings', icon: 'settings', permission: 'SETTINGS_VIEW' },
+    ]
+  }
 ];
 
 export default function Sidebar() {
@@ -82,9 +47,13 @@ export default function Sidebar() {
 
   const displayName = sidebarName || organizationName;
 
-  // Filter links by user permissions
-  const sidebarLinks = allSidebarLinks.filter((link) => userPermissions.includes(link.permission));
-
+  // Filter groups and links by user permissions
+  const visibleGroups = sidebarGroups
+    .map((group) => ({
+      ...group,
+      links: group.links.filter((link) => userPermissions.includes(link.permission)),
+    }))
+    .filter((group) => group.links.length > 0);
   if (isSidebarCollapsed) return null;
 
   const isVertical = sidebarPosition === 'left' || sidebarPosition === 'right';
@@ -113,15 +82,25 @@ export default function Sidebar() {
         isHorizontal={isHorizontal}
       />
 
-      <nav className={isVertical ? 'flex-1 space-y-1 px-4' : 'mx-auto flex flex-row items-center gap-2'}>
-        {sidebarLinks.map((link) => (
-          <SidebarLink key={link.title} {...link} isActive={url.startsWith(link.href)} isHorizontal={isHorizontal} />
+      <nav className={isVertical ? 'flex-1 overflow-y-auto custom-scrollbar space-y-6 px-4 pb-4' : 'mx-auto flex flex-row items-center gap-2'}>
+        {visibleGroups.map((group, groupIdx) => (
+          <div key={group.group} className={isVertical ? 'space-y-1' : 'flex flex-row items-center gap-2'}>
+            {isVertical && (
+              <div className="px-3 pb-1 text-xs font-semibold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
+                {group.group}
+              </div>
+            )}
+            {group.links.map((link) => (
+              <SidebarLink key={link.title} {...link} isActive={url.startsWith(link.href)} isHorizontal={isHorizontal} />
+            ))}
+            {isHorizontal && groupIdx < visibleGroups.length - 1 && (
+              <div className="mx-2 h-6 w-px bg-slate-200 dark:bg-white/10" />
+            )}
+          </div>
         ))}
-      </nav>
 
-      {isVertical ? (
-        <>
-          <div className="px-4 pb-2">
+        {isVertical && (
+          <div className="pt-2">
             <ConfirmDialog
               title="Log Out"
               description="Are you sure you want to log out of your account?"
@@ -138,9 +117,10 @@ export default function Sidebar() {
               )}
             />
           </div>
-          {/* <SidebarFooter /> */}
-        </>
-      ) : (
+        )}
+      </nav>
+
+      {!isVertical && (
         <div className="ml-auto pl-4">
           <ConfirmDialog
             title="Log Out"
