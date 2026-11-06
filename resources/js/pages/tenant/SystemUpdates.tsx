@@ -79,10 +79,7 @@ export default function SystemUpdates() {
       }
     } catch {
       setUpdateResult({ success: false, newVersion: activeVersion });
-      setUpdateSteps((prev) => [
-        ...prev,
-        { step: 'Request failed', status: 'error', output: 'The update request timed out or failed.' },
-      ]);
+      setUpdateSteps((prev) => [...prev, { step: 'Request failed', status: 'error', output: 'The update request timed out or failed.' }]);
     } finally {
       setUpdating(false);
       setIsUpdating(false);
@@ -104,10 +101,7 @@ export default function SystemUpdates() {
       }
     } catch {
       setUpdateResult({ success: false, newVersion: activeVersion });
-      setUpdateSteps((prev) => [
-        ...prev,
-        { step: 'Request failed', status: 'error', output: 'The rollback request timed out or failed.' },
-      ]);
+      setUpdateSteps((prev) => [...prev, { step: 'Request failed', status: 'error', output: 'The rollback request timed out or failed.' }]);
     } finally {
       setUpdating(false);
       setIsUpdating(false);
@@ -128,7 +122,7 @@ export default function SystemUpdates() {
     <Layout>
       {/* Full Screen Overlay during update */}
       {updating && (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-100 flex animate-in flex-col items-center justify-center bg-black/80 backdrop-blur-sm fade-in">
           <div className="flex flex-col items-center gap-4 text-center">
             <span className="material-symbols-outlined animate-spin text-6xl text-primary">progress_activity</span>
             <h2 className="text-2xl font-black text-white">System is Updating</h2>
@@ -141,9 +135,7 @@ export default function SystemUpdates() {
 
       <div className="mb-8">
         <Header>System Updates</Header>
-        <p className="mt-1 text-slate-500 dark:text-slate-400">
-          Manage your system version, check for updates, and rollback if needed.
-        </p>
+        <p className="mt-1 text-slate-500 dark:text-slate-400">Manage your system version, check for updates, and rollback if needed.</p>
       </div>
 
       {/* Current Version Card */}
@@ -151,7 +143,7 @@ export default function SystemUpdates() {
         id="system-current-version"
         className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-surface-dark"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent" />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-primary/10">
@@ -186,7 +178,7 @@ export default function SystemUpdates() {
 
       {/* Check Error */}
       {checkError && (
-        <section className="mt-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <section className="mt-6 animate-in duration-300 fade-in slide-in-from-bottom-2">
           <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-5 dark:border-red-500/20 dark:bg-red-500/10">
             <span className="material-symbols-outlined mt-0.5 text-red-500">error</span>
             <div>
@@ -199,7 +191,7 @@ export default function SystemUpdates() {
 
       {/* Update Progress */}
       {updateSteps.length > 0 && (
-        <section className="mt-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <section className="mt-6 animate-in duration-300 fade-in slide-in-from-bottom-2">
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-surface-dark">
             <div className="flex items-center gap-3 border-b border-slate-200 px-6 py-4 dark:border-white/10">
               {updating ? (
@@ -226,7 +218,7 @@ export default function SystemUpdates() {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{step.step}</p>
                     {step.output && (
-                      <pre className="mt-1 max-h-24 overflow-auto whitespace-pre-wrap rounded-lg bg-slate-50 p-2 font-mono text-xs text-slate-500 dark:bg-white/5 dark:text-slate-400">
+                      <pre className="mt-1 max-h-24 overflow-auto rounded-lg bg-slate-50 p-2 font-mono text-xs whitespace-pre-wrap text-slate-500 dark:bg-white/5 dark:text-slate-400">
                         {step.output}
                       </pre>
                     )}
@@ -248,7 +240,9 @@ export default function SystemUpdates() {
                     : 'border-red-200 bg-red-50 dark:border-red-500/20 dark:bg-red-500/10'
                 }`}
               >
-                <p className={`text-sm font-medium ${updateResult.success ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700 dark:text-red-300'}`}>
+                <p
+                  className={`text-sm font-medium ${updateResult.success ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700 dark:text-red-300'}`}
+                >
                   {updateResult.success
                     ? `Successfully updated to ${updateResult.newVersion}. You may need to refresh the page.`
                     : 'The update could not complete. The system has been brought back online. Please check the logs above for details.'}
@@ -261,7 +255,7 @@ export default function SystemUpdates() {
 
       {/* Available Updates */}
       {releases !== null && !updating && updateSteps.length === 0 && (
-        <section className="mt-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <section className="mt-6 animate-in duration-300 fade-in slide-in-from-bottom-2">
           {releases.length === 0 ? (
             <div className="flex flex-col items-center gap-4 rounded-2xl border border-slate-200 bg-white py-12 dark:border-white/10 dark:bg-surface-dark">
               <div className="flex size-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-500/10">
@@ -269,9 +263,7 @@ export default function SystemUpdates() {
               </div>
               <div className="text-center">
                 <h3 className="text-lg font-semibold text-slate-800 dark:text-white">You're Up to Date!</h3>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                  Your system is running the latest available version.
-                </p>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Your system is running the latest available version.</p>
               </div>
             </div>
           ) : (
@@ -299,9 +291,7 @@ export default function SystemUpdates() {
                             {release.tag_name}
                           </span>
                         </div>
-                        <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-                          Released {formatDate(release.published_at)}
-                        </p>
+                        <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Released {formatDate(release.published_at)}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -341,10 +331,8 @@ export default function SystemUpdates() {
                   </div>
                   {/* Changelog Expandable */}
                   {expandedRelease === release.tag_name && release.body && (
-                    <div className="border-t border-slate-200 bg-slate-50 px-6 py-4 dark:border-white/10 dark:bg-white/[0.02]">
-                      <pre className="whitespace-pre-wrap font-mono text-sm text-slate-600 dark:text-slate-300">
-                        {release.body}
-                      </pre>
+                    <div className="border-t border-slate-200 bg-slate-50 px-6 py-4 dark:border-white/10 dark:bg-white/2">
+                      <pre className="font-mono text-sm whitespace-pre-wrap text-slate-600 dark:text-slate-300">{release.body}</pre>
                     </div>
                   )}
                 </div>
@@ -359,45 +347,35 @@ export default function SystemUpdates() {
         <section className="mt-8">
           <button
             onClick={() => setShowRollback(!showRollback)}
-            className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-6 py-4 text-left transition-colors hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:hover:bg-white/[0.03]"
+            className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-6 py-4 text-left transition-colors hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:hover:bg-white/3"
           >
             <div className="flex items-center gap-3">
               <span className="material-symbols-outlined text-slate-400">history</span>
               <div>
                 <h3 className="font-semibold text-slate-800 dark:text-white">Version History & Rollback</h3>
-                <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-                  View installed versions and rollback to a previous release
-                </p>
+                <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">View installed versions and rollback to a previous release</p>
               </div>
             </div>
-            <span className={`material-symbols-outlined text-slate-400 transition-transform ${showRollback ? 'rotate-180' : ''}`}>
-              expand_more
-            </span>
+            <span className={`material-symbols-outlined text-slate-400 transition-transform ${showRollback ? 'rotate-180' : ''}`}>expand_more</span>
           </button>
 
           {showRollback && (
-            <div className="mt-3 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="mt-3 animate-in duration-300 fade-in slide-in-from-top-2">
               {rollbackVersions.length === 0 ? (
                 <div className="rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center dark:border-white/10 dark:bg-surface-dark">
-                  <span className="material-symbols-outlined mb-2 text-3xl text-slate-300 dark:text-slate-600">
-                    inventory_2
-                  </span>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    No other versions available for rollback.
-                  </p>
+                  <span className="material-symbols-outlined mb-2 text-3xl text-slate-300 dark:text-slate-600">inventory_2</span>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">No other versions available for rollback.</p>
                 </div>
               ) : (
                 <div className="space-y-2">
                   {rollbackVersions.map((version) => (
                     <div
                       key={version}
-                      className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-5 py-3 transition-colors hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:hover:bg-white/[0.03]"
+                      className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-5 py-3 transition-colors hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:hover:bg-white/3"
                     >
                       <div className="flex items-center gap-3">
                         <span className="material-symbols-outlined text-sm text-slate-400">tag</span>
-                        <span className="font-mono text-sm font-semibold text-slate-700 dark:text-slate-200">
-                          {version}
-                        </span>
+                        <span className="font-mono text-sm font-semibold text-slate-700 dark:text-slate-200">{version}</span>
                       </div>
                       <ConfirmDialog
                         title={`Rollback to ${version}`}

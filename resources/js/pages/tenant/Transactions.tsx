@@ -5,6 +5,8 @@ import { router, usePage } from '@inertiajs/react';
 import RecordTransactionModal from '@/components/transactions/RecordTransactionModal';
 import { useToast } from '@/hooks/use-toast';
 import Dialog from '@/components/ui/Dialog';
+import TransactionReceiptModal from '@/components/transactions/TransactionReceiptModal';
+import EditTransactionModal from '@/components/transactions/EditTransactionModal';
 
 type TransactionPayment = {
   id: number;
@@ -13,7 +15,7 @@ type TransactionPayment = {
   mode_of_payment: string;
 };
 
-type Transaction = {
+export type Transaction = {
   id: number;
   paid_amount: number;
   status: 'pending' | 'partial' | 'paid';
@@ -61,9 +63,9 @@ export default function Transactions({ transactions, collections }: Transactions
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  
+
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
-  
+
   const [editForm, setEditForm] = useState({
     description: '',
     details: {} as Record<string, string>,
@@ -155,7 +157,11 @@ export default function Transactions({ transactions, collections }: Transactions
             </thead>
             <tbody className="divide-y divide-slate-200 dark:divide-white/10">
               {transactions.data.map((transaction) => (
-                <tr key={transaction.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-white/5">
+                <tr
+                  key={transaction.id}
+                  // onClick={() => openReceiptModal(transaction)}
+                  className="cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-white/5"
+                >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
@@ -251,137 +257,22 @@ export default function Transactions({ transactions, collections }: Transactions
       <RecordTransactionModal isOpen={isRecordModalOpen} onClose={() => setIsRecordModalOpen(false)} collections={collections} />
 
       {isReceiptModalOpen && selectedTransaction && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 animate-in bg-slate-900/50 backdrop-blur-sm duration-200 fade-in"
-            onClick={() => setIsReceiptModalOpen(false)}
-          />
-          <div className="relative w-full max-w-lg animate-in rounded-2xl bg-white p-6 shadow-xl duration-200 zoom-in-95 fade-in dark:bg-surface-dark">
-            <div className="mb-6 flex items-center justify-between border-b border-slate-200 pb-4 dark:border-white/10">
-              <div>
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Transaction Receipt</h2>
-                <div className="text-xs text-slate-500">Ref: #{selectedTransaction.id.toString().padStart(6, '0')}</div>
-              </div>
-              <button onClick={() => setIsReceiptModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-
-            <div className="mb-6 space-y-4">
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-500 dark:text-slate-400">Student:</span>
-                <span className="font-medium text-slate-900 dark:text-white">{selectedTransaction.student.first_name} {selectedTransaction.student.last_name}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-500 dark:text-slate-400">Collection:</span>
-                <span className="font-medium text-slate-900 dark:text-white">{selectedTransaction.collection?.name || '-'}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-500 dark:text-slate-400">Total Fee:</span>
-                <span className="font-medium text-slate-900 dark:text-white">₱{Number(selectedTransaction.collection?.fee || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-500 dark:text-slate-400">Total Paid:</span>
-                <span className="font-bold text-slate-900 dark:text-white">₱{Number(selectedTransaction.paid_amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-500 dark:text-slate-400">Status:</span>
-                <span className="font-medium capitalize text-slate-900 dark:text-white">{selectedTransaction.status}</span>
-              </div>
-            </div>
-
-            <div className="mt-6 border-t border-slate-200 pt-6 dark:border-white/10">
-              <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-white">Payment History</h3>
-              {selectedTransaction.payments && selectedTransaction.payments.length > 0 ? (
-                <div className="space-y-3">
-                  {selectedTransaction.payments.map((payment) => (
-                    <div key={payment.id} className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-3 dark:border-white/5 dark:bg-white/5">
-                      <div>
-                        <div className="text-sm font-medium text-slate-900 dark:text-white">₱{Number(payment.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-                        <div className="text-xs text-slate-500 uppercase">{payment.mode_of_payment}</div>
-                      </div>
-                      <div className="text-sm text-slate-600 dark:text-slate-400">
-                        {new Date(payment.date).toLocaleDateString()}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-sm text-slate-500">No payment records found.</div>
-              )}
-            </div>
-
-            <div className="mt-6 pt-4">
-              <button
-                onClick={() => setIsReceiptModalOpen(false)}
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:bg-surface-dark dark:text-slate-300 dark:hover:bg-white/5"
-              >
-                Close Receipt
-              </button>
-            </div>
-          </div>
-        </div>
+        <TransactionReceiptModal
+          isOpen={isReceiptModalOpen}
+          setIsReceiptModalOpen={setIsReceiptModalOpen}
+          selectedTransaction={selectedTransaction}
+        />
       )}
 
       {isEditModalOpen && selectedTransaction && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 animate-in bg-slate-900/50 backdrop-blur-sm duration-200 fade-in"
-            onClick={() => setIsEditModalOpen(false)}
-          />
-          <div className="relative w-full max-w-md animate-in rounded-2xl bg-white p-6 shadow-xl duration-200 zoom-in-95 fade-in dark:bg-surface-dark">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Edit Transaction</h2>
-              <button onClick={() => setIsEditModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-
-            <form onSubmit={handleEdit} className="space-y-4">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">Description</label>
-                <textarea
-                  value={editForm.description}
-                  onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 bg-transparent px-4 py-2.5 text-sm transition-colors outline-none focus:border-primary dark:border-white/10 dark:text-white"
-                  placeholder="Optional description"
-                  rows={3}
-                />
-              </div>
-
-              {selectedTransaction.collection?.details && selectedTransaction.collection.details.length > 0 && (
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Collection Details</label>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {selectedTransaction.collection.details.map((detailKey: string) => (
-                      <div key={detailKey}>
-                        <label className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">{detailKey}</label>
-                        <input
-                          type="text"
-                          required
-                          value={editForm.details[detailKey] || ''}
-                          onChange={(e) => setEditForm({ ...editForm, details: { ...editForm.details, [detailKey]: e.target.value } })}
-                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary/40 dark:border-white/10 dark:bg-surface-dark dark:text-white"
-                          placeholder={`Enter ${detailKey}`}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-hover disabled:opacity-50"
-                >
-                  {isSubmitting ? 'Updating...' : 'Update Transaction'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <EditTransactionModal
+          editForm={editForm}
+          setEditForm={setEditForm}
+          isSubmitting={isSubmitting}
+          handleEdit={handleEdit}
+          selectedTransaction={selectedTransaction}
+          setIsEditModalOpen={setIsEditModalOpen}
+        />
       )}
 
       <Dialog

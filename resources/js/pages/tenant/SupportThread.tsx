@@ -83,9 +83,13 @@ export default function SupportThread({ ticket }: PageProps) {
                 iconClass="text-slate-500 bg-slate-500/10"
                 confirmStyle="bg-slate-600 hover:bg-slate-700 shadow-slate-600/20"
                 onConfirm={(close) => {
-                  router.post(`/support/${ticket.id}/close`, {}, {
-                    onSuccess: () => close(),
-                  });
+                  router.post(
+                    `/support/${ticket.id}/close`,
+                    {},
+                    {
+                      onSuccess: () => close(),
+                    },
+                  );
                 }}
                 trigger={(open) => (
                   <button
@@ -135,7 +139,7 @@ export default function SupportThread({ ticket }: PageProps) {
                   })}
                 </span>
               </div>
-              <p className="whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">{msg.body}</p>
+              <p className="text-sm whitespace-pre-wrap text-slate-700 dark:text-slate-300">{msg.body}</p>
             </div>
           ))}
         </div>
@@ -164,7 +168,7 @@ export default function SupportThread({ ticket }: PageProps) {
         )}
 
         {ticket.status === 'closed' && (
-          <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.02]">
+          <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/2">
             <span className="material-symbols-outlined text-slate-400">lock</span>
             <p className="text-sm text-slate-500 dark:text-slate-400">This ticket has been closed. No further replies can be added.</p>
           </div>
