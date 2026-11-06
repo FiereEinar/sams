@@ -160,9 +160,6 @@ User::create([
 
 ## How Tenant Isolation Works
 
-> [!NOTE]
-> This is the most architecturally significant part of SAMS and the question you're most likely to get in an interview.
-
 SAMS uses **database-per-tenant isolation** via [`stancl/tenancy`](https://tenancyforlaravel.com/).
 
 ### The Two-Database Model
